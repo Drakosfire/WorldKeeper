@@ -17,7 +17,7 @@ This is a conceptual review contract. It defines what must be reviewable and wha
 ```text
 PreparedWorldChange
   prepared_change_id
-  request_identity
+  change_request_id
   world_id
   scope_context
   parent_revision_id
@@ -31,9 +31,9 @@ PreparedWorldChange
 
 ## Required review information
 
-### Identity and authority
+### Transaction identity and authority
 
-The prepared change identifies the target World, selected scope/profile context, exact parent revision, and the authority snapshot that matters to interpretation. It must not imply that the current head remains unchanged forever; staleness is a commit-time condition.
+The prepared change identifies the whole transaction through `change_request_id`, plus the target World, selected scope/profile context, exact parent revision, and the authority snapshot that matters to interpretation. `change_request_id` is the one transaction-level idempotency/recovery identity for the prepared/publication lifecycle. It is not any individual operation's `operation_id`, and an operation ID must never be used to recover or deduplicate the whole change. The prepared change must not imply that the current head remains unchanged forever; staleness is a commit-time condition.
 
 ### Interpreted operations
 
@@ -58,16 +58,16 @@ The public contract does not yet decide whether prospective identifiers are dete
 
 Warnings are inspectable and do not silently become identity decisions. Examples include similar existing objects, non-fatal projection ambiguity, or profile-specific advisory concerns. An unresolved semantic ambiguity that would make publication unsafe is a failure, not merely a warning.
 
-### Source/evidence summary
+### Source/evidence and occurrence summary
 
-The review includes enough source identity to show what grounded the interpretation: artifact/revision/occurrence identity, admissibility status, and relevant evidence summary. Internal evidence rows, SQL keys, and storage joins are not part of the public contract.
+The review includes enough source identity to show what grounded the interpretation: artifact/revision/location identity, admissibility status, and relevant evidence summary. If the intent contains an explicit occurrence/mention binding, the prepared change shows that as a separate interpreted operation and does not infer it from the evidence summary. Creating a source-grounded object or assertion alone must not appear as a mention link. Internal evidence rows, SQL keys, and storage joins are not part of the public contract.
 
 ## Confirmation binding
 
 The prepared change carries an opaque or otherwise tamper-evident binding over the exact facts that confirm must not change:
 
 ```text
-request identity
+change request / publication identity
 world / scope / profile context
 parent revision
 source selector and admitted source/evidence identity
@@ -88,7 +88,7 @@ Commit may proceed only when:
 4. the expected parent is still valid;
 5. all local references still resolve within the prepared transaction;
 6. DungeonMind accepts the governed publication;
-7. an existing publication is recovered when the operation identity was already applied.
+7. an existing publication is recovered when the transaction-level `change_request_id` / publication identity was already applied.
 
 If a precondition fails, no new child may be created by silently reinterpreting the request.
 
@@ -97,7 +97,7 @@ If a precondition fails, no new child may be created by silently reinterpreting 
 A successful committed result must expose enough identity to establish:
 
 ```text
-prepared change → operation/request identity
+prepared change → change request / publication identity
 parent revision → child revision
 local object reference → durable object identity
 source/evidence interpretation → child read-back
@@ -111,7 +111,7 @@ Receipt success is independent from subsequent client refresh success. A client 
 
 Prepared changes may expire or become stale. A stale prepared change is not automatically rebased. The client must re-prepare so the new meaning can be reviewed.
 
-Recovery takes the original operation identity and binding. It may return `committed`, `not_committed`, or `outcome_unknown` according to the eventual authority contract. It must never create a second interpretation just because a prior response was lost.
+Recovery takes the original transaction-level `change_request_id` / publication identity and binding. It may return `committed`, `not_committed`, or `outcome_unknown` according to the eventual authority contract. It must never use one semantic `operation_id` as a substitute for the whole transaction or create a second interpretation just because a prior response was lost.
 
 ## Failure classes
 

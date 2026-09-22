@@ -85,7 +85,7 @@ Confirm must prove that the submitted confirmation is bound to the prepared chan
 
 Confirm must not reinterpret the original intent against today's state. It may revalidate the sealed authority and re-prove the source/evidence pair; any material mismatch fails closed or requires re-prepare.
 
-DungeonMind then owns atomic expected-parent publication. The intended result is one immutable child revision. If publication already happened and the response was lost, recovery with the same operation identity must return that result rather than publish another child.
+DungeonMind then owns atomic expected-parent publication. The intended result is one immutable child revision. If publication already happened and the response was lost, recovery with the same transaction-level `change_request_id` / publication identity must return that result rather than publish another child. A per-operation `operation_id` is never sufficient to recover or deduplicate the whole change.
 
 ## Transaction-local references
 
@@ -108,9 +108,9 @@ The following are mandatory:
 
 ## Source/evidence semantics
 
-The client names source context. Keeper determines whether the requested World interpretation can be grounded in admissible source/evidence semantics. DungeonMind stores and validates durable source/evidence identity.
+The client names source context. Keeper determines whether the requested World interpretation can be grounded in admissible source/evidence semantics. DungeonMind stores and validates durable source/evidence identity. Evidence grounding is distinct from occurrence/mention binding: supporting a proposed World fact with a source does not by itself assert that particular words refer to a durable object or should receive a pill/link. Only an explicit occurrence-binding operation can make that assertion.
 
-Prepare must bind the selected source strongly enough that confirm cannot swap an artifact, revision, occurrence, or source selector. A client-local path or digest is context, not publication authority. Reads may expose evidence/provenance; they may not silently repair a weak write.
+Prepare must bind the selected source strongly enough that confirm cannot swap an artifact, revision, occurrence, or source selector. A client-local path or digest is context, not publication authority. Reads may expose evidence/provenance; they may not silently repair a weak write or invent an occurrence binding.
 
 ## Identity semantics
 
@@ -147,7 +147,7 @@ The receipt must distinguish durable publication from a later refresh failure. W
 
 Failure is typed and inspectable. The application must not receive raw database exceptions as its semantic contract. At minimum, Keeper distinguishes invalid intent, invalid local reference, source inadmissibility, identity conflict, stale parent, prepared mismatch, authority unavailability, integrity failure, and publication failure.
 
-Recovery is a semantic operation identified by the original operation identity. It may prove that a prior commit exists, retry a safe idempotent publication, or report that the outcome remains unknown. It may not invent a new meaning to make a retry succeed.
+Recovery is a semantic operation identified by the original transaction-level `change_request_id` / publication identity. It may prove that a prior commit exists, retry a safe idempotent publication, or report that the outcome remains unknown. A semantic operation's `operation_id` is only an intra-transaction identifier and cannot serve as the recovery key. Recovery may not invent a new meaning to make a retry succeed.
 
 ## Current implementation evidence
 
