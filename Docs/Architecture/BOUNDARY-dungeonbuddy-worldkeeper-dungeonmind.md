@@ -1,7 +1,7 @@
 # Boundary — DungeonBuddy, World Keeper, and DungeonMind
 
-**Status:** CURRENT BOOTSTRAP BOUNDARY AUTHORITY
-**Phase:** DESIGN / REPOSITORY BOOTSTRAP
+**Status:** CURRENT BOUNDARY AUTHORITY
+**Phase:** WK-1 — TRANSPORT-NEUTRAL APPLICATION CONTRACTS
 **Implementation:** NOT AUTHORIZED
 
 ## Boundary statement

@@ -1,7 +1,7 @@
 # Steward Anchor — World Keeper
 
-**Status:** CURRENT DESIGN AUTHORITY
-**Phase:** DESIGN / REPOSITORY BOOTSTRAP
+**Status:** CURRENT WK-1 DESIGN AUTHORITY — READY FOR REVIEW
+**Phase:** WK-1 — TRANSPORT-NEUTRAL APPLICATION CONTRACTS
 **Implementation:** NOT AUTHORIZED
 **Repository:** `WorldKeeper`
 
@@ -28,12 +28,12 @@ World Keeper is not simple storage. DungeonMind remembers; World Keeper decides 
 
 ## Current repository state
 
-This bootstrap repository began empty of product/runtime files. The intended initial state is a small, reviewable document set only:
+WK-0 repository bootstrap was accepted at `62a6f5671b8387c0d35ecb491489cbd253e9f6c8`. The current repository remains documentation-only while WK-1 resolves the application contract:
 
 - root README and repository operating law;
 - steward, architecture, and boundary authority;
 - governed write-lifecycle design;
-- two versioned v0 design contracts;
+- v0 intent and prepared-change contracts;
 - coarse roadmap;
 - source/ancestry index.
 
@@ -77,19 +77,36 @@ For a fresh agent or contributor:
 - Identity advice is not identity authority. Duplicate suggestions never silently merge objects.
 - Read-back at the published child revision is part of write correctness.
 - World Keeper must be transport-independent and must not become an agent harness.
+- The v0 application surface is `prepare_change`, `commit_prepared_change`,
+  `recover_change`, and a narrow exact-child `read_exact_change_result`
+  capability.
+- `change_request_id` is the transaction-level idempotency/recovery identity;
+  `prepared_change_id` plus `preparation_generation` identify one exact
+  interpretation; `operation_id` is never a publication/recovery key.
+- Prepared changes use a retained canonical workflow record plus a
+  tamper-evident confirmation binding. The workflow record is not World truth
+  and does not require HTTP or a World Keeper database.
+- Safe re-prepare retains `change_request_id` and increments the preparation
+  generation only after the prior generation is proven not committed or safely
+  invalidated. Committed or unknown outcomes require recovery first.
+- v0 uses immutable source revision identity plus optional UTF-8 byte spans and
+  selected-text digests; evidence support remains distinct from explicit
+  occurrence/mention binding.
+- Prepared local objects use opaque prospective handles; committed v0 receipts
+  return direct relationship operation → durable relationship IDs, with exact
+  child read-back still mandatory.
 
-## Open design questions
+## Remaining design questions
 
-These are deliberately not resolved by bootstrap:
+WK-1 resolves the smallest application contract. The following remain open
+without blocking the semantic contract:
 
-1. What is the smallest transport-neutral application API, and when is an optional network host justified?
-2. Which World Keeper read operations are true application façades versus direct, well-scoped DungeonMind capabilities?
-3. Should receipts expose a local relationship operation → durable relationship ID mapping, or should exact relationship identity be derived from child-revision read-back?
-4. What are the durable storage/lifecycle, expiry, and invalidation mechanisms for a prepared change, and how does the decided `change_request_id` map to any internal `publication_operation_id`?
-5. Which source occurrence/span forms can be accepted in v0 while preserving DungeonMind provenance authority?
-6. Which semantic-profile and scope inputs belong in the v0 intent contract versus being resolved from World context?
-7. What exact policy governs warnings, ambiguities, and an explicit identity-reconciliation operation?
-8. What is the smallest v0 operation family beyond create, reference, link-occurrence, and relationship creation?
+1. When is an optional network host justified, after an in-process contract proof?
+2. Which broader World Keeper read operations are true application façades versus direct, well-scoped DungeonMind capabilities?
+3. What exact policy/human approval metadata is needed beyond the explicit confirmation fact?
+4. Which semantic-profile and scope inputs belong in a later contract versus being resolved from World context?
+5. What is the smallest v0 operation family beyond create, reference, link-occurrence, and relationship creation?
+6. What operational store, retention duration, key-management provider, and transport mapping implement the accepted prepared lifecycle?
 
 ## STOP conditions
 
@@ -107,11 +124,15 @@ Stop and return to design review if work would require any of the following:
 
 ## Next permitted work
 
-The next slice is a design/review decision that resolves the smallest transport-neutral application contract and prepared-change lifecycle. Only after that decision is accepted may an implementation slice be authorized. The safest first implementation is expected to be an in-process reference path against DungeonMind, but that is a roadmap hypothesis, not current authorization.
+WK-1 is ready for review. No implementation is authorized by these decisions.
+After WK-1 acceptance, the steward may issue a new narrow handoff for the
+roadmap's seam/test-harness proof or another explicitly reviewed implementation
+slice. The safest first implementation remains an in-process reference path
+against DungeonMind, but that is not current authorization.
 
-## Bootstrap review answers
+## WK-1 review readiness
 
-The bootstrap is ready for review only if a reader can answer yes to all of these:
+WK-1 is ready for review when a fresh contributor can answer yes to all of these:
 
 - World Keeper is clearly distinct from both DungeonBuddy and DungeonMind.
 - Semantic transaction interpretation is the central responsibility.
@@ -123,3 +144,11 @@ The bootstrap is ready for review only if a reader can answer yes to all of thes
 - A non-DungeonBuddy client and an in-process deployment remain possible.
 - Nothing here recreates DungeonMind or makes World Keeper an agent harness.
 - The roadmap starts with contracts and evidence, not endpoints.
+- A transaction has one recovery identity, one preparation generation at a time,
+  and no per-operation recovery ambiguity.
+- A prepared record can be inspected, invalidated, expired, or safely recovered
+  without reconstructing meaning from untrusted client input.
+- Evidence grounding and occurrence/mention binding have separate contract
+  representations.
+- A committed result names the exact child and can be proven through a narrow
+  child-pinned read-back capability.

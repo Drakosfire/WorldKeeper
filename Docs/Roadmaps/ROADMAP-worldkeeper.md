@@ -25,9 +25,13 @@ Create the steward anchor, ownership architecture, boundary, lifecycle design, v
 
 ### WK-1 — Transport-neutral application contracts
 
+**State:** DESIGN COMPLETE — READY FOR REVIEW
+
 Resolve the open questions needed to implement a minimal application API: intent, prepared change, confirmation, commit/recovery, result/read-back, and semantic failure classes. Keep the contract independent of HTTP and DungeonMind internal DTOs.
 
-**Gate:** accepted v0 contracts and a reviewed policy for prepared-change lifecycle, local/prospective identities, source occurrence forms, and relationship result handles.
+**Resolved for review:** four semantic capabilities; retained prepared record plus tamper-evident binding; explicit lifecycle/invalidation states; stable `change_request_id` across safe re-prepare generations; immutable source revision plus optional UTF-8 byte spans; opaque prospective object handles; direct relationship result IDs; exact child-pinned read-back; and the required adversarial outcomes.
+
+**Gate:** steward/reviewer acceptance of the updated v0 contracts and lifecycle design. Acceptance authorizes a later narrow implementation handoff; it does not itself authorize runtime code.
 
 ### WK-2 — DungeonMind-backed in-process reference boundary
 

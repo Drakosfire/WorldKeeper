@@ -1,6 +1,6 @@
 # Contract — WorldChangeIntent v0
 
-**Status:** DESIGN CONTRACT — v0 proposal, implementation not authorized
+**Status:** WK-1 DESIGN CONTRACT — READY FOR REVIEW, implementation not authorized
 **Version:** `world-change-intent/v0`
 **Owner:** World Keeper boundary
 
@@ -22,11 +22,39 @@ WorldChangeIntent
   operations[]
 ```
 
+## Minimal application capability surface
+
+The v0 application contract is four semantic capabilities:
+
+```text
+prepare_change(intent) -> PreparedWorldChange
+commit_prepared_change(prepared_change_id + explicit confirmation)
+  -> CommittedWorldChange
+recover_change(change_request_id + prepared generation + recovery binding)
+  -> RecoveryResult
+read_exact_change_result(result locator pinned to child revision)
+  -> ExactWorldChangeReadback
+```
+
+`commit_prepared_change` and `recover_change` are separate capabilities. Commit
+means “publish this reviewed prepared meaning.” Recovery means “establish the
+outcome of the already-authorized transaction when the caller may not know
+whether publication completed.” A transport may expose a single publish
+endpoint internally, but it must preserve this semantic distinction.
+
+The read capability is deliberately narrow. It proves one committed change at
+one exact child revision; it is not the complete World query façade.
+
 ### Transaction identity
 
 `change_request_id` identifies one complete intent and its resulting prepared/publication transaction. It is supplied by the caller, stable for retries of that same transaction, and is the transaction-level idempotency and recovery key. One prepared transaction has one such identity and can produce at most one publication outcome. It is not a durable World revision or object identity. A caller may also include a client/workflow identity for result reconciliation; the Keeper must not treat a client-local ID as a World object ID.
 
-The publication record may use an internal or durable `publication_operation_id` for the same transaction-level identity. If that name exists internally, it must map one-to-one to `change_request_id`; it must never be confused with an operation inside `operations[]`.
+The publication record may use an internal or durable
+`publication_operation_id`. It maps one-to-one to a single governed attempt
+for `(change_request_id, preparation_generation)`; the transaction record
+maps those attempts and enforces at most one committed outcome for the whole
+`change_request_id`. It must never be confused with an operation inside
+`operations[]`.
 
 ### World and scope
 
@@ -47,6 +75,28 @@ source_context
 Artifact and revision identity are authoritative only after Keeper/DungeonMind admission or revalidation. A local file path, browser digest, or display label is not sufficient publication authority. A span may be an exact durable occurrence identity, a bounded offset, or another versioned form accepted by a later profile; the v0 wire shape remains open.
 
 Evidence grounding and occurrence/mention binding are separate semantic facts. `source_context` and an operation's `source_links` say what source material supports a proposed World fact. They do not, by themselves, assert that particular source words refer to a particular durable object or deserve mention navigation. Creating a source-grounded object or assertion must not implicitly create an occurrence binding.
+
+The smallest v0 source reference is:
+
+```text
+SourceRevisionRef
+  artifact_id
+  source_revision_id
+
+SourceSpan (only when a location is available)
+  source_revision_id
+  start_offset inclusive
+  end_offset exclusive
+  offset_unit = utf8_byte
+  selected_text_digest
+```
+
+`SourceRevisionRef` is sufficient to ground a fact when no exact occurrence
+was selected. `SourceSpan` is required for an explicit occurrence/mention
+binding. The immutable source revision identity and selected-text digest allow
+revalidation without trusting a client path or mutable source body. The v0
+contract does not define a universal annotation system, paragraph model, or
+source-body transport.
 
 ### Actor context
 
@@ -73,13 +123,25 @@ The `local_ref` is transaction-local. It is not a durable node identity and is n
 
 ### `reference_existing`
 
-Declares that an operation uses an existing governed object. The durable reference is interpreted at the prepared parent revision and must identify an object admissible in the requested World/scope. A candidate label or similarity match is not itself a durable reference.
+Declares that an operation uses an existing governed object. It carries an
+`operation_id` unique within the intent and a durable object reference. The
+durable reference is interpreted at the prepared parent revision and must
+identify an object admissible in the requested World/scope. A candidate label
+or similarity match is not itself a durable reference.
 
 ### `link_source_occurrence`
 
 Requests an explicit occurrence/mention binding: these source words or this durable source occurrence refer to this World object or operation result. This is distinct from evidence grounding. DungeonMind owns the durable evidence/provenance representation and any durable occurrence-binding record, but a source-grounded object does not receive this binding implicitly. A link to a transaction-local object resolves only within this intent.
 
-Conceptually, the operation carries a source occurrence/span reference and a target reference. The final v0 occurrence identity and link-kind vocabulary remain open. A client may use the resulting binding for mention navigation or a pill only when the governed World projection says the binding is truthful.
+Conceptually, the operation carries:
+
+```text
+operation_id       unique within the intent
+source_span        immutable SourceSpan
+target_ref         durable object ref or local_ref
+```
+
+The final v0 link-kind vocabulary remains open, but the source revision, byte range, and selected-text digest are required. A client may use the resulting binding for mention navigation or a pill only when the governed World projection says the binding is truthful.
 
 ### `create_relationship`
 
@@ -115,6 +177,21 @@ Similarity and duplicate advice may be returned during prepare, but it does not 
 ## Validation boundary
 
 World Keeper validates request shape and semantic dependencies. DungeonMind validates durable World, source/evidence, profile, identity, scope, and publication authority. Neither client-side UI validation nor an agent prompt is a substitute for Keeper/DungeonMind validation.
+
+## Transaction and preparation lifecycle
+
+`change_request_id` identifies one logical application transaction and remains
+stable across safe re-prepare generations. Each call to prepare produces a new
+`prepared_change_id` and monotonically increasing `preparation_generation`.
+Those identities are described by the prepared-change contract. A caller that
+starts an unrelated new change must use a new `change_request_id`.
+
+Re-prepare with the same `change_request_id` is allowed only when the prior
+generation is known not to have published and the transaction record is not in
+`committed` or `outcome_unknown`. If publication may have happened, the caller
+must recover the existing transaction outcome before preparing another
+generation. This prevents a stale re-prepare from colliding with an earlier
+child revision.
 
 ## Typed failure principles
 
