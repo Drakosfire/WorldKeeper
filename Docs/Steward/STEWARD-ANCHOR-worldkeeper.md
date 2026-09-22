@@ -90,6 +90,10 @@ For a fresh agent or contributor:
   recovery record must preserve the generation-bound `publication_operation_id`
   and lifecycle/outcome mapping. Ordinary prepared-payload expiry cannot erase
   an in-flight or unknown publication outcome.
+- `confirmation_binding` authorizes commit of an active preparation only. Once
+  publication begins, recovery is resolved from the durable server-side
+  `change_request_id` plus generation record and must outlive the ordinary
+  confirmation-binding verification window.
 - Safe re-prepare retains `change_request_id` and increments the preparation
   generation only after the prior generation is proven not committed or safely
   invalidated. Committed or unknown outcomes require recovery first.

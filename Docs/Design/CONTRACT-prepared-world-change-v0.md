@@ -38,7 +38,7 @@ WK-1 fixes the smallest transport-neutral capability family as:
 prepare_change(intent) -> PreparedWorldChange
 commit_prepared_change(prepared_change_id, confirmation)
   -> CommittedWorldChange
-recover_change(change_request_id, prepared_change_id/generation, recovery_binding)
+recover_change(change_request_id, preparation_generation)
   -> RecoveryResult
 read_exact_change_result(readback_locator)
   -> ExactWorldChangeReadback
@@ -49,6 +49,14 @@ the exact reviewed preparation after explicit confirmation. Recovery establishes
 the outcome of that same transaction when the caller may have lost the commit
 response. A transport may combine them behind one implementation endpoint, but
 it must preserve the distinction and the result states.
+
+`confirmation_binding` is a commit-only credential for an active prepared
+change. It is not an input to recovery. Once publication begins, recovery is
+resolved from the durable server-side transaction record by
+`change_request_id` and `preparation_generation`; normal caller authorization
+remains a transport/policy concern. This prevents recovery from depending on a
+client-held credential or confirmation-verification key after the ordinary
+prepared lifetime ends.
 
 `read_exact_change_result` is intentionally narrower than the eventual World
 query façade. It is the minimum read contract needed to prove one committed
@@ -194,15 +202,18 @@ Prepared-payload retention and publication-outcome retention are separate
 concerns. If the ordinary prepared payload disappears before any publication
 attempt, re-prepare is safe only after the recovery record proves that no
 attempt began. Once commit begins, loss of the prepared payload must produce a
-recovery path (`commit_pending` or `outcome_unknown`), never
+recovery path (`publishing` or `outcome_unknown`), never
 `prepared_change_not_found` followed by a new generation. Recovery must reuse
 the surviving mapping to determine whether the original publication
 committed; a new publication attempt is blocked until that outcome is proven.
 
 Binding key rotation is operational rather than semantic: bindings carry a
-version/key identifier, old verification keys remain available through the
-maximum prepared lifetime, and a retired key makes the preparation
-unconfirmable rather than weakening verification.
+version/key identifier, and confirmation-binding verification keys remain
+available through the maximum prepared lifetime. A retired confirmation key
+makes an unconfirmed preparation unconfirmable rather than weakening
+verification; it cannot make an in-flight or unknown publication
+unrecoverable, because recovery uses the durable server-side transaction
+record instead.
 
 ## Lifecycle and invalidation states
 
@@ -212,7 +223,7 @@ The prepared record and its transaction record distinguish these states:
 active
 expired
 invalidated
-commit_pending
+publishing
 committed
 not_committed
 outcome_unknown
@@ -226,7 +237,7 @@ outcome_unknown
 - `invalidated`: the meaning or authority no longer matches. Reasons include
   changed intent digest, changed source admissibility, changed identity/profile
   state, revoked policy, or an explicit caller cancellation.
-- `commit_pending`: a governed publication attempt exists; the caller must not
+- `publishing`: a governed publication attempt exists; the caller must not
   create a new generation until commit or recovery establishes its outcome.
 - `committed`: one child revision and receipt are authoritative. Repeated
   commit/recovery returns that same result; it cannot be reinterpreted.
@@ -242,7 +253,7 @@ stale-parent rebase. A lost response is an unknown outcome, not permission to
 retry with a new meaning.
 
 Only an `active` prepared record may transition to `expired`. A
-`commit_pending` or `outcome_unknown` transaction retains the recovery record
+`publishing` or `outcome_unknown` transaction retains the recovery record
 until its publication outcome is proven; prepared-payload retention and
 publication-outcome retention are separate lifecycle concerns.
 
@@ -281,7 +292,8 @@ Commit may proceed only when:
 7. an existing publication is recovered when the transaction-level
    `change_request_id` and its generation-bound publication identity were
    already applied; if a commit may have begun, the crash-surviving recovery
-   record is consulted before any re-prepare.
+   record is consulted before any re-prepare. Recovery does not require a
+   client-held binding after publication begins.
 
 If a precondition fails, no new child may be created by silently reinterpreting the request.
 
@@ -317,9 +329,9 @@ Receipt success is independent from subsequent client refresh success. A client 
 
 Prepared changes may expire or become stale. A stale prepared change is not automatically rebased. The client must re-prepare so the new meaning can be reviewed.
 
-Recovery takes the original transaction-level `change_request_id`, the
-generation-bound prepared identity, and the recovery binding. It returns one
-of:
+Recovery takes the original transaction-level `change_request_id` and
+`preparation_generation`. The authority resolves the matching durable
+transaction/publication record and returns one of:
 
 ```text
 committed        → the original CommittedWorldChange receipt
@@ -328,7 +340,8 @@ outcome_unknown  → publication outcome still cannot be proven
 ```
 
 It must never use one semantic `operation_id` as a substitute for the whole
-transaction or create a second interpretation just because a prior response
+transaction, require the original `confirmation_binding` as a recovery
+credential, or create a second interpretation just because a prior response
 was lost.
 
 ## Public contract versus adapter boundary

@@ -30,7 +30,7 @@ The v0 application contract is four semantic capabilities:
 prepare_change(intent) -> PreparedWorldChange
 commit_prepared_change(prepared_change_id + explicit confirmation)
   -> CommittedWorldChange
-recover_change(change_request_id + prepared generation + recovery binding)
+recover_change(change_request_id + preparation_generation)
   -> RecoveryResult
 read_exact_change_result(result locator pinned to child revision)
   -> ExactWorldChangeReadback
@@ -41,6 +41,14 @@ means “publish this reviewed prepared meaning.” Recovery means “establish 
 outcome of the already-authorized transaction when the caller may not know
 whether publication completed.” A transport may expose a single publish
 endpoint internally, but it must preserve this semantic distinction.
+
+`confirmation_binding` authorizes commit of an active prepared change; it is
+not a recovery credential. Once publication begins, recovery is resolved from
+the crash-surviving server-side transaction record using
+`change_request_id` and `preparation_generation`. A transport still applies
+its normal caller authorization, but recovery cannot depend on a client-held
+binding or a confirmation-key lifetime that may end before the publication
+outcome is proven.
 
 The read capability is deliberately narrow. It proves one committed change at
 one exact child revision; it is not the complete World query façade.

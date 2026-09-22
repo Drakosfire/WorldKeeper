@@ -35,7 +35,7 @@ The smallest transport-neutral application API is:
 prepare_change(intent) -> PreparedWorldChange
 commit_prepared_change(prepared_change_id, explicit_confirmation)
   -> CommittedWorldChange
-recover_change(change_request_id, prepared_change_id/generation, recovery binding)
+recover_change(change_request_id, preparation_generation)
   -> RecoveryResult
 read_exact_change_result(readback_locator)
   -> ExactWorldChangeReadback
@@ -45,6 +45,13 @@ Commit and recovery are separate semantic capabilities. Commit authorizes the
 exact prepared meaning. Recovery determines whether that same transaction
 already committed when the caller may have lost the response. A transport may
 combine their plumbing, but it may not collapse their result semantics.
+
+The confirmation binding authorizes commit of an active preparation only. It
+is not a recovery credential. Once publication begins, recovery resolves the
+durable server-side transaction/publication record from `change_request_id` and
+`preparation_generation`; normal caller authorization remains a transport or
+policy concern. Recovery must therefore remain possible after the ordinary
+prepared/confirmation lifetime ends.
 
 The fourth capability is deliberately narrow: it proves one committed change
 at one exact child revision and does not define the broader World read/query
@@ -221,12 +228,15 @@ The receipt must distinguish durable publication from a later refresh failure.
 Failure is typed and inspectable. The application must not receive raw database exceptions as its semantic contract. At minimum, Keeper distinguishes invalid intent, invalid local reference, source inadmissibility, identity conflict, stale parent, prepared mismatch, authority unavailability, integrity failure, and publication failure.
 
 Recovery is a semantic operation identified by the original transaction-level
-`change_request_id`, generation-bound prepared identity, and recovery binding.
-It returns `committed` with the original receipt, `not_committed` when the
-authority proves no child was published for that generation, or
-`outcome_unknown` when proof is not yet available. A semantic operation's
-`operation_id` is only an intra-transaction identifier and cannot serve as the
-recovery key. Recovery may not invent a new meaning to make a retry succeed.
+`change_request_id` and `preparation_generation`. The durable server-side
+transaction/publication record resolves the prepared identity, publication
+operation, and outcome; recovery does not require the original confirmation
+binding after publication begins. It returns `committed` with the original
+receipt, `not_committed` when the authority proves no child was published for
+that generation, or `outcome_unknown` when proof is not yet available. A
+semantic operation's `operation_id` is only an intra-transaction identifier and
+cannot serve as the recovery key. Recovery may not invent a new meaning to make
+a retry succeed.
 
 ## Prepared-record decision
 
@@ -250,12 +260,14 @@ Keeper adapter; it may not exist only in the ordinary in-memory prepared store.
 
 If a prepared payload disappears before any publication attempt, re-prepare is
 safe only when the recovery record proves that no attempt began. Once commit
-begins, missing payload is a recovery condition (`commit_pending` or
+begins, missing payload is a recovery condition (`publishing` or
 `outcome_unknown`), not `prepared_change_not_found` and permission to create a
 new generation. The original publication identity must survive or be
 deterministically recoverable until `committed` or `not_committed` is proven.
-Binding key rotation uses a version/key identifier and keeps old verification
-keys available through the maximum preparation window.
+Confirmation-binding key rotation uses a version/key identifier and keeps old
+verification keys available through the maximum preparation window. Those keys
+are never required to recover a publishing or unknown transaction; recovery is
+authorized and resolved from the durable server-side record.
 
 ## WK-1 adversarial decision table
 

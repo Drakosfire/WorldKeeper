@@ -125,7 +125,12 @@ Similarity, duplicate detection, and candidate ranking are advice. They never si
 
 Every prepared change is bound to an exact parent revision and the authority state used to interpret it. DungeonMind publication must enforce expected-parent compare-and-swap semantics and produce one immutable child revision. If another publication advances the parent first, commit fails closed with a stale-parent result or requires re-prepare.
 
-A retry with the same transaction-level `change_request_id` / publication identity and exact prepared binding must recover the original publication rather than create a second child. A per-operation `operation_id` is not a recovery key. A successful commit is not erased by a later read/refresh failure; the receipt and refresh outcome are separate facts.
+A retry with the same transaction-level `change_request_id` and preparation
+generation must recover the original publication from the durable server-side
+transaction record rather than create a second child. `confirmation_binding`
+authorizes commit only and is not a recovery credential. A per-operation
+`operation_id` is not a recovery key. A successful commit is not erased by a
+later read/refresh failure; the receipt and refresh outcome are separate facts.
 
 ## Failure semantics
 
