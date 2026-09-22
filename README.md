@@ -1,7 +1,7 @@
 # World Keeper
 
-**Status:** design / WK-1 application contracts ready for review
-**Implementation:** not authorized
+**Status:** WK-1 accepted / WK-2 in-process boundary proof active
+**Implementation:** limited authorization — WK-2 only
 
 World Keeper is the semantic transaction layer between applications and DungeonMind. It turns source-grounded application intent into validated, reviewable World changes, commits confirmed changes through DungeonMind's governed authority, and exposes World knowledge back to clients.
 
@@ -46,4 +46,8 @@ Read the repository authority in this order:
 7. [Roadmap](Docs/Roadmaps/ROADMAP-worldkeeper.md)
 8. [Source index](Docs/Sources/SOURCE-INDEX-worldkeeper.md) when ancestry or evidence is needed
 
-The repository is intentionally documentation-only at this phase. A later implementation slice must be explicitly authorized after the design questions in the steward anchor are resolved.
+World Keeper now contains a narrowly authorized WK-2 reference package. It
+implements only the in-process DungeonMind governed-authority seam and test
+harness: exact head/revision, source/provenance, and finalized-publication
+reads expressed as World Keeper-owned witnesses. Semantic prepare/commit,
+recovery orchestration, workflow persistence, and HTTP remain unauthorized.

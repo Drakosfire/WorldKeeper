@@ -1,8 +1,8 @@
 # Steward Anchor — World Keeper
 
-**Status:** CURRENT WK-1 DESIGN AUTHORITY — READY FOR REVIEW
-**Phase:** WK-1 — TRANSPORT-NEUTRAL APPLICATION CONTRACTS
-**Implementation:** NOT AUTHORIZED
+**Status:** WK-1 ACCEPTED / WK-2 ACTIVE
+**Phase:** WK-2 — DUNGEONMIND-BACKED IN-PROCESS REFERENCE BOUNDARY
+**Implementation:** LIMITED AUTHORIZATION — WK-2 ONLY
 **Repository:** `WorldKeeper`
 
 ## Mission
@@ -28,16 +28,23 @@ World Keeper is not simple storage. DungeonMind remembers; World Keeper decides 
 
 ## Current repository state
 
-WK-0 repository bootstrap was accepted at `62a6f5671b8387c0d35ecb491489cbd253e9f6c8`. The current repository remains documentation-only while WK-1 resolves the application contract:
+WK-0 repository bootstrap was accepted at `62a6f5671b8387c0d35ecb491489cbd253e9f6c8`.
+WK-1 was accepted through PR #1 at `22035df4e413f96d88a2414c673a428bbd3f4f32`,
+merged to `main` at `f3126e1d4f486599503e8ebacabb73f3d6242a3b`. WK-2 is now
+the only authorized implementation slice:
 
 - root README and repository operating law;
 - steward, architecture, and boundary authority;
 - governed write-lifecycle design;
 - v0 intent and prepared-change contracts;
 - coarse roadmap;
-- source/ancestry index.
+- source/ancestry index;
+- a read-only, in-process DungeonMind authority seam and conformance harness.
 
-No runtime service, schema, endpoint, persistence adapter, migration, or live-world operation is authorized by this anchor.
+WK-2 may implement only World Keeper-owned witnesses and a read-only
+DungeonMind adapter. No HTTP service, World Keeper schema/persistence,
+migration, live-world operation, prepare/commit behavior, recovery
+orchestration, confirmation binding, or semantic compiler is authorized.
 
 ## Authority hierarchy
 
@@ -107,6 +114,9 @@ For a fresh agent or contributor:
   binds dependent relationships to it before confirmation. Committed v0
   receipts return direct relationship operation → durable relationship IDs,
   with exact child read-back still mandatory.
+- WK-2 is a read-only boundary proof. It may read exact heads, immutable
+  revisions, source/revision provenance, and finalized publication evidence
+  through DungeonMind; it may not publish or create a second durable authority.
 
 ## Remaining design questions
 
@@ -130,7 +140,7 @@ without blocking the semantic contract:
 
 Stop and return to design review if work would require any of the following:
 
-- implementing before implementation authorization is changed;
+- implementing outside the explicit WK-2 read-only boundary lease;
 - making World Keeper own graph persistence, a new identity ledger, or DungeonMind schema;
 - leaking `GraphContribution`, evidence-record, publication, or persistence DTOs as the public World Keeper contract;
 - silently changing a prepared transaction during confirm;
@@ -142,13 +152,13 @@ Stop and return to design review if work would require any of the following:
 
 ## Next permitted work
 
-WK-1 is ready for review. No implementation is authorized by these decisions.
-After WK-1 acceptance, the steward may issue a new narrow handoff for the
-roadmap's seam/test-harness proof or another explicitly reviewed implementation
-slice. The safest first implementation remains an in-process reference path
-against DungeonMind, but that is not current authorization.
+WK-2 is active under
+`Docs/Plans/HANDOFF-CON-READY-wk2-dungeonmind-inprocess-boundary-v1.md`.
+The permitted work is the narrow in-process, read-only authority seam and its
+tests against DungeonMind `1fc03aa21e406d9a7cb07d0e4792e202fe281375`. WK-3
+and WK-4 behavior remain unauthorized pending separate review.
 
-## WK-1 review readiness
+## Accepted WK-1 invariants
 
 WK-1 is ready for review when a fresh contributor can answer yes to all of these:
 

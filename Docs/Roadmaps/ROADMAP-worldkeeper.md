@@ -1,7 +1,7 @@
 # Roadmap — World Keeper
 
-**Status:** COARSE DESIGN ROADMAP
-**Implementation:** NOT AUTHORIZED
+**Status:** COARSE ROADMAP / WK-2 ACTIVE
+**Implementation:** LIMITED AUTHORIZATION — WK-2 ONLY
 **Planning rule:** each phase requires an explicit reviewed slice; this is not a 20-PR implementation schedule.
 
 ## Guardrails
@@ -25,15 +25,17 @@ Create the steward anchor, ownership architecture, boundary, lifecycle design, v
 
 ### WK-1 — Transport-neutral application contracts
 
-**State:** DESIGN COMPLETE — READY FOR REVIEW
+**State:** COMPLETE / ACCEPTED
 
 Resolve the open questions needed to implement a minimal application API: intent, prepared change, confirmation, commit/recovery, result/read-back, and semantic failure classes. Keep the contract independent of HTTP and DungeonMind internal DTOs.
 
 **Resolved for review:** four semantic capabilities; retained prepared record plus tamper-evident binding; a crash-surviving generation-bound publication/recovery record; explicit lifecycle/invalidation states; stable `change_request_id` across safe re-prepare generations; DungeonMind-admitted source/revision/locator evidence identity; deferred occurrence binding pending a distinct DungeonMind write contract; opaque public handles over exact prepare-time prospective identity/materialization; direct relationship result IDs; exact child-pinned read-back; and the required adversarial outcomes.
 
-**Gate:** steward/reviewer acceptance of the updated v0 contracts and lifecycle design. Acceptance authorizes a later narrow implementation handoff; it does not itself authorize runtime code.
+**Accepted:** PR #1, merged at `f3126e1d4f486599503e8ebacabb73f3d6242a3b`.
 
 ### WK-2 — DungeonMind-backed in-process reference boundary
+
+**State:** ACTIVE
 
 Build the smallest reference implementation using the existing DungeonMind application/library authority. Prove the repository/process boundary without introducing network complexity. This phase should exercise real World, source, evidence, revision, and publication semantics through narrow adapters. Occurrence binding remains out of scope until its DungeonMind landing contract is reviewed.
 
