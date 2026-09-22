@@ -86,15 +86,23 @@ For a fresh agent or contributor:
 - Prepared changes use a retained canonical workflow record plus a
   tamper-evident confirmation binding. The workflow record is not World truth
   and does not require HTTP or a World Keeper database.
+- Once a commit can begin, a separate crash-surviving transaction/publication
+  recovery record must preserve the generation-bound `publication_operation_id`
+  and lifecycle/outcome mapping. Ordinary prepared-payload expiry cannot erase
+  an in-flight or unknown publication outcome.
 - Safe re-prepare retains `change_request_id` and increments the preparation
   generation only after the prior generation is proven not committed or safely
   invalidated. Committed or unknown outcomes require recovery first.
-- v0 uses immutable source revision identity plus optional UTF-8 byte spans and
-  selected-text digests; evidence support remains distinct from explicit
-  occurrence/mention binding.
-- Prepared local objects use opaque prospective handles; committed v0 receipts
-  return direct relationship operation → durable relationship IDs, with exact
-  child read-back still mandatory.
+- v0 uses immutable source artifact/revision identity plus optional
+  DungeonMind-admitted locator identity; evidence support remains distinct from
+  explicit occurrence/mention binding. Occurrence binding is deferred from
+  implementable v0 because the current DungeonMind authority has no distinct
+  durable occurrence-to-object write contract.
+- Prepared local objects use opaque prospective handles, but prepare binds each
+  handle internally to an exact prospective durable identity/materialization and
+  binds dependent relationships to it before confirmation. Committed v0
+  receipts return direct relationship operation → durable relationship IDs,
+  with exact child read-back still mandatory.
 
 ## Remaining design questions
 
@@ -105,8 +113,14 @@ without blocking the semantic contract:
 2. Which broader World Keeper read operations are true application façades versus direct, well-scoped DungeonMind capabilities?
 3. What exact policy/human approval metadata is needed beyond the explicit confirmation fact?
 4. Which semantic-profile and scope inputs belong in a later contract versus being resolved from World context?
-5. What is the smallest v0 operation family beyond create, reference, link-occurrence, and relationship creation?
-6. What operational store, retention duration, key-management provider, and transport mapping implement the accepted prepared lifecycle?
+5. What exact DungeonMind landing contract, canonical source-byte/digest
+   semantics, and read-back should govern a future occurrence-binding
+   operation?
+6. What is the smallest v0 operation family beyond create, reference, and
+   relationship creation once that deferred family is revisited?
+7. What operational store, retention duration, key-management provider, and
+   transport mapping implement the accepted prepared lifecycle and its durable
+   recovery record?
 
 ## STOP conditions
 
@@ -149,6 +163,12 @@ WK-1 is ready for review when a fresh contributor can answer yes to all of these
 - A prepared record can be inspected, invalidated, expired, or safely recovered
   without reconstructing meaning from untrusted client input.
 - Evidence grounding and occurrence/mention binding have separate contract
-  representations.
+  representations, and occurrence binding is explicitly deferred from
+  implementable v0 pending DungeonMind authority.
+- Prospective handles are public abstractions over exact prepare-time durable
+  identity/materialization; dependent relationships never wait for commit-time
+  identity allocation or repair.
+- A crash after publication begins cannot erase the generation-bound recovery
+  identity or permit an unsafe re-prepare.
 - A committed result names the exact child and can be proven through a narrow
   child-pinned read-back capability.

@@ -75,7 +75,8 @@ Prepare validates and interprets the entire `WorldChangeIntent` as one transacti
 3. validate source context and establish an admissible evidence interpretation;
 4. validate operation identities and references;
 5. resolve durable endpoints against the exact parent;
-6. resolve transaction-local endpoints to prospective durable results;
+6. resolve transaction-local endpoints to exact prospective durable identities
+   and materialization plans;
 7. apply semantic-profile, visibility, and expressibility rules;
 8. record warnings and ambiguities without silently choosing identity;
 9. assign a new `prepared_change_id` and `preparation_generation`;
@@ -111,14 +112,17 @@ Confirm must prove that the submitted confirmation is bound to the prepared chan
 
 Confirm must not reinterpret the original intent against today's state. It may revalidate the sealed authority and re-prove the source/evidence pair; any material mismatch fails closed or requires re-prepare.
 
-DungeonMind then owns atomic expected-parent publication. When a commit attempt
-begins, Keeper maps `(change_request_id, preparation_generation)` to exactly one
-internal `publication_operation_id` and seals that mapping. Retries reuse the
-same internal identity and binding. If publication already happened and the
-response was lost, recovery with the transaction-level `change_request_id`,
-generation, and binding must return that result rather than publish another
-child. A per-operation `operation_id` is never sufficient to recover or
-deduplicate the whole change.
+DungeonMind then owns atomic expected-parent publication. Before a commit can
+begin a publication-capable call, Keeper must durably persist or make
+deterministically recoverable the mapping from
+`(change_request_id, preparation_generation)` to exactly one internal
+`publication_operation_id`, together with the prepared digest and lifecycle
+state. Retries reuse the same internal identity and binding, including after a
+Keeper restart. If publication already happened and the response was lost,
+recovery with the transaction-level `change_request_id`, generation, and
+binding must return that result rather than publish another child. A
+per-operation `operation_id` is never sufficient to recover or deduplicate the
+whole change.
 
 ## Transaction-local references
 
@@ -136,20 +140,27 @@ The following are mandatory:
 - local operation/reference IDs are non-empty and unique within the intent;
 - each local object reference resolves to exactly one object-creation operation;
 - a missing, duplicate, wrong-kind, or outside-transaction reference fails before prepare succeeds;
-- all dependent edges are materialized in the same prospective transaction;
+- all dependent edges are bound during prepare to the exact prospective durable
+  identity/materialization of their local endpoints;
+- commit reuses that prepared materialization and never allocates an object,
+  publishes it, and rewrites a dependent edge afterward;
 - no placeholder durable object or follow-up repair write is accepted.
 
 ## Source/evidence semantics
 
-The client names source context. Keeper determines whether the requested World interpretation can be grounded in admissible source/evidence semantics. DungeonMind stores and validates durable source/evidence identity. Evidence grounding is distinct from occurrence/mention binding: supporting a proposed World fact with a source does not by itself assert that particular words refer to a durable object or should receive a pill/link. Only an explicit occurrence-binding operation can make that assertion.
+The client names source context. Keeper determines whether the requested World interpretation can be grounded in admissible source/evidence semantics. DungeonMind stores and validates durable source/evidence identity. Evidence grounding is distinct from occurrence/mention binding: supporting a proposed World fact with a source does not by itself assert that particular words refer to a durable object or should receive a pill/link. Only a future explicitly reviewed occurrence-binding operation can make that assertion.
 
-Prepare must bind the selected source strongly enough that confirm cannot swap an artifact, revision, occurrence, or source selector. A client-local path or digest is context, not publication authority. Reads may expose evidence/provenance; they may not silently repair a weak write or invent an occurrence binding.
+Prepare must bind the selected source strongly enough that confirm cannot swap an artifact, revision, admitted locator, or source selector. A client-local path or digest is context, not publication authority. Reads may expose evidence/provenance; they may not silently repair a weak write or invent an occurrence binding.
 
-For v0, source evidence uses an immutable artifact/revision identity and an
-optional UTF-8 byte span with a selected-text digest. A span in `source_links`
-supports evidence only. `link_source_occurrence` carries the same source-span
-identity plus a target and is the only operation that asserts mention/occurrence
-identity.
+For v0, source evidence uses immutable artifact/revision identity and, where
+available, a DungeonMind-admitted source locator identity or locator form. A
+locator in `source_links` supports evidence only. World Keeper does not freeze
+client-defined UTF-8 byte spans or selected-text digests. The conceptual
+`link_source_occurrence` operation is deferred from implementable v0 because
+the current DungeonMind authority does not expose a distinct durable
+occurrence-to-object write contract. A future operation requires a reviewed
+landing contract, lossless translation, canonical source-byte/digest semantics,
+and exact read-back.
 
 ## Identity semantics
 
@@ -200,8 +211,9 @@ relationship operation_id → durable relationship_id
 ```
 
 The mapping is not the publication identity. Exact child read-back remains
-mandatory and verifies that each returned object, relationship, explicit
-occurrence binding, and supporting evidence exists at the published revision.
+mandatory and verifies that each returned object, relationship, and supporting
+evidence exists at the published revision. V0 has no occurrence-binding
+receipt; evidence support must not be presented as a mention/pill/link.
 The receipt must distinguish durable publication from a later refresh failure.
 
 ## Failure and recovery
@@ -226,19 +238,31 @@ from which Keeper reconstructs a meaning. The workflow store is not a graph,
 identity ledger, evidence authority, or publication store, and its existence
 does not require HTTP or a dedicated World Keeper database.
 
-The first in-process implementation may provide the store through an adapter.
-A deployment that needs prepared changes to survive restart must use a durable
-store. If the record is unavailable, the safe result is
-`prepared_change_not_found` and re-prepare; Keeper must not reconstruct from
-untrusted client input. Binding key rotation uses a version/key identifier and
-keeps old verification keys available through the maximum preparation window.
+The first in-process implementation may provide the prepared payload through an
+adapter, but the semantic contract also requires a crash-surviving
+transaction/publication recovery record once a commit can begin. Before any
+publication-capable call, that record must durably persist or make
+deterministically recoverable the `(change_request_id,
+preparation_generation, prepared_change_id, prepared_digest,
+publication_operation_id, lifecycle/outcome)` mapping. It may live in
+DungeonMind's governed publication/recovery authority or an explicitly durable
+Keeper adapter; it may not exist only in the ordinary in-memory prepared store.
+
+If a prepared payload disappears before any publication attempt, re-prepare is
+safe only when the recovery record proves that no attempt began. Once commit
+begins, missing payload is a recovery condition (`commit_pending` or
+`outcome_unknown`), not `prepared_change_not_found` and permission to create a
+new generation. The original publication identity must survive or be
+deterministically recoverable until `committed` or `not_committed` is proven.
+Binding key rotation uses a version/key identifier and keeps old verification
+keys available through the maximum preparation window.
 
 ## WK-1 adversarial decision table
 
 | Case | Required result |
 | --- | --- |
 | normal publish | prepare against parent A; review; confirm; one child B; exact read-back of B |
-| prepare local object + relationship to it | one prepared interpretation; relationship endpoint is the opaque prospective object handle |
+| prepare local object + relationship to it | one prepared interpretation; public endpoint is opaque, while the prepared record binds it to one exact prospective durable identity/materialization |
 | stale parent before confirm | `stale_parent`; no child; re-prepare required |
 | changed source authority | source re-proof fails; no child; prepared change invalidated |
 | changed identity/profile authority | authority revalidation fails; no child; prepared change invalidated |
@@ -249,13 +273,14 @@ keeps old verification keys available through the maximum preparation window.
 | re-prepare after stale preparation | same request ID, new generation/prepared ID, only after prior generation is proven not committed |
 | refresh failure after publication | commit remains successful; refresh/read-back reports its own failure |
 | source-grounded object without mention binding | evidence can support publication; no occurrence/pill/link is implied |
-| explicit mention binding | separate operation is reviewed and read back as a source-occurrence assertion |
+| requested explicit mention binding | deferred from implementable v0 until DungeonMind supplies a distinct durable occurrence-to-object contract and canonical locator/digest semantics |
+| crash after publication before local outcome | surviving generation ledger maps to the same `publication_operation_id`; recover before any re-prepare |
 
 ## WK-1 review outcome and next authorization
 
 This design and the companion v0 contracts answer the WK-1 capability,
-identity, storage, expiry, re-prepare, source-span, prospective-result,
-relationship-result, read-back, and adversarial questions. They remain design
+identity, storage, expiry, re-prepare, source-locator, prospective-result,
+relationship-result, read-back, occurrence-binding deferral, and adversarial questions. They remain design
 authority only. Implementation is still not authorized until WK-1 review
 accepts these decisions and a subsequent handoff grants a narrow
 implementation lease.

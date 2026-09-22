@@ -68,35 +68,38 @@ The client supplies source context and, where applicable, evidence links support
 source_context
   artifact reference
   source revision reference
-  optional source location/occurrence context
+  optional authority-owned source locator context
   client context for presentation
 ```
 
-Artifact and revision identity are authoritative only after Keeper/DungeonMind admission or revalidation. A local file path, browser digest, or display label is not sufficient publication authority. A span may be an exact durable occurrence identity, a bounded offset, or another versioned form accepted by a later profile; the v0 wire shape remains open.
+Artifact and revision identity are authoritative only after Keeper/DungeonMind
+admission or revalidation. A local file path, browser digest, or display label
+is not sufficient publication authority. A future profile may accept an exact
+durable occurrence identity or another versioned locator form, but v0 does not
+freeze a client-supplied span or offset representation.
 
 Evidence grounding and occurrence/mention binding are separate semantic facts. `source_context` and an operation's `source_links` say what source material supports a proposed World fact. They do not, by themselves, assert that particular source words refer to a particular durable object or deserve mention navigation. Creating a source-grounded object or assertion must not implicitly create an occurrence binding.
 
-The smallest v0 source reference is:
+The smallest v0 source/evidence reference is:
 
 ```text
 SourceRevisionRef
   artifact_id
   source_revision_id
 
-SourceSpan (only when a location is available)
+SourceEvidenceLocator (only when DungeonMind has admitted one)
+  source_artifact_id
   source_revision_id
-  start_offset inclusive
-  end_offset exclusive
-  offset_unit = utf8_byte
-  selected_text_digest
+  authority-owned locator identity or locator form
 ```
 
 `SourceRevisionRef` is sufficient to ground a fact when no exact occurrence
-was selected. `SourceSpan` is required for an explicit occurrence/mention
-binding. The immutable source revision identity and selected-text digest allow
-revalidation without trusting a client path or mutable source body. The v0
-contract does not define a universal annotation system, paragraph model, or
-source-body transport.
+was selected. An authority-owned locator may refine the evidence location, but
+it remains evidence/provenance and does not assert that source words refer to a
+World object. World Keeper v0 does not freeze client-supplied byte offsets,
+selected-text digests, or a universal annotation system. Any future occurrence
+contract must define canonical source bytes and digest/revalidation semantics
+with DungeonMind before it can become implementable.
 
 ### Actor context
 
@@ -129,20 +132,6 @@ durable reference is interpreted at the prepared parent revision and must
 identify an object admissible in the requested World/scope. A candidate label
 or similarity match is not itself a durable reference.
 
-### `link_source_occurrence`
-
-Requests an explicit occurrence/mention binding: these source words or this durable source occurrence refer to this World object or operation result. This is distinct from evidence grounding. DungeonMind owns the durable evidence/provenance representation and any durable occurrence-binding record, but a source-grounded object does not receive this binding implicitly. A link to a transaction-local object resolves only within this intent.
-
-Conceptually, the operation carries:
-
-```text
-operation_id       unique within the intent
-source_span        immutable SourceSpan
-target_ref         durable object ref or local_ref
-```
-
-The final v0 link-kind vocabulary remains open, but the source revision, byte range, and selected-text digest are required. A client may use the resulting binding for mention navigation or a pill only when the governed World projection says the binding is truthful.
-
 ### `create_relationship`
 
 Proposes a relationship with:
@@ -158,6 +147,16 @@ source_links      optional operation-level grounding links
 
 Both endpoints must resolve during prepare. A local endpoint must resolve to an object created by this same intent, not to a relationship operation or a prior transaction.
 
+### Deferred occurrence binding
+
+`link_source_occurrence` remains a future conceptual operation, not an
+implementable v0 operation. The current DungeonMind authority exposes source
+evidence and locator forms, but not a distinct durable occurrence-to-object
+write contract that World Keeper can call losslessly. A source-grounded object
+therefore receives no mention/pill/link binding in v0. A later contract may add
+the operation only after DungeonMind defines the durable landing record,
+translation, canonical source-byte/digest semantics, and exact read-back.
+
 ## Reference rules
 
 1. `change_request_id` identifies the whole transaction and is the only v0 idempotency/recovery identity.
@@ -168,7 +167,9 @@ Both endpoints must resolve during prepare. A local endpoint must resolve to an 
 6. Missing, duplicate, wrong-kind, cross-intent, or ambiguous references fail closed.
 7. No client may submit a fabricated durable ID for an object that the same transaction creates.
 8. The order of operations must not change the meaning; dependency resolution is semantic, not a client-side two-phase protocol.
-9. Source/evidence links never imply occurrence/mention bindings; only `link_source_occurrence` or a later explicit operation can create that assertion.
+9. Source/evidence links never imply occurrence/mention bindings. V0 has no
+   implementable occurrence-binding operation; a later reviewed operation may
+   create that assertion only after its DungeonMind landing contract exists.
 
 ## Identity and ambiguity rules
 
@@ -216,6 +217,7 @@ The contract does not authorize:
 - identity merge/reconciliation, delete, or arbitrary edit;
 - automatic deduplication;
 - raw graph contributions or evidence-record DTOs;
+- occurrence/mention binding or client-defined source byte-offset semantics;
 - direct persistence or SQL;
 - a required HTTP transport;
 - an agent/tool-loop protocol;

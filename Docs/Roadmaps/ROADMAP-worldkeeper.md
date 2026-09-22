@@ -29,13 +29,13 @@ Create the steward anchor, ownership architecture, boundary, lifecycle design, v
 
 Resolve the open questions needed to implement a minimal application API: intent, prepared change, confirmation, commit/recovery, result/read-back, and semantic failure classes. Keep the contract independent of HTTP and DungeonMind internal DTOs.
 
-**Resolved for review:** four semantic capabilities; retained prepared record plus tamper-evident binding; explicit lifecycle/invalidation states; stable `change_request_id` across safe re-prepare generations; immutable source revision plus optional UTF-8 byte spans; opaque prospective object handles; direct relationship result IDs; exact child-pinned read-back; and the required adversarial outcomes.
+**Resolved for review:** four semantic capabilities; retained prepared record plus tamper-evident binding; a crash-surviving generation-bound publication/recovery record; explicit lifecycle/invalidation states; stable `change_request_id` across safe re-prepare generations; DungeonMind-admitted source/revision/locator evidence identity; deferred occurrence binding pending a distinct DungeonMind write contract; opaque public handles over exact prepare-time prospective identity/materialization; direct relationship result IDs; exact child-pinned read-back; and the required adversarial outcomes.
 
 **Gate:** steward/reviewer acceptance of the updated v0 contracts and lifecycle design. Acceptance authorizes a later narrow implementation handoff; it does not itself authorize runtime code.
 
 ### WK-2 — DungeonMind-backed in-process reference boundary
 
-Build the smallest reference implementation using the existing DungeonMind application/library authority. Prove the repository/process boundary without introducing network complexity. This phase should exercise real World, source, evidence, revision, and publication semantics through narrow adapters.
+Build the smallest reference implementation using the existing DungeonMind application/library authority. Prove the repository/process boundary without introducing network complexity. This phase should exercise real World, source, evidence, revision, and publication semantics through narrow adapters. Occurrence binding remains out of scope until its DungeonMind landing contract is reviewed.
 
 WK-2 is seam and test-harness proof only. It may establish transport-neutral fixtures, capability probes, and a narrow in-process adapter, but it must not implement or expand World Keeper semantic behavior before WK-1 freezes the application contract; prepare and commit behavior belong to WK-3 and WK-4.
 

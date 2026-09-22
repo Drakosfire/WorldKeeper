@@ -34,6 +34,9 @@ The Buddy handoff also identifies PR #745 review `5279631534` as a design review
 | `DungeonMind/README.md` at `13fe863...` | CURRENT AUTHORITY in DungeonMind | DungeonMind is an independent governed world-knowledge library; it owns durable knowledge, immutable revisions, evidence/provenance, scope/admissibility, profile identity, retrieval, and governed publication | the durable lower-layer ownership boundary; correctness-first posture | no product UI, agent harness, product-local source presentation, or requirement to expose Mind DTOs |
 | `DungeonMind/Docs/Architecture/ARCHITECTURE.md` | CURRENT AUTHORITY in DungeonMind | one World Graph per world; immutable revisions/head CAS; evidence as validity; explicit reads; governed writes; profiles own domain meaning | exact parent, immutable child, read pinning, fail-closed evidence and scope principles | DungeonMind's internal package layout and its own read-context implementation |
 | `DungeonMind/Docs/Architecture/AUTHORITY.md` | CURRENT AUTHORITY in DungeonMind | accepted precedence, graph/source/evidence authority, client boundary, write authority, profile authority | no current-head inference, no foreign graph reconstruction, source revalidation, publication receipts/recovery | source index does not let historical Buddy behavior override current Mind authority |
+| `DungeonMind/src/dungeonmind/contracts/evidence.py` at `13fe863...` | CURRENT AUTHORITY in DungeonMind | durable source-artifact, source-revision, and evidence-reference representations with opaque `locator`/`uri` fields | World Keeper may bind evidence to admitted artifact/revision and authority-owned locator identity | no distinct v0 occurrence-to-object publication operation; evidence fields are not mention-binding authority |
+| `DungeonMind/src/dungeonmind/contracts/vnext/source.py` at `13fe863...` | CURRENT AUTHORITY in DungeonMind | versioned evidence contracts retain independent locator forms including `source_span_ref_id`, `source_locator`, and `line_ref` | preserve locator identity without conflating it with a World-object occurrence assertion | no lossless v0 translation from these evidence fields to a distinct occurrence-to-object write |
+| `DungeonMind/Docs/Decisions/ADR-0015-lossless-source-provenance-v2.md` at `13fe863...` | CURRENT AUTHORITY in DungeonMind | source locator forms such as `source_span_ref_id`, `locator`, `uri`, `source_locator`, and `line_ref` are independent; v2 provenance is lossless and fail-closed | preserve the distinction between source evidence and a future occurrence assertion | no client-defined byte-offset contract and no authorization to invent an occurrence write operation |
 | `DungeonMind/Docs/Decisions/ADR-0022-independent-library-and-agent-harness-boundary.md` | CURRENT AUTHORITY in DungeonMind | agent harness/model/tool loop/context budgeting belongs to the client; DungeonMind authorizes only its own operations | World Keeper must also remain a semantic client-facing layer, not an agent harness | no MindTurn/agent/context behavior is automatically a Keeper responsibility |
 | `DungeonMind/Docs/Roadmaps/ROADMAP.md` | CURRENT AUTHORITY in DungeonMind | current library roadmap and its evidence-driven posture | consult for compatibility and sequencing when implementation begins | not a World Keeper implementation schedule |
 
@@ -65,10 +68,12 @@ These findings are the reason this repository exists:
 
 1. Prepare-time prospective identity is part of safety. Publishing objects, receiving IDs, then rewriting relationships is weaker than preparing the complete transaction.
 2. Local operation/reference identifiers must be unique inside an intent; ambiguity fails before prepare succeeds.
-3. Relationship result handles are still an open contract decision. This repository does not invent them.
+3. WK-1 decides that a committed v0 receipt maps each relationship `operation_id` directly to its durable `relationship_id`. That operation identity is a result correlation key only; it is not the publication or recovery identity.
 4. Buddy's current expressibility classifier is implementation evidence, not architecture. Semantic expressibility belongs at the Keeper boundary eventually.
 5. Source admission and graph publication are one application-facing semantic workflow even though DungeonMind owns the durable records and publication authority.
 6. Identity suggestions are not identity decisions.
+7. A public prospective object handle is opaque, but prepare must bind it internally to an exact prospective durable identity/materialization. Dependent relationships must resolve to that exact materialization before confirmation.
+8. Evidence grounding remains distinct from occurrence/mention binding. Because the current DungeonMind source contracts expose evidence locators but no distinct occurrence-to-object write operation, occurrence binding is deferred from implementable World Keeper v0.
 
 ## Conflicts and caveats discovered
 
@@ -76,7 +81,7 @@ These findings are the reason this repository exists:
 - The current Buddy side-quest authority is identified as `19593ae6...` in the reviewed handoff, but that revision is not present in this local clone. Its indexed claims are limited to the corrected interaction semantics established by the review; implementation details must be re-read from the exact source revision before extraction work.
 - The Buddy source contract is marked proposed/blocked for its own implementation lane. Its safety findings are accepted ancestry for this bootstrap, not authorization to continue that lane here.
 - DungeonMind's local working tree contains unrelated uncommitted performance/contract work. This bootstrap relies on committed README/architecture/authority/ADR content at `13fe863...`, not on those changes.
-- The handoff proposes a future `created_relationship_ids` decision but explicitly leaves it open. The prepared-change contract preserves that uncertainty.
+- The earlier source handoff left relationship result handles open. WK-1 resolves that question as `relationship operation_id → durable relationship_id`; this index is updated in the same decision.
 
 No observed source conflict defeats the three-layer thesis. The main uncertainty is sequencing and contract shape, not ownership.
 
