@@ -1,6 +1,6 @@
 # World Keeper
 
-**Status:** design / repository bootstrap
+**Status:** design / WK-1 application contracts ready for review
 **Implementation:** not authorized
 
 World Keeper is the semantic transaction layer between applications and DungeonMind. It turns source-grounded application intent into validated, reviewable World changes, commits confirmed changes through DungeonMind's governed authority, and exposes World knowledge back to clients.

@@ -1,7 +1,7 @@
 # Architecture — World Keeper
 
-**Status:** CURRENT BOOTSTRAP ARCHITECTURE AUTHORITY
-**Phase:** DESIGN / REPOSITORY BOOTSTRAP
+**Status:** CURRENT ARCHITECTURE AUTHORITY
+**Phase:** WK-1 — TRANSPORT-NEUTRAL APPLICATION CONTRACTS
 **Implementation:** NOT AUTHORIZED
 
 ## Mission
@@ -39,7 +39,14 @@ The application submits a transport-neutral `WorldChangeIntent`. World Keeper va
 - transaction-local dependencies;
 - identity advice and any explicit identity decision.
 
-It returns a `PreparedWorldChange` that explains the exact proposed meaning. Review happens in the client, but the prepared interpretation is authoritative input to review. Confirmation must identify that exact prepared change. DungeonMind then performs its governed publication against the expected parent, returning an immutable child revision and durable result identities.
+It returns a `PreparedWorldChange` that explains the exact proposed meaning,
+including prospective local-object identities/materializations that dependent
+relationships already resolve to. Review happens in the client, but the
+prepared interpretation is authoritative input to review. Confirmation must
+identify that exact prepared change. DungeonMind then performs its governed
+publication against the expected parent, returning an immutable child revision
+and durable result identities; commit does not allocate an object and repair
+its relationships afterward.
 
 ```text
 WorldChangeIntent
@@ -91,7 +98,14 @@ READ:  exact revision → scoped/admissible projection → retrieval/result
 
 ## Source and evidence boundary
 
-The client supplies the source context it is acting from: an artifact, source revision, and, where available, an occurrence or span. World Keeper owns the application-facing meaning of that grounding and ensures a proposed change has an admissible evidence path. DungeonMind owns durable source identity, evidence records, provenance admission, and revalidation.
+The client supplies the source context it is acting from: an artifact, source
+revision, and, where available, a DungeonMind-admitted locator identity. World
+Keeper owns the application-facing meaning of that grounding and ensures a
+proposed change has an admissible evidence path. DungeonMind owns durable
+source identity, evidence records, provenance admission, locator semantics, and
+revalidation. Occurrence/mention binding is deferred from implementable v0
+until DungeonMind exposes a distinct durable occurrence-to-object write
+contract.
 
 The browser or client may not turn a local path, byte digest, or untrusted source label into publication authority. Confirm must re-prove the same selected source/evidence pair that prepare sealed.
 
@@ -111,7 +125,12 @@ Similarity, duplicate detection, and candidate ranking are advice. They never si
 
 Every prepared change is bound to an exact parent revision and the authority state used to interpret it. DungeonMind publication must enforce expected-parent compare-and-swap semantics and produce one immutable child revision. If another publication advances the parent first, commit fails closed with a stale-parent result or requires re-prepare.
 
-A retry with the same transaction-level `change_request_id` / publication identity and exact prepared binding must recover the original publication rather than create a second child. A per-operation `operation_id` is not a recovery key. A successful commit is not erased by a later read/refresh failure; the receipt and refresh outcome are separate facts.
+A retry with the same transaction-level `change_request_id` and preparation
+generation must recover the original publication from the durable server-side
+transaction record rather than create a second child. `confirmation_binding`
+authorizes commit only and is not a recovery credential. A per-operation
+`operation_id` is not a recovery key. A successful commit is not erased by a
+later read/refresh failure; the receipt and refresh outcome are separate facts.
 
 ## Failure semantics
 

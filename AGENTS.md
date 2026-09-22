@@ -1,6 +1,6 @@
 # World Keeper repository operating law
 
-This repository is in **DESIGN / REPOSITORY BOOTSTRAP**. The current checked-in authority says:
+This repository is in **DESIGN / WK-1 APPLICATION CONTRACT REVIEW**. The current checked-in authority says:
 
 ```text
 IMPLEMENTATION: NOT AUTHORIZED
