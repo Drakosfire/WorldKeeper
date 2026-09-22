@@ -1,0 +1,83 @@
+# Source Index — World Keeper
+
+**Status:** CURRENT EVIDENCE INDEX
+**Purpose:** record ancestry, reviewed revisions, and the exact claims each source can support. Sources are evidence; this index and the World Keeper authority hierarchy determine how they are used.
+
+## Precedence for this repository
+
+1. `Docs/Steward/STEWARD-ANCHOR-worldkeeper.md`
+2. `Docs/Architecture/ARCHITECTURE-worldkeeper.md`
+3. `Docs/Architecture/BOUNDARY-dungeonbuddy-worldkeeper-dungeonmind.md`
+4. `Docs/Design/DESIGN-governed-world-change-lifecycle.md`
+5. versioned `Docs/Design/CONTRACT-*` documents
+6. `Docs/Roadmaps/ROADMAP-worldkeeper.md`
+7. this index and the external sources below
+
+External repository architecture and contracts outrank chat/history within their own repositories, but they do not silently override accepted World Keeper design.
+
+## Snapshot and repository conditions
+
+This index was created from the local repositories on 2026-09-22.
+
+| Repository | Observed revision | Condition | Use |
+| --- | --- | --- | --- |
+| WorldKeeper | bootstrap commit `0893c45` on `codex/bootstrap-worldkeeper` | documentation-only repository bootstrap | current local authority after bootstrap |
+| DungeonMindBuddy | `b7e71379399905b7853d3ee67459511b2669b003` reviewed head; local current `c3e5153570cad720c2eff8c110c07ec255a699ad` | local working tree contains unrelated UI edits; reviewed head is the safer ancestry pin | source-to-World semantics and migration evidence |
+| DungeonMind | `13fe863283dea489373fda8f801af19afb85570a` local HEAD | local working tree contains unrelated performance/contract work; use committed docs at HEAD | durable library boundary and authority |
+
+The Buddy handoff also identifies PR #745 review `5279631534` as a design review that held the draft for precision. That review identifier is preserved as process evidence; the durable claims used here come from the checked-in reviewed head and current DungeonMind documents.
+
+## DungeonMind sources
+
+| Source | Status | What it proves | What World Keeper inherits | What World Keeper does not inherit |
+| --- | --- | --- | --- | --- |
+| `DungeonMind/README.md` at `13fe863...` | CURRENT AUTHORITY in DungeonMind | DungeonMind is an independent governed world-knowledge library; it owns durable knowledge, immutable revisions, evidence/provenance, scope/admissibility, profile identity, retrieval, and governed publication | the durable lower-layer ownership boundary; correctness-first posture | no product UI, agent harness, product-local source presentation, or requirement to expose Mind DTOs |
+| `DungeonMind/Docs/Architecture/ARCHITECTURE.md` | CURRENT AUTHORITY in DungeonMind | one World Graph per world; immutable revisions/head CAS; evidence as validity; explicit reads; governed writes; profiles own domain meaning | exact parent, immutable child, read pinning, fail-closed evidence and scope principles | DungeonMind's internal package layout and its own read-context implementation |
+| `DungeonMind/Docs/Architecture/AUTHORITY.md` | CURRENT AUTHORITY in DungeonMind | accepted precedence, graph/source/evidence authority, client boundary, write authority, profile authority | no current-head inference, no foreign graph reconstruction, source revalidation, publication receipts/recovery | source index does not let historical Buddy behavior override current Mind authority |
+| `DungeonMind/Docs/Decisions/ADR-0022-independent-library-and-agent-harness-boundary.md` | CURRENT AUTHORITY in DungeonMind | agent harness/model/tool loop/context budgeting belongs to the client; DungeonMind authorizes only its own operations | World Keeper must also remain a semantic client-facing layer, not an agent harness | no MindTurn/agent/context behavior is automatically a Keeper responsibility |
+| `DungeonMind/Docs/Roadmaps/ROADMAP.md` | CURRENT AUTHORITY in DungeonMind | current library roadmap and its evidence-driven posture | consult for compatibility and sequencing when implementation begins | not a World Keeper implementation schedule |
+
+## DungeonMindBuddy architecture sources
+
+| Source | Status | What it proves | What World Keeper inherits | What World Keeper does not inherit |
+| --- | --- | --- | --- | --- |
+| `DungeonMindBuddy/Docs/Design/ARCHITECTURE-campaign-supergraph.md` at reviewed head `b7e71379...` | ACCEPTED ANCESTRY | one World-owned supergraph; campaign-scoped assertions/evidence/chronology; many projections; surfaces never own graph behavior; separate read/write paths | source-first product boundary, world-versus-campaign distinction, projection/read separation | Buddy's surface names, historical overlay implementation, or current sequencing authority |
+| `DungeonMindBuddy/Docs/Design/DESIGN-source-to-world-authoring-interaction-contract.md` at `b7e71379...` | ACCEPTED ANCESTRY / OPEN DESIGN EVIDENCE | continuous source ↔ World authoring; durable refs differ from source occurrences; local refs in one transaction; identity advice is not identity authority; publish/read-back continuity | local-ref and exact-result semantics, source-first interaction principle | the proposed Buddy interaction sequence is not itself the Keeper API or an implementation authorization |
+| `DungeonMindBuddy/Docs/Plans/HANDOFF-CON-READY-source-to-world-transaction-semantics-v1.md` at `b7e71379...` | IMPLEMENTATION EVIDENCE / BLOCKED at its source head | same-batch object + relationship must publish atomically; invalid local refs, stale parent, changed proposal fail closed; receipt maps local object to durable node | adversarial proof requirements and one-child invariant | Buddy file allowlists, route names, and its activation process |
+| `DungeonMindBuddy/Docs/Plans/PLAN-CON-READY-authoring-v2-derived-gold-ablation-loop-v1.md` | ACCEPTED ANCESTRY / ACTIVE in Buddy at local current source | human authoring → durable World truth → derived gold; current World authority is DungeonMind; agent is not first author | product continuity and the rule that durable truth precedes derived evaluation output | Buddy's V2 sequencing, UI implementation, or permission to start Keeper implementation |
+| `DungeonMindBuddy/Docs/Plans/HANDOFF-CON-READY-authoring-v2-governed-world-commit-v1.md` | IMPLEMENTATION EVIDENCE | existing prepare/commit seam re-resolves and re-proves source, enforces stale parent, publishes one immutable revision, returns created node IDs, and supports idempotent recovery | exact source/parent binding and read-back requirements | `POST` routes, `recapArtifactId`, `sourceRunId`, or Buddy response DTOs as public Keeper contract |
+| `DungeonMindBuddy/Docs/Design/DESIGN-graph-object-authoring-surface.md` | HISTORICAL / TRANSITIONAL | source-first selection, local staging, explicit review/confirm, authored corrections; explicitly says Buddy-owned graph storage is superseded | interaction lessons and local/reversible authoring principle | authored overlay/event log and gold fixtures as durable World truth |
+
+## DungeonMindBuddy implementation evidence
+
+| Source | Status | What it proves | Extraction treatment |
+| --- | --- | --- | --- |
+| `apps/live_control_server/services/graph_object_authoring_prepare.py` | IMPLEMENTATION EVIDENCE | request validation, expressibility checks, prepared response, signed binding, exact source/parent/proposal facts, local relationship handling seam | preserve semantics; redesign at the Keeper boundary; do not freeze Python models or classifier |
+| `apps/live_control_server/services/graph_object_authoring_commit.py` | IMPLEMENTATION EVIDENCE | commit revalidation, publication/recovery orchestration, receipt and committed proposal handling | use as behavior evidence and migration inventory; remove duplication after Keeper adoption |
+| `apps/live_control_server/ports/world_graph_authority.py` | IMPLEMENTATION EVIDENCE / MIGRATION SEAM | exact World view, identity snapshot, expected-parent, relationship/read-back and publication concepts | classify as an adapter seam; DungeonMind remains durable authority |
+| `apps/live_control_server/ports/world_graph_source_admission.py` | IMPLEMENTATION EVIDENCE / MIGRATION SEAM | source identity, admission, and confirm-time re-proof distinction | preserve source/evidence safety; do not expose Buddy port shape as Keeper contract |
+| `apps/live_control_server/integrations/dungeonmind/` | IMPLEMENTATION EVIDENCE | Buddy-specific adapters for reads, writes, contribution mapping, source admission | likely retirement or thinning after extraction; no wholesale move |
+
+## Accepted semantic findings
+
+These findings are the reason this repository exists:
+
+1. Prepare-time prospective identity is part of safety. Publishing objects, receiving IDs, then rewriting relationships is weaker than preparing the complete transaction.
+2. Local operation/reference identifiers must be unique inside an intent; ambiguity fails before prepare succeeds.
+3. Relationship result handles are still an open contract decision. This repository does not invent them.
+4. Buddy's current expressibility classifier is implementation evidence, not architecture. Semantic expressibility belongs at the Keeper boundary eventually.
+5. Source admission and graph publication are one application-facing semantic workflow even though DungeonMind owns the durable records and publication authority.
+6. Identity suggestions are not identity decisions.
+
+## Conflicts and caveats discovered
+
+- The handoff's reviewed source head `b7e71379...` exists locally and contains the source-to-World contract and blocked transaction handoff. The checked-out Buddy branch has moved to `c3e51535...` and has unrelated working-tree edits; this index does not treat those edits as authority.
+- The Buddy source contract is marked proposed/blocked for its own implementation lane. Its safety findings are accepted ancestry for this bootstrap, not authorization to continue that lane here.
+- DungeonMind's local working tree contains unrelated uncommitted performance/contract work. This bootstrap relies on committed README/architecture/authority/ADR content at `13fe863...`, not on those changes.
+- The handoff proposes a future `created_relationship_ids` decision but explicitly leaves it open. The prepared-change contract preserves that uncertainty.
+
+No observed source conflict defeats the three-layer thesis. The main uncertainty is sequencing and contract shape, not ownership.
+
+## Use rule
+
+When later work needs a claim not represented here, update this index and the relevant authority document in the same design decision. Do not promote an implementation detail, branch-local patch, or chat reconstruction into World Keeper authority by implication.
