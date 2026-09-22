@@ -85,7 +85,7 @@ These are deliberately not resolved by bootstrap:
 1. What is the smallest transport-neutral application API, and when is an optional network host justified?
 2. Which World Keeper read operations are true application façades versus direct, well-scoped DungeonMind capabilities?
 3. Should receipts expose a local relationship operation → durable relationship ID mapping, or should exact relationship identity be derived from child-revision read-back?
-4. What is the durable lifecycle, expiry, and recovery identity of a prepared change?
+4. What are the durable storage/lifecycle, expiry, and invalidation mechanisms for a prepared change, and how does the decided `change_request_id` map to any internal `publication_operation_id`?
 5. Which source occurrence/span forms can be accepted in v0 while preserving DungeonMind provenance authority?
 6. Which semantic-profile and scope inputs belong in the v0 intent contract versus being resolved from World context?
 7. What exact policy governs warnings, ambiguities, and an explicit identity-reconciliation operation?
