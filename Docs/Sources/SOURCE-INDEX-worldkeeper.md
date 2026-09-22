@@ -21,7 +21,7 @@ This index was created from the local repositories on 2026-09-22.
 
 | Repository | Observed revision | Condition | Use |
 | --- | --- | --- | --- |
-| WorldKeeper | reviewed WK-0 bootstrap base `09c24dc86937f76647d67c7fb6dba08fce5b39d6`; this correction follows it | documentation-only repository bootstrap; the correction commit is intentionally not named here because this file cannot contain its own final SHA | current local authority after correction |
+| WorldKeeper | WK-1 accepted head `22035df4e413f96d88a2414c673a428bbd3f4f32`; merged `main` base `f3126e1d4f486599503e8ebacabb73f3d6242a3b` | WK-2 is the only active limited implementation lease | current authority for the in-process boundary proof |
 | DungeonMindBuddy | current side-quest authority `19593ae6...`; historical reviewed #745 head `b7e71379399905b7853d3ee67459511b2669b003`; local current `c3e5153570cad720c2eff8c110c07ec255a699ad` | local working tree contains unrelated UI edits; side-quest authority is the direct ancestry for World Keeper, while b7e is retained for older review/implementation evidence | source-to-World semantics, corrected interaction boundary, and migration evidence |
 | DungeonMind | verified current `origin/main` `1fc03aa21e406d9a7cb07d0e4792e202fe281375`; local checkout remains at `13fe863...` | local working tree contains unrelated performance/contract work; the indexed sources were verified at current main rather than inferred from the stale local checkout | durable library boundary and authority |
 
@@ -39,6 +39,7 @@ The Buddy handoff also identifies PR #745 review `5279631534` as a design review
 | `DungeonMind/Docs/Decisions/ADR-0015-lossless-source-provenance-v2.md` at `1fc03aa...` | CURRENT AUTHORITY in DungeonMind | source locator forms such as `source_span_ref_id`, `locator`, `uri`, `source_locator`, and `line_ref` are independent; v2 provenance is lossless and fail-closed | preserve the distinction between source evidence and a future occurrence assertion | no client-defined byte-offset contract and no authorization to invent an occurrence write operation |
 | `DungeonMind/Docs/Decisions/ADR-0022-independent-library-and-agent-harness-boundary.md` at `1fc03aa...` | CURRENT AUTHORITY in DungeonMind | agent harness/model/tool loop/context budgeting belongs to the client; DungeonMind authorizes only its own operations | World Keeper must also remain a semantic client-facing layer, not an agent harness | no MindTurn/agent/context behavior is automatically a Keeper responsibility |
 | `DungeonMind/Docs/Roadmaps/ROADMAP.md` at `1fc03aa...` | CURRENT AUTHORITY in DungeonMind | current library roadmap and its evidence-driven posture | consult for compatibility and sequencing when implementation begins | not a World Keeper implementation schedule |
+| `DungeonMind/src/dungeonmind/application/repositories.py`, `application/graph_snapshot.py`, and `infrastructure/memory/repositories.py` at `1fc03aa...` | WK-2 IMPLEMENTATION EVIDENCE | read-only `get_head`, exact `get_revision`, source artifact/revision reads, finalized-publication `get`, graph parsing, and in-memory authority adapters | the exact read primitives used by the WK-2 adapter and fixture setup | DungeonMind DTOs, write methods, storage topology, and publication orchestration as World Keeper public behavior |
 
 ## DungeonMindBuddy architecture sources
 

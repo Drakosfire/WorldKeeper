@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "worldkeeper"
+version = "0.1.0"
+description = "Transport-neutral application boundary for governed World knowledge."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "dungeonmind @ git+https://github.com/Drakosfire/DungeonMind.git@1fc03aa21e406d9a7cb07d0e4792e202fe281375",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "pyright>=1.1.390",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/worldkeeper"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF", "ANN"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ANN"]
+
+[tool.pyright]
+include = ["src"]
+exclude = ["**/__pycache__"]
+pythonVersion = "3.11"
+typeCheckingMode = "basic"
+reportMissingImports = true
+reportMissingTypeStubs = false
