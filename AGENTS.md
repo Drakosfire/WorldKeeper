@@ -36,3 +36,11 @@ IMPLEMENTATION: LIMITED AUTHORIZATION — WK-2 ONLY
 - Do not copy DungeonMindBuddy modules wholesale. Classify current seams as product behavior, migration evidence, World Keeper responsibility, or DungeonMind responsibility before moving anything.
 - A future implementation change must name the authority document and the explicit authorization that permits it.
 - Before handing work back, run documentation-oriented checks, inspect the complete diff, and report the exact branch, commit, status, and unresolved questions.
+
+## Execution policy
+
+- An explicitly authorized handoff or implementation lease is execution authority for its stated scope. Execute it without asking for separate permission to begin.
+- For an already-authorized handoff, editing, testing, committing, pushing, and opening or updating its pull request are ordinary completion steps. Do not ask for separate permission for those steps.
+- A review request, review verdict, or pasted review is review-only unless it explicitly grants or references an active implementation lease; it does not authorize implementation by itself.
+- If work reaches a stated scope or STOP condition, or requires broader authority, stop and report the blocker rather than broadening the lease.
+- Merging a pull request is separate from opening or updating it and still requires explicit authorization.

@@ -158,7 +158,7 @@ The permitted work is the narrow in-process, read-only authority seam and its
 tests against DungeonMind `1fc03aa21e406d9a7cb07d0e4792e202fe281375`. WK-3
 and WK-4 behavior remain unauthorized pending separate review.
 
-## WK-1 review readiness
+## Accepted WK-1 invariants
 
 WK-1 is ready for review when a fresh contributor can answer yes to all of these:
 
