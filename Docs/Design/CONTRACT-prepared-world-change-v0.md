@@ -1,6 +1,6 @@
 # Contract — PreparedWorldChange v0
 
-**Status:** CURRENT APPLICATION CONTRACT, WK-3 implementation blocked
+**Status:** CURRENT APPLICATION CONTRACT, WK-3 prepare active
 **Owner:** WorldKeeper boundary
 **Decision:** [ownership simplification](DECISION-worldkeeper-ownership-simplification.md)
 
@@ -67,7 +67,6 @@ deferred unless a later authority decision establishes a concrete need.
 `get_change_result(prepared_change_id)` is optional until a demonstrated caller
 needs status inspection independently of a commit retry.
 
-At inspected DungeonMind `1fc03aa…`, materialization requires durable
-`subject_object_id` and `object_object_id` endpoints. WK-3 is blocked until a
-DungeonMind-owned prospective-reference publication contract proves allocation,
-substitution, atomicity, idempotency, and lost-response resolution.
+DungeonMind V5.4 at merged authority `6edb9e40…` proves prospective allocation,
+substitution, atomicity, idempotency, and lost-response resolution. WK-3 may
+produce an immutable compile-ready prospective plan; it may not publish it.

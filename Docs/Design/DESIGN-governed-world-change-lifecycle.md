@@ -1,7 +1,7 @@
 # Design — Governed World Change Lifecycle
 
-**Status:** CURRENT LIFECYCLE AUTHORITY, WK-3 implementation blocked
-**Phase:** WK-1/WK-2 accepted; DungeonMind prerequisite next
+**Status:** CURRENT LIFECYCLE AUTHORITY, WK-3 prepare active
+**Phase:** WK-1/WK-2 and DungeonMind V5.4 accepted
 **Decision:** [ownership simplification](DECISION-worldkeeper-ownership-simplification.md)
 
 ## Lifecycle
@@ -39,18 +39,18 @@ and lost-response resolution reconstruct it from the caller-held prepared ID
 alone, so no retained WorldKeeper prepared state or mirrored recovery ledger is
 needed. A re-prepare creates both a new prepared ID and publication identity.
 
-## DungeonMind gate
+## DungeonMind gate — accepted
 
-At inspected DungeonMind `1fc03aa…`,
+At historical DungeonMind `1fc03aa…`,
 `GraphContributionAssertionV2` carries durable endpoint fields and
 `GraphMaterializerV6.apply_edge` requires both endpoints to be present in the
 materialized object set. `publish_finalized_review` publishes an already
 materialized graph payload through `WorldGraphRepository.publish_revision`.
-No current contract accepts a prospective endpoint, allocates it during the
+No contract at that historical revision accepted a prospective endpoint, allocated it during the
 same publication, substitutes it through dependent assertions, and returns the
 mapping.
 
-The next implementation slice belongs to DungeonMind and must prove:
+DungeonMind V5.4 now proves:
 
 1. prospective references are scoped to one publication;
 2. each prospective reference maps to one newly allocated durable ID;
@@ -61,7 +61,8 @@ The next implementation slice belongs to DungeonMind and must prove:
 7. lost responses resolve from durable evidence; and
 8. the result returns prospective/client-operation-to-durable mappings.
 
-Until then, `WK-3 implementation is BLOCKED`.
+V5.4 was accepted at `c7700f98…` and merged at `6edb9e40…`. WK-3 prepare is
+active; publication and exact-child verification remain WK-4 work.
 
 ## Deferred capabilities
 

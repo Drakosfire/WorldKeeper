@@ -4,8 +4,8 @@
 **Decision date:** 2026-09-22
 **WorldKeeper baseline:** `732c3c394a5b56843612841c7b7e4a0def53cd70`
 **Accepted WK-2 PR #2 head:** `15739eb2688992fe8f977d006b1e9153047753a9`
-**DungeonMind inspected authority:** `1fc03aa21e406d9a7cb07d0e4792e202fe281375` (`origin/main`)
-**DungeonMind local checkout:** `13fe863283dea489373fda8f801af19afb85570a`, dirty and not used as authority
+**Historical DungeonMind gap inspection:** `1fc03aa21e406d9a7cb07d0e4792e202fe281375`
+**Accepted DungeonMind V5.4 merge:** `6edb9e40d1dc930f537c66deb1afbd1b99002844`
 
 ## Decision
 
@@ -67,10 +67,10 @@ WorldKeeper recovery ledger are not mandatory v0 semantics. A successful commit
 still performs exact child-revision read-back internally before returning a
 verified result.
 
-## DungeonMind prerequisite
+## DungeonMind prerequisite — accepted
 
-At inspected DungeonMind `1fc03aa…`, the answer is **no**: its current
-materialization contract does not accept prospective endpoints. The relevant
+At historical DungeonMind `1fc03aa…`, the answer was **no**: its then-current
+materialization contract did not accept prospective endpoints. The relevant
 authority is `GraphContributionAssertionV2` in
 `src/dungeonmind/contracts/contribution.py`; its edge fields are
 `subject_object_id` and `object_object_id`. `GraphMaterializerV6.apply_edge`
@@ -93,14 +93,14 @@ publish(expected_parent, idempotency_key,
      dependent relationship -> durable relationship ID
 ```
 
-The DungeonMind slice must prove allocation, consistent substitution,
+DungeonMind V5.4 now proves allocation, consistent substitution,
 pre-publication validation, atomicity, idempotency, lost-response outcome
-resolution, and the returned mapping at the owning boundary. Until then:
+resolution, and the returned mapping at the owning boundary. It was accepted at
+`c7700f98…` and merged at `6edb9e40…`. Therefore:
 
 ```text
-WK-3 implementation is BLOCKED
-until DungeonMind prospective-reference atomic publication is available
-and proved at its owning boundary.
+WK-3 preparation implementation is ACTIVE
+WK-4 publication/commit/recovery remains unauthorized.
 ```
 
 ## Preserved invariants and deferrals
