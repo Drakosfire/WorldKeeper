@@ -1,94 +1,47 @@
-# Roadmap — World Keeper
+# Roadmap — WorldKeeper
 
-**Status:** COARSE ROADMAP / WK-2 ACTIVE
-**Implementation:** LIMITED AUTHORIZATION — WK-2 ONLY
-**Planning rule:** each phase requires an explicit reviewed slice; this is not a 20-PR implementation schedule.
+**Status:** WK-1 and WK-2 accepted; WK-3 blocked on DungeonMind prerequisite
+**Implementation:** WK-3 not authorized
 
-## Guardrails
+## Accepted history
 
-World Keeper should reduce conceptual complexity in the ecosystem. A repository split is not automatically a process split, and a new service name is not permission to add HTTP, a database, retries, or deployment machinery before the semantic boundary is proven.
+- **WK-0:** repository boundary and authority bootstrap accepted.
+- **WK-1:** transport-neutral application contracts accepted.
+- **WK-2:** read-only DungeonMind-backed in-process boundary proof accepted.
 
-Every implementation phase must state:
+The earlier contracts remain historical evidence for safety properties such as
+same-transaction reference resolution and exact child verification. They do not
+authorize a WorldKeeper durable-ID allocator or recovery ledger.
 
-- the contract and invariant it proves;
-- the exact DungeonMind capability it consumes;
-- the Buddy seam it replaces or retires;
-- the adversarial tests and read-back evidence required;
-- what remains unauthorized after the phase.
+## Next prerequisite — DungeonMind prospective publication
 
-## Coarse phases
+This is the next implementation slice, below WorldKeeper. DungeonMind must
+accept one semantically resolved publication containing prospective creates and
+dependent references, allocate durable identities exactly once, substitute
+them consistently, publish one immutable child atomically, honor expected-parent
+and idempotency semantics, resolve lost responses durably, and return
+prospective/client-operation-to-durable-result mappings.
 
-### WK-0 — Repository bootstrap / architecture
+The owning-boundary proof must cover validation-before-head-advance, failure
+preserving the prior head, retry replay, and exact result read-back. If the
+implementation belongs in DungeonMind, this repository supplies the decision
+and pointer; it does not implement that primitive here.
 
-**State:** this phase.
-Create the steward anchor, ownership architecture, boundary, lifecycle design, v0 contracts, source index, and coarse roadmap. No runtime implementation.
+The concrete follow-on is recorded in
+`Docs/Plans/HANDOFF-dungeonmind-prospective-publication-prerequisite-v1.md`.
 
-### WK-1 — Transport-neutral application contracts
+## WK-3 — Prepare World change
 
-**State:** COMPLETE / ACCEPTED
+**State:** DESIGN REVIEW / BLOCKED / implementation not authorized.
 
-Resolve the open questions needed to implement a minimal application API: intent, prepared change, confirmation, commit/recovery, result/read-back, and semantic failure classes. Keep the contract independent of HTTP and DungeonMind internal DTOs.
+WK-3 may begin only after the DungeonMind prerequisite is available and proved.
+It will implement non-mutating semantic interpretation, exact parent and
+authority binding, source/evidence admissibility, and complete local-reference
+resolution against the DungeonMind publication contract.
 
-**Resolved for review:** four semantic capabilities; retained prepared record plus tamper-evident binding; a crash-surviving generation-bound publication/recovery record; explicit lifecycle/invalidation states; stable `change_request_id` across safe re-prepare generations; DungeonMind-admitted source/revision/locator evidence identity; deferred occurrence binding pending a distinct DungeonMind write contract; opaque public handles over exact prepare-time prospective identity/materialization; direct relationship result IDs; exact child-pinned read-back; and the required adversarial outcomes.
+## Later work
 
-**Accepted:** PR #1, merged at `f3126e1d4f486599503e8ebacabb73f3d6242a3b`.
-
-### WK-2 — DungeonMind-backed in-process reference boundary
-
-**State:** ACTIVE
-
-Build the smallest reference implementation using the existing DungeonMind application/library authority. Prove the repository/process boundary without introducing network complexity. This phase should exercise real World, source, evidence, revision, and publication semantics through narrow adapters. Occurrence binding remains out of scope until its DungeonMind landing contract is reviewed.
-
-WK-2 is seam and test-harness proof only. It may establish transport-neutral fixtures, capability probes, and a narrow in-process adapter, but it must not implement or expand World Keeper semantic behavior before WK-1 freezes the application contract; prepare and commit behavior belong to WK-3 and WK-4.
-
-**Gate:** one non-UI client or fixture can call the transport-neutral contract; no duplicate graph or identity authority exists; direct read-back is proven.
-
-### WK-3 — Prepare World change
-
-Implement non-mutating interpretation of the v0 intent family. Prove exact parent binding, source/evidence admissibility, profile/scoping checks, same-transaction local references, deterministic prospective results, and truthful warnings/failures.
-
-**Gate:** adversarial tests show missing, duplicate, wrong-kind, and external local references fail closed; prepare never advances the World head.
-
-### WK-4 — Commit and recover prepared change
-
-Implement explicit confirmation, exact binding verification, stale-parent failure, atomic DungeonMind publication, idempotent recovery, receipts, and exact child read-back.
-
-**Gate:** one confirm produces at most one immutable child; retries recover; stale or modified preparations cannot publish; local-to-durable object mapping is proven.
-
-### WK-5 — World read/query façade
-
-Add only the application-oriented read capabilities demonstrated by a client: exact revision/head, object lookup, search, relationships/neighborhood, evidence/provenance, and scoped/admissible projections. Keep DungeonMind retrieval semantics authoritative.
-
-**Gate:** read results are pinned, fail closed for inadmissible knowledge, and never mutate interpretation or identity.
-
-### WK-6 — DungeonBuddy pilot client
-
-Move one narrow source-grounded authoring loop from Buddy to World Keeper. Preserve source-first interaction, local reversible drafts, explicit review/confirm, stale-parent behavior, and exact result read-back. Keep unrelated product surfaces in Buddy.
-
-**Gate:** the pilot demonstrates user-visible continuity from source selection to durable child revision and result inspection.
-
-### WK-7 — Move authoring semantic compiler out of Buddy
-
-Transfer only the semantic compilation and source/evidence choreography that are proven Keeper responsibilities. Keep product UI, local staging, and agent harness behavior in Buddy. Do not transfer code merely because it currently sits near an authoring service.
-
-**Gate:** the Keeper contract is the one semantic authority for the pilot path; Buddy no longer needs DungeonMind-specific contribution construction.
-
-### WK-8 — Delete replaced Buddy adapters and orchestration
-
-Retire migration-era adapters, duplicate expressibility logic, and compatibility paths only after the Keeper-backed client has independent evidence. Deletion is part of extraction correctness: the old path must not remain a second authority.
-
-**Gate:** no live consumer depends on the retired path; ownership and source indexes are synchronized.
-
-### WK-9 — Second-client / generalization proof
-
-Use a non-DungeonBuddy consumer or a batch/import workflow to test that the contracts are genuinely application-level. Use this evidence to decide whether an optional service transport or additional semantic-profile work is justified.
-
-**Gate:** generality is demonstrated by a named client requirement, not by speculative extension hooks.
-
-## Sequencing rules
-
-- Do not begin WK-2 until WK-1 has accepted the application contract.
-- Do not begin any UI extraction until WK-3 and WK-4 prove the safety boundary.
-- Do not add an HTTP host as a prerequisite for WK-2 through WK-4.
-- Do not authorize automatic merge, generic ontology generation, agent harness work, vector storage, or DungeonMind schema redesign as hidden dependencies.
-- If a phase discovers that a responsibility belongs in DungeonMind or Buddy, update the boundary and return the work to design rather than forcing it into Keeper.
+Commit coordination, verified receipts, and product integration follow only
+after WK-3 design and the prerequisite are accepted. HTTP, persistence,
+migrations, agent harnesses, vector storage, automatic dedupe, and generic
+reconciliation remain outside this bootstrap unless separately authorized.
