@@ -208,4 +208,3 @@ class PreparedWorldChange:
     warnings: tuple[str, ...] = ()
     _domain_contract_json: str = field(repr=False, default="")
     _semantic_profile_json: str = field(repr=False, default="")
-
