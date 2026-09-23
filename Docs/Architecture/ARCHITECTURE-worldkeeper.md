@@ -35,8 +35,10 @@ an object first and repair a dependent relationship later.
 
 The selected v0 concepts are one `prepared_change_id` for one immutable
 prepared meaning and caller-controlled `client_op_id` values referenced by
-`result_of(client_op_id)`. Prepared local lifecycle and DungeonMind durable
-publication outcome are separate authorities.
+`result_of(client_op_id)`. Each prepared ID maps one-to-one to a stable
+DungeonMind publication/idempotency identity so retries and lost responses use
+DungeonMind durable evidence without a second Keeper ledger. Prepared local
+lifecycle and DungeonMind durable publication outcome are separate authorities.
 
 ## Sequencing
 

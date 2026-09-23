@@ -32,6 +32,13 @@ authority, changed evidence, or changed proposal fails closed and requires a
 new `prepared_change_id`. There is no object-first publication followed by
 dependent repair, automatic merge, or dedupe.
 
+Each immutable `prepared_change_id` maps one-to-one to a stable DungeonMind
+publication/idempotency identity. Commit retries and lost-response resolution
+must use that same identity against DungeonMind durable evidence. The mapping
+is immutable prepared meaning or deterministically derived from it; it does not
+authorize a mirrored WorldKeeper recovery ledger. A re-prepare creates both a
+new prepared ID and a new publication identity.
+
 ## DungeonMind gate
 
 At inspected DungeonMind `1fc03aa…`,
@@ -61,9 +68,11 @@ Until then, `WK-3 implementation is BLOCKED`.
 `recover_change`, `read_exact_change_result`, mandatory cryptographic
 confirmation bindings, `preparation_generation`, generic reconciliation,
 generic WorldKeeper reads, speculative policy fields, and automatic identity
-merging are deferred. Exact child read-back remains mandatory internally before
-WorldKeeper returns a successful commit result. Evidence grounding remains
-separate from occurrence/mention binding.
+merging are deferred. `get_change_result(prepared_change_id)` is optional until
+a caller demonstrates a need for status inspection independent of commit retry.
+Exact child read-back remains mandatory internally before WorldKeeper returns a
+successful commit result. Evidence grounding remains separate from
+occurrence/mention binding.
 
 The superseded WK-1 lifecycle text remains historical evidence in prior commits;
 it is not current authority for a durable-ID allocator or Keeper recovery API.

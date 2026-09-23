@@ -10,7 +10,7 @@ lifecycle, or versioned contract documents.
 
 | Source | Revision / condition | What it proves | What it does not prove |
 | --- | --- | --- | --- |
-| WorldKeeper | current head `15739eb2688992fe8f977d006b1e9153047753a9` | current re-anchor and accepted WK-1/WK-2 history | authorization for WK-3 implementation |
+| WorldKeeper | accepted WK-2 PR #2 head `15739eb2688992fe8f977d006b1e9153047753a9` | accepted WK-2 boundary proof and its history | authorization for WK-3 implementation |
 | DungeonMind | `origin/main` `1fc03aa21e406d9a7cb07d0e4792e202fe281375` | current durable graph, revision, source, publication, and read authority | prospective-reference materialization; current local checkout is dirty at historical `13fe863…` |
 | DungeonMindBuddy | side-quest authority `19593ae6d5a0ba583eaac063d772abaf9a42d74d` | product interaction boundary and migration evidence | WorldKeeper authority or DungeonMind contract |
 | DungeonMindBuddy historical review | `b7e71379399905b7853d3ee67459511b2669b003` | older source-to-World transaction evidence | current Buddy authority |

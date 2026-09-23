@@ -14,6 +14,7 @@ it does not mutate or reinterpret the old record.
 ```text
 PreparedWorldChange
   prepared_change_id
+  dungeonmind_publication_identity
   world / scope / profile context
   expected_parent_revision_id
   source and evidence context
@@ -45,12 +46,26 @@ Confirmation preserves the exact prepared meaning. A successful result must be
 verified against the exact immutable child revision reported by DungeonMind,
 including returned durable object and relationship mappings.
 
+Every `prepared_change_id` binds exactly one stable
+`dungeonmind_publication_identity`. Commit retries and lost-response resolution
+must use that same identity against DungeonMind's durable publication evidence.
+The binding is immutable prepared meaning or deterministically derived from it;
+it is not a second WorldKeeper recovery ledger. A new prepared ID receives a
+new publication identity.
+
+The minimum verified receipt returns the prepared ID, DungeonMind publication
+identity, exact child revision, each `create_object client_op_id ->
+durable_object_id`, each `create_relationship client_op_id ->
+durable_relationship_id`, and proof of exact-child read-back.
+
 ## Non-goals and gate
 
 This contract does not require `recover_change`, `read_exact_change_result`,
 `confirmation_binding`, `preparation_generation`, generic reconciliation,
 automatic dedupe, generic attributes, or ordinary World read APIs. Those are
 deferred unless a later authority decision establishes a concrete need.
+`get_change_result(prepared_change_id)` is optional until a demonstrated caller
+needs status inspection independently of a commit retry.
 
 At inspected DungeonMind `1fc03aa…`, materialization requires durable
 `subject_object_id` and `object_object_id` endpoints. WK-3 is blocked until a

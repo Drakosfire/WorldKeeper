@@ -3,7 +3,7 @@
 **Status:** CURRENT DESIGN AUTHORITY
 **Decision date:** 2026-09-22
 **WorldKeeper baseline:** `732c3c394a5b56843612841c7b7e4a0def53cd70`
-**WorldKeeper current head:** `15739eb2688992fe8f977d006b1e9153047753a9`
+**Accepted WK-2 PR #2 head:** `15739eb2688992fe8f977d006b1e9153047753a9`
 **DungeonMind inspected authority:** `1fc03aa21e406d9a7cb07d0e4792e202fe281375` (`origin/main`)
 **DungeonMind local checkout:** `13fe863283dea489373fda8f801af19afb85570a`, dirty and not used as authority
 
@@ -41,9 +41,14 @@ namespaces for `operation_id`, `local_ref`, and a future durable identity.
 
 ## Simplified lifecycle
 
-One `prepared_change_id` identifies one exact immutable prepared meaning. A
-re-preparation creates a new prepared ID; DungeonBuddy may retain its own draft
-correlation. WorldKeeper local lifecycle is limited to `active`, `expired`, and
+One `prepared_change_id` identifies one exact immutable prepared meaning. It
+also binds to exactly one stable DungeonMind publication/idempotency identity.
+Every commit retry and lost-response inquiry for that prepared meaning uses the
+same DungeonMind identity; the mapping is bound into the immutable prepared
+meaning or deterministically derived from it, not mirrored in a second durable
+WorldKeeper ledger. A re-preparation creates a new prepared ID and therefore a
+new publication identity; DungeonBuddy may retain its own draft correlation.
+WorldKeeper local lifecycle is limited to `active`, `expired`, and
 `invalidated`. DungeonMind owns publication outcomes such as `not_published`,
 `committed`, and `outcome_unknown`.
 
@@ -52,13 +57,14 @@ The v0 semantic surface is intentionally small:
 ```text
 prepare_change(intent) -> PreparedChange
 commit_change(prepared_change_id, confirmed_by) -> VerifiedCommittedChange
-get_change_result(prepared_change_id) -> not_started | committed | outcome_unknown
 ```
 
-`recover_change`, `read_exact_change_result`, cryptographic confirmation
-bindings, and a second WorldKeeper recovery ledger are not mandatory v0
-semantics. A successful commit still performs exact child-revision read-back
-internally before returning a verified result.
+`get_change_result(prepared_change_id)` is optional until a caller needs status
+inspection independently of retrying `commit_change`. `recover_change`,
+`read_exact_change_result`, cryptographic confirmation bindings, and a second
+WorldKeeper recovery ledger are not mandatory v0 semantics. A successful commit
+still performs exact child-revision read-back internally before returning a
+verified result.
 
 ## DungeonMind prerequisite
 
