@@ -24,6 +24,8 @@ FrozenJson: TypeAlias = JsonAtom | FrozenJsonArray | FrozenJsonObject
 
 def freeze_json(value: object) -> FrozenJson:
     """Copy canonical JSON-compatible input into an immutable representation."""
+    if isinstance(value, FrozenJsonArray | FrozenJsonObject):
+        return value
     if value is None or isinstance(value, (str, int, bool)):
         return value
     if isinstance(value, float):
@@ -70,6 +72,10 @@ class TemporalScope:
     schema_term: str | None = None
     payload: FrozenJson | None = None
 
+    def __post_init__(self) -> None:
+        if self.payload is not None:
+            object.__setattr__(self, "payload", freeze_json(self.payload))
+
     @classmethod
     def domain_ref(cls, schema_term: str, payload: object) -> TemporalScope:
         return cls(kind="domain_ref", schema_term=schema_term, payload=freeze_json(payload))
@@ -79,6 +85,9 @@ class TemporalScope:
 class DomainMetadata:
     schema_term: str
     payload: FrozenJson
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "payload", freeze_json(self.payload))
 
     @classmethod
     def from_json(cls, schema_term: str, payload: object) -> DomainMetadata:
@@ -100,6 +109,9 @@ class AssertionMetadata:
 @dataclass(frozen=True, slots=True)
 class LiteralFactValue:
     value: FrozenJson
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "value", freeze_json(self.value))
 
     @classmethod
     def from_json(cls, value: object) -> LiteralFactValue:

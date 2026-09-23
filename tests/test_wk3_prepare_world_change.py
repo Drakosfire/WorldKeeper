@@ -389,7 +389,7 @@ def test_prepared_result_is_immutable_isolated_and_repeatable() -> None:
     fact = CreateFact(
         client_op_id="fact-1",
         predicate="lab:title",
-        value=LiteralFactValue.from_json(source_value),
+        value=LiteralFactValue(value=source_value),  # type: ignore[arg-type]
         metadata=metadata(),
     )
     source_value["nested"].append("mutated")
