@@ -1,6 +1,6 @@
 # Handoff — WK-2 DungeonMind-backed in-process reference boundary
 
-**Status:** ACTIVE LIMITED IMPLEMENTATION LEASE
+**Status:** COMPLETED / HISTORICAL WK-2 IMPLEMENTATION LEASE
 **World Keeper base:** `f3126e1d4f486599503e8ebacabb73f3d6242a3b`
 **DungeonMind authority:** `1fc03aa21e406d9a7cb07d0e4792e202fe281375`
 
@@ -33,5 +33,7 @@ construct real downstream state.
 - Runtime adapter tests prove that no DungeonMind mutation method is called.
 - Tests, lint, and type checks run against the exact pinned DungeonMind SHA.
 
-The steward anchor, architecture, lifecycle design, and versioned contracts
-remain higher authority. WK-3 and WK-4 require separate authorization.
+This handoff was completed by the accepted WK-2 boundary proof. Its scope and
+tests remain historical evidence; the current steward, architecture, lifecycle
+and versioned contracts re-anchor the repository for the DungeonMind
+prospective-publication prerequisite. WK-3 remains blocked and unauthorized.

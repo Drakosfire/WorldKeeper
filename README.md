@@ -1,53 +1,37 @@
 # World Keeper
 
-**Status:** WK-1 accepted / WK-2 in-process boundary proof active
-**Implementation:** limited authorization — WK-2 only
+**Status:** WK-1 accepted / WK-2 accepted / WK-3 design review blocked
+**Implementation:** WK-3 not authorized
 
-World Keeper is the semantic transaction layer between applications and DungeonMind. It turns source-grounded application intent into validated, reviewable World changes, commits confirmed changes through DungeonMind's governed authority, and exposes World knowledge back to clients.
-
-```text
-DungeonBuddy / other clients
-  interaction + source selection + application intent
-                    │
-                    ▼
-              World Keeper
-  semantic interpretation + prepare/review/confirm lifecycle
-                    │
-                    ▼
-               DungeonMind
-  durable governed World knowledge, revisions, evidence, retrieval
-```
-
-The intended durable loop is:
+WorldKeeper is the thin semantic transaction coordinator between application
+clients and DungeonMind. DungeonBuddy owns interaction and reversible drafts;
+WorldKeeper compiles intent into one exact prepared meaning; DungeonMind owns
+durable World truth, identity, policy, publication, recovery, and reads.
 
 ```text
-source-grounded intent
-→ exact interpretation
-→ reviewable prepared World change
-→ explicit confirmation
-→ immutable publication
-→ exact read-back
+DungeonBuddy  ->  WorldKeeper  ->  DungeonMind
+interaction       meaning          durable truth
+and drafts        and coordination
 ```
 
-World Keeper owns the application-facing meaning of a proposed World change, transaction-local reference resolution, source-grounding interpretation, prepared-change review, confirmation binding, and application-oriented World reads. DungeonMind remains the durable knowledge authority: it owns immutable revisions, source/evidence records, identity authority, projection/retrieval semantics, and governed publication.
+WorldKeeper must not predict future DungeonMind IDs, maintain a second graph or
+recovery ledger, or publish an object and repair dependent relationships later.
+Prepare binds same-transaction references to exact prospective create results;
+DungeonMind must allocate and substitute durable identities atomically during
+publication.
 
-World Keeper does not own the UI, the agent harness, graph persistence, a second graph engine, or the DungeonMind schema. It is not a replacement for DungeonMind and it is not an agent runtime.
+The current decision and inspected DungeonMind evidence are recorded in
+[`DECISION-worldkeeper-ownership-simplification.md`](Docs/Design/DECISION-worldkeeper-ownership-simplification.md).
+At DungeonMind `1fc03aa21e406d9a7cb07d0e4792e202fe281375`, the materialization
+contract still requires durable relationship endpoint IDs. Therefore the next
+coding slice belongs in DungeonMind, not WorldKeeper.
 
-## Start here
+```text
+WK-3 implementation is BLOCKED
+until DungeonMind prospective-reference atomic publication is available
+and proved at its owning boundary.
+```
 
-Read the repository authority in this order:
-
-1. [Steward anchor](Docs/Steward/STEWARD-ANCHOR-worldkeeper.md)
-2. [Architecture](Docs/Architecture/ARCHITECTURE-worldkeeper.md)
-3. [Boundary](Docs/Architecture/BOUNDARY-dungeonbuddy-worldkeeper-dungeonmind.md)
-4. [Write lifecycle](Docs/Design/DESIGN-governed-world-change-lifecycle.md)
-5. [Intent contract v0](Docs/Design/CONTRACT-world-change-intent-v0.md)
-6. [Prepared-change contract v0](Docs/Design/CONTRACT-prepared-world-change-v0.md)
-7. [Roadmap](Docs/Roadmaps/ROADMAP-worldkeeper.md)
-8. [Source index](Docs/Sources/SOURCE-INDEX-worldkeeper.md) when ancestry or evidence is needed
-
-World Keeper now contains a narrowly authorized WK-2 reference package. It
-implements only the in-process DungeonMind governed-authority seam and test
-harness: exact head/revision, source/provenance, and finalized-publication
-reads expressed as World Keeper-owned witnesses. Semantic prepare/commit,
-recovery orchestration, workflow persistence, and HTTP remain unauthorized.
+No HTTP host, persistence, migrations, agent harness, vector storage,
+automatic dedupe, merge/split workflow, or runtime WK-3 behavior is authorized
+by this repository state.

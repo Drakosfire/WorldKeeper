@@ -1,10 +1,10 @@
 # World Keeper repository operating law
 
-This repository is in **WK-2 DUNGEONMIND-BACKED IN-PROCESS BOUNDARY PROOF**.
+This repository is in **DESIGN RE-ANCHOR: WK-1/WK-2 ACCEPTED; WK-3 BLOCKED**.
 The current checked-in authority says:
 
 ```text
-IMPLEMENTATION: LIMITED AUTHORIZATION — WK-2 ONLY
+IMPLEMENTATION: WK-3 NOT AUTHORIZED — DUNGEONMIND PREREQUISITE BLOCKS RUNTIME WORK
 ```
 
 ## Authority and pickup
@@ -26,13 +26,15 @@ IMPLEMENTATION: LIMITED AUTHORIZATION — WK-2 ONLY
 
 ## Work restrictions
 
-- WK-2 may add only a transport-neutral Python package, World Keeper-owned
-  read witnesses, a DungeonMind in-process read adapter, and its test harness.
+- Documentation/design work may update the authority documents and record the
+  DungeonMind prerequisite. No WorldKeeper runtime implementation is authorized
+  by this re-anchor.
 - Do not add HTTP endpoints, World Keeper persistence, migrations, an agent
   harness, vector storage, automatic deduplication, or a second graph engine.
-- Do not implement `prepare_change`, `commit_prepared_change`, recovery
-  orchestration, prepared workflow persistence, confirmation bindings, intent
-  compilation, or prospective identity planning. Those remain WK-3/WK-4 work.
+- Do not implement `prepare_change`, `commit_change`, recovery orchestration,
+  prepared workflow persistence, confirmation bindings, intent compilation, or
+  prospective-publication materialization. WK-3 remains blocked until
+  DungeonMind proves its prospective-reference atomic publication contract.
 - Do not copy DungeonMindBuddy modules wholesale. Classify current seams as product behavior, migration evidence, World Keeper responsibility, or DungeonMind responsibility before moving anything.
 - A future implementation change must name the authority document and the explicit authorization that permits it.
 - Before handing work back, run documentation-oriented checks, inspect the complete diff, and report the exact branch, commit, status, and unresolved questions.
