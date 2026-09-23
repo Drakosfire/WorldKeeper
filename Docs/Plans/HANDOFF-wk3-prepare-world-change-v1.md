@@ -15,19 +15,19 @@ pr_body_template: |
 
 # HANDOFF — WK-3 prepare World change
 
-**Created:** 2026-09-23  
-**Status:** READY FOR IMPLEMENTATION — DungeonMind prerequisite accepted  
-**Repository:** `Drakosfire/WorldKeeper`  
-**Canonical handoff path:** `Docs/Plans/HANDOFF-wk3-prepare-world-change-v1.md`  
-**Suggested branch:** `kernel/wk3-prepare-world-change`  
-**Suggested PR title:** `WK-3: prepare World change against DungeonMind V5.4`  
-**WorldKeeper implementation base:** `e84f6bea90ba05c25be83b6b2c7c08751cac2608`  
-**Predecessor:** WorldKeeper PR #3 — ownership/gate re-anchor  
-**DungeonMind accepted prerequisite:** PR #75 — V5.4 prospective-reference identity allocation + substitution  
-**DungeonMind accepted head:** `c7700f98e62732cbd1c021270f5366a77c24ea9b`  
-**DungeonMind final PASS review:** `5296514025`  
-**DungeonMind disposition:** `V5_4_PROSPECTIVE_REFERENCE_PUBLICATION_ACCEPTED`  
-**DungeonMind merged main:** `6edb9e40d1dc930f537c66deb1afbd1b99002844`  
+**Created:** 2026-09-23
+**Status:** READY FOR IMPLEMENTATION — DungeonMind prerequisite accepted
+**Repository:** `Drakosfire/WorldKeeper`
+**Canonical handoff path:** `Docs/Plans/HANDOFF-wk3-prepare-world-change-v1.md`
+**Suggested branch:** `kernel/wk3-prepare-world-change`
+**Suggested PR title:** `WK-3: prepare World change against DungeonMind V5.4`
+**WorldKeeper implementation base:** `e84f6bea90ba05c25be83b6b2c7c08751cac2608`
+**Predecessor:** WorldKeeper PR #3 — ownership/gate re-anchor
+**DungeonMind accepted prerequisite:** PR #75 — V5.4 prospective-reference identity allocation + substitution
+**DungeonMind accepted head:** `c7700f98e62732cbd1c021270f5366a77c24ea9b`
+**DungeonMind final PASS review:** `5296514025`
+**DungeonMind disposition:** `V5_4_PROSPECTIVE_REFERENCE_PUBLICATION_ACCEPTED`
+**DungeonMind merged main:** `6edb9e40d1dc930f537c66deb1afbd1b99002844`
 **Named successor:** `WK-4 — commit prepared change + exact child verification`
 
 > This is a **prepare-only** implementation slice.
