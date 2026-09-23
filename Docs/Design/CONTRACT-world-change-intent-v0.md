@@ -71,12 +71,14 @@ verification remains mandatory before WorldKeeper returns a successful result.
 
 ## Stable publication identity and receipt
 
-Every immutable `prepared_change_id` maps one-to-one to a stable DungeonMind
-publication/idempotency identity. The mapping is part of the immutable prepared
-meaning or deterministically derivable from it, so every retry and lost-response
-inquiry addresses the same DungeonMind publication. Re-preparing produces a new
-prepared ID and a new publication identity; WorldKeeper does not persist a
-second ledger merely to mirror DungeonMind's outcome.
+Every immutable `prepared_change_id` deterministically derives one stable
+DungeonMind publication/idempotency identity, or is itself that identity.
+DungeonMind durably records and replays the outcome under it. Consequently a
+retry or lost-response inquiry reconstructs the identity from the caller-held
+prepared ID alone; it never depends on retained WorldKeeper prepared state.
+Re-preparing produces a new prepared ID and a new publication identity;
+WorldKeeper does not persist a second ledger merely to mirror DungeonMind's
+outcome.
 
 The minimum successful `VerifiedCommittedChange` receipt contains:
 

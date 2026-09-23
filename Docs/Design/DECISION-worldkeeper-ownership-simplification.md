@@ -42,12 +42,13 @@ namespaces for `operation_id`, `local_ref`, and a future durable identity.
 ## Simplified lifecycle
 
 One `prepared_change_id` identifies one exact immutable prepared meaning. It
-also binds to exactly one stable DungeonMind publication/idempotency identity.
-Every commit retry and lost-response inquiry for that prepared meaning uses the
-same DungeonMind identity; the mapping is bound into the immutable prepared
-meaning or deterministically derived from it, not mirrored in a second durable
-WorldKeeper ledger. A re-preparation creates a new prepared ID and therefore a
-new publication identity; DungeonBuddy may retain its own draft correlation.
+deterministically derives exactly one DungeonMind publication/idempotency
+identity (or is itself that identity). Every commit retry and lost-response
+inquiry can therefore reconstruct the same DungeonMind identity from the
+caller-held prepared ID alone; DungeonMind durably records and replays the
+outcome under that identity. A re-preparation creates a new prepared ID and
+therefore a new publication identity; DungeonBuddy may retain its own draft
+correlation. WorldKeeper does not mirror this outcome in a durable ledger.
 WorldKeeper local lifecycle is limited to `active`, `expired`, and
 `invalidated`. DungeonMind owns publication outcomes such as `not_published`,
 `committed`, and `outcome_unknown`.

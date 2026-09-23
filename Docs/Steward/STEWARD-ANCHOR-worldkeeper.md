@@ -37,9 +37,11 @@ general World reads.
   atomic publication. Object-first publication and dependent repair are barred.
 - Confirmation publishes only the exact prepared meaning; stale authority fails
   closed and requires re-prepare.
-- Every immutable `prepared_change_id` maps one-to-one to a stable DungeonMind
-  publication/idempotency identity; retries and lost responses use that durable
-  authority, not a second Keeper recovery ledger.
+- Every immutable `prepared_change_id` deterministically derives one stable
+  DungeonMind publication/idempotency identity (or is itself that identity).
+  DungeonMind durably records and replays the outcome; retries and lost
+  responses reconstruct it from the caller-held prepared ID alone, not a second
+  Keeper recovery ledger.
 - Evidence support does not imply occurrence or mention binding.
 - Similarity is advisory; automatic merge/dedupe is not authorized.
 - Exact immutable child read-back is mandatory before a successful result.

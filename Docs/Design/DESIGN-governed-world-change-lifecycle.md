@@ -32,12 +32,12 @@ authority, changed evidence, or changed proposal fails closed and requires a
 new `prepared_change_id`. There is no object-first publication followed by
 dependent repair, automatic merge, or dedupe.
 
-Each immutable `prepared_change_id` maps one-to-one to a stable DungeonMind
-publication/idempotency identity. Commit retries and lost-response resolution
-must use that same identity against DungeonMind durable evidence. The mapping
-is immutable prepared meaning or deterministically derived from it; it does not
-authorize a mirrored WorldKeeper recovery ledger. A re-prepare creates both a
-new prepared ID and a new publication identity.
+Each immutable `prepared_change_id` deterministically derives one stable
+DungeonMind publication/idempotency identity, or is itself that identity.
+DungeonMind durably records and replays the outcome under it. Commit retries
+and lost-response resolution reconstruct it from the caller-held prepared ID
+alone, so no retained WorldKeeper prepared state or mirrored recovery ledger is
+needed. A re-prepare creates both a new prepared ID and publication identity.
 
 ## DungeonMind gate
 
