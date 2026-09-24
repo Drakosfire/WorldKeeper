@@ -1,7 +1,7 @@
 # World Keeper
 
-**Status:** WK-1 accepted / WK-2 accepted / WK-3 design review blocked
-**Implementation:** WK-3 not authorized
+**Status:** WK-1 accepted / WK-2 accepted / WK-3 prepare active
+**Implementation:** limited authorization — WK-3 prepare only
 
 WorldKeeper is the thin semantic transaction coordinator between application
 clients and DungeonMind. DungeonBuddy owns interaction and reversible drafts;
@@ -22,16 +22,17 @@ publication.
 
 The current decision and inspected DungeonMind evidence are recorded in
 [`DECISION-worldkeeper-ownership-simplification.md`](Docs/Design/DECISION-worldkeeper-ownership-simplification.md).
-At DungeonMind `1fc03aa21e406d9a7cb07d0e4792e202fe281375`, the materialization
-contract still requires durable relationship endpoint IDs. Therefore the next
-coding slice belongs in DungeonMind, not WorldKeeper.
+DungeonMind V5.4 is accepted and merged at
+`6edb9e40d1dc930f537c66deb1afbd1b99002844`. It owns prospective identity
+allocation and substitution, atomic publication, durable replay, and result
+mapping. WK-3 may now prepare and losslessly compile to that contract without
+publishing or predicting durable IDs.
 
 ```text
-WK-3 implementation is BLOCKED
-until DungeonMind prospective-reference atomic publication is available
-and proved at its owning boundary.
+WK-3 ACTIVE — PREPARE ONLY
+WK-4 commit and exact-child verification remain unauthorized.
 ```
 
 No HTTP host, persistence, migrations, agent harness, vector storage,
-automatic dedupe, merge/split workflow, or runtime WK-3 behavior is authorized
-by this repository state.
+automatic dedupe, merge/split workflow, publication, commit, or recovery is
+authorized by this repository state.

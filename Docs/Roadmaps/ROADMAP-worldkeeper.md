@@ -1,7 +1,7 @@
 # Roadmap — WorldKeeper
 
-**Status:** WK-1 and WK-2 accepted; WK-3 blocked on DungeonMind prerequisite
-**Implementation:** WK-3 not authorized
+**Status:** WK-1 and WK-2 accepted; DungeonMind V5.4 accepted; WK-3 active
+**Implementation:** limited authorization — WK-3 prepare only
 
 ## Accepted history
 
@@ -13,35 +13,33 @@ The earlier contracts remain historical evidence for safety properties such as
 same-transaction reference resolution and exact child verification. They do not
 authorize a WorldKeeper durable-ID allocator or recovery ledger.
 
-## Next prerequisite — DungeonMind prospective publication
+## Accepted prerequisite — DungeonMind prospective publication
 
-This is the next implementation slice, below WorldKeeper. DungeonMind must
-accept one semantically resolved publication containing prospective creates and
+DungeonMind V5.4 now accepts one semantically resolved publication containing prospective creates and
 dependent references, allocate durable identities exactly once, substitute
 them consistently, publish one immutable child atomically, honor expected-parent
 and idempotency semantics, resolve lost responses durably, and return
 prospective/client-operation-to-durable-result mappings.
 
-The owning-boundary proof must cover validation-before-head-advance, failure
-preserving the prior head, retry replay, and exact result read-back. If the
-implementation belongs in DungeonMind, this repository supplies the decision
-and pointer; it does not implement that primitive here.
+The accepted owning-boundary proof covers validation-before-head-advance,
+failure preserving the prior head, retry replay, and exact result read-back.
 
-The concrete follow-on is recorded in
+The completed prerequisite handoff is recorded in
 `Docs/Plans/HANDOFF-dungeonmind-prospective-publication-prerequisite-v1.md`.
 
 ## WK-3 — Prepare World change
 
-**State:** DESIGN REVIEW / BLOCKED / implementation not authorized.
+**State:** ACTIVE / PREPARE-ONLY IMPLEMENTATION AUTHORIZED.
 
-WK-3 may begin only after the DungeonMind prerequisite is available and proved.
-It will implement non-mutating semantic interpretation, exact parent and
+WK-3 implements non-mutating semantic interpretation, exact parent and
 authority binding, source/evidence admissibility, and complete local-reference
 resolution against the DungeonMind publication contract.
 
-## Later work
+## WK-4 — Commit prepared change and verify exact child
+
+**State:** NAMED SUCCESSOR / NOT AUTHORIZED.
 
 Commit coordination, verified receipts, and product integration follow only
-after WK-3 design and the prerequisite are accepted. HTTP, persistence,
+after WK-3 is accepted. HTTP, persistence,
 migrations, agent harnesses, vector storage, automatic dedupe, and generic
 reconciliation remain outside this bootstrap unless separately authorized.

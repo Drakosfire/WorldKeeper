@@ -1,8 +1,8 @@
 # Architecture — WorldKeeper
 
 **Status:** CURRENT ARCHITECTURE AUTHORITY
-**Phase:** WK-1 and WK-2 accepted; WK-3 design review blocked
-**Implementation:** WK-3 NOT AUTHORIZED
+**Phase:** WK-1 and WK-2 accepted; WK-3 prepare active
+**Implementation:** LIMITED AUTHORIZATION — WK-3 PREPARE ONLY
 **Decision:** [ownership simplification](../Design/DECISION-worldkeeper-ownership-simplification.md)
 
 ## Mission
@@ -29,8 +29,8 @@ interaction + drafts  ->  semantic meaning + coordination  -> durable truth
 
 Prepare binds local references to one exact prospective create result inside one
 prepared transaction; it does not predict or reserve a future durable ID.
-DungeonMind must eventually materialize prospective creates and dependent
-operations atomically, then return the mapping. WorldKeeper must never publish
+DungeonMind V5.4 materializes prospective creates and dependent operations
+atomically, then returns the mapping. WorldKeeper must never publish
 an object first and repair a dependent relationship later.
 
 The selected v0 concepts are one `prepared_change_id` for one immutable
@@ -43,12 +43,9 @@ lifecycle and DungeonMind durable publication outcome are separate authorities.
 
 ## Sequencing
 
-WK-1 and WK-2 are accepted. The next implementation is a narrow DungeonMind
-prospective-publication prerequisite, not WK-3 runtime behavior. WK-3 becomes
-ready only after DungeonMind proves prospective allocation, consistent
-substitution, atomic publication, idempotency, lost-response resolution, and
-the returned prospective-to-durable mapping.
+WK-1 and WK-2 are accepted. DungeonMind V5.4 is accepted and merged at
+`6edb9e40…`; WK-3 is active for non-mutating preparation and lossless compile
+to its prospective contract.
 
-WorldKeeper runtime implementation remains unauthorized. See the decision
-document for retained safety invariants, historical WK-1 evidence, and
-explicitly deferred capabilities.
+Publication, commit, recovery orchestration, prepared persistence, and exact
+child verification remain unauthorized until WK-4.

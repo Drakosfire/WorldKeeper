@@ -1,12 +1,12 @@
 # Contract — WorldChangeIntent v0
 
-**Status:** CURRENT APPLICATION CONTRACT, WK-3 implementation blocked
+**Status:** CURRENT APPLICATION CONTRACT, WK-3 prepare active
 **Owner:** WorldKeeper boundary
 **Decision:** [ownership simplification](DECISION-worldkeeper-ownership-simplification.md)
 
 This is a transport-neutral semantic contract, not a Python model, HTTP schema,
-or DungeonMind DTO. It is accepted as design; implementation is not authorized
-until the DungeonMind prerequisite is proved.
+or DungeonMind DTO. WK-3 implementation is authorized only for non-mutating
+prepare and lossless DungeonMind V5.4 prospective compilation.
 
 ## Shape
 
@@ -93,11 +93,9 @@ exact child-revision read-back verification
 
 ## Gating decision
 
-DungeonMind `1fc03aa…` currently accepts materialized assertions with durable
-endpoint IDs, not prospective references. WK-3 cannot implement this contract
-by predicting IDs or publishing objects before dependent relationships. The
-DungeonMind prospective-publication prerequisite must be available and proved
-at its owning boundary first.
+DungeonMind V5.4 at merged authority `6edb9e40…` accepts prospective references
+and owns allocation/substitution. WK-3 compiles `result_of(client_op_id)` to
+that syntax without predicting IDs or publishing. Commit remains WK-4 work.
 
 Earlier WK-1 contract text is retained in repository history as historical
 evidence, including its same-transaction safety analysis. It is not current

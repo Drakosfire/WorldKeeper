@@ -9,7 +9,7 @@ description = "Transport-neutral application boundary for governed World knowled
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "dungeonmind @ git+https://github.com/Drakosfire/DungeonMind.git@1fc03aa21e406d9a7cb07d0e4792e202fe281375",
+    "dungeonmind @ git+https://github.com/Drakosfire/DungeonMind.git@6edb9e40d1dc930f537c66deb1afbd1b99002844",
 ]
 
 [dependency-groups]

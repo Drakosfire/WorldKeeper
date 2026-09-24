@@ -77,3 +77,46 @@ class GovernedWorldAuthority(Protocol):
         world_id: str,
         publication_operation_id: str,
     ) -> FinalizedPublicationWitness | None: ...
+
+
+@dataclass(frozen=True)
+class PreparationAuthorityRef:
+    """Pinned descriptor identity carried by one native vNext parent."""
+
+    authority_id: str
+    revision: str
+    descriptor_sha256: str
+
+
+@dataclass(frozen=True)
+class PreparationEvidenceWitness:
+    """Exact evidence identity visible in the selected native parent."""
+
+    evidence_ref_id: str
+    source_artifact_id: str
+    source_revision_id: str | None
+    evidence_role: str
+    locator: str | None
+    uri: str | None
+    source_locator: str | None
+    line_ref: str | None
+    source_span_ref_id: str | None
+
+
+@dataclass(frozen=True)
+class PreparationAuthorityWitness:
+    """Narrow immutable native-vNext authority required by WK-3 prepare."""
+
+    space_id: str
+    head_revision_id: str
+    graph_payload_sha256: str
+    domain_contract_ref: PreparationAuthorityRef
+    semantic_profile_ref: PreparationAuthorityRef
+    durable_entity_ids: tuple[str, ...]
+    evidence_witnesses: tuple[PreparationEvidenceWitness, ...]
+
+
+class GovernedPreparationAuthority(Protocol):
+    """Read-only current native-vNext authority used by prepare."""
+
+    def read_current_space(self, space_id: str) -> PreparationAuthorityWitness | None: ...

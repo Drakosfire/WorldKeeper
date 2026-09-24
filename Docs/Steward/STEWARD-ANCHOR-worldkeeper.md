@@ -1,7 +1,7 @@
 # Steward Anchor — WorldKeeper
 
-**Status:** WK-1 ACCEPTED / WK-2 ACCEPTED / WK-3 BLOCKED
-**Implementation:** WK-3 NOT AUTHORIZED
+**Status:** WK-1 ACCEPTED / WK-2 ACCEPTED / WK-3 ACTIVE
+**Implementation:** LIMITED AUTHORIZATION — WK-3 PREPARE ONLY
 **Repository:** `WorldKeeper`
 **Current decision:** [ownership simplification](../Design/DECISION-worldkeeper-ownership-simplification.md)
 
@@ -46,27 +46,31 @@ general World reads.
 - Similarity is advisory; automatic merge/dedupe is not authorized.
 - Exact immutable child read-back is mandatory before a successful result.
 
-## Gating decision
+## DungeonMind prerequisite disposition
 
-At DungeonMind `origin/main` `1fc03aa21e406d9a7cb07d0e4792e202fe281375`, the
-materialization contract requires durable relationship endpoint IDs. It does
-not expose the prospective-publication primitive required by WK-3. The next
-implementation is a small DungeonMind-owned contract and proof, not WorldKeeper
-runtime work.
+DungeonMind PR #75 V5.4 is accepted at
+`c7700f98e62732cbd1c021270f5366a77c24ea9b`, final PASS `5296514025`, disposition
+`V5_4_PROSPECTIVE_REFERENCE_PUBLICATION_ACCEPTED`, and merged to `main` at
+`6edb9e40d1dc930f537c66deb1afbd1b99002844`.
 
 ```text
-WK-3 implementation is BLOCKED
-until DungeonMind prospective-reference atomic publication is available
-and proved at its owning boundary.
+WK-3 ACTIVE — prepare, authority binding, and V5.4 prospective compilation only
+WK-4 UNAUTHORIZED — commit, recovery, and exact-child verification
 ```
+
+V5.4 proves transaction-local prospective handles, DungeonMind-owned
+type-separated allocation, substitution before materialization, create-new
+parent-collision rejection, predicted-ID bypass rejection, repository-boundary
+allocation validation, atomic revision/head/event/receipt/result-map commit,
+and exact replay/lost-response recovery. WorldKeeper must not reproduce the
+allocator.
 
 ## Explicit stop conditions
 
 Stop rather than broaden authority if work would add WorldKeeper persistence,
 HTTP, migrations, agent harnesses, vector storage, automatic dedupe, generic
-reconciliation, a general read façade, `recover_change`, mandatory
-`preparation_generation`, or any WK-3 implementation before the DungeonMind
-gate is accepted.
+reconciliation, a general read façade, publication, `commit_change`,
+`recover_change`, prepared persistence, or any V5.4 allocator logic.
 
 Earlier WK-1 and WK-2 documents and commits remain truthful historical evidence;
 they are not silently rewritten. Their deterministic-ID and recovery-ledger

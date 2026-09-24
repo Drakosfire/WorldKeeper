@@ -1,10 +1,10 @@
 # World Keeper repository operating law
 
-This repository is in **DESIGN RE-ANCHOR: WK-1/WK-2 ACCEPTED; WK-3 BLOCKED**.
+This repository is in **WK-3 PREPARE WORLD CHANGE — ACTIVE**.
 The current checked-in authority says:
 
 ```text
-IMPLEMENTATION: WK-3 NOT AUTHORIZED — DUNGEONMIND PREREQUISITE BLOCKS RUNTIME WORK
+IMPLEMENTATION: LIMITED AUTHORIZATION — WK-3 PREPARE ONLY
 ```
 
 ## Authority and pickup
@@ -26,15 +26,16 @@ IMPLEMENTATION: WK-3 NOT AUTHORIZED — DUNGEONMIND PREREQUISITE BLOCKS RUNTIME 
 
 ## Work restrictions
 
-- Documentation/design work may update the authority documents and record the
-  DungeonMind prerequisite. No WorldKeeper runtime implementation is authorized
-  by this re-anchor.
+- WK-3 may implement immutable intent/prepared contracts, a read-only native
+  DungeonMind preparation authority, lossless V5.4 prospective compilation,
+  and its test harness under
+  `Docs/Plans/HANDOFF-wk3-prepare-world-change-v1.md`.
 - Do not add HTTP endpoints, World Keeper persistence, migrations, an agent
   harness, vector storage, automatic deduplication, or a second graph engine.
-- Do not implement `prepare_change`, `commit_change`, recovery orchestration,
-  prepared workflow persistence, confirmation bindings, intent compilation, or
-  prospective-publication materialization. WK-3 remains blocked until
-  DungeonMind proves its prospective-reference atomic publication contract.
+- Do not implement `commit_change`, publication/recovery orchestration,
+  prepared workflow persistence, confirmation bindings, HTTP, or durable
+  identity allocation. Prepare must not call a DungeonMind mutation seam or
+  reproduce the V5.4 allocator. Those remain WK-4 or later work.
 - Do not copy DungeonMindBuddy modules wholesale. Classify current seams as product behavior, migration evidence, World Keeper responsibility, or DungeonMind responsibility before moving anything.
 - A future implementation change must name the authority document and the explicit authorization that permits it.
 - Before handing work back, run documentation-oriented checks, inspect the complete diff, and report the exact branch, commit, status, and unresolved questions.
