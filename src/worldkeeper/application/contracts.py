@@ -220,3 +220,33 @@ class PreparedWorldChange:
     warnings: tuple[str, ...] = ()
     _domain_contract_json: str = field(repr=False, default="")
     _semantic_profile_json: str = field(repr=False, default="")
+
+
+@dataclass(frozen=True, slots=True)
+class CommittedObjectResult:
+    client_op_id: str
+    durable_object_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class CommittedAssertionResult:
+    client_op_id: str
+    durable_assertion_id: str
+    semantic_role: str
+
+
+@dataclass(frozen=True, slots=True)
+class CommitVerification:
+    exact_child_read_back: bool = True
+
+
+@dataclass(frozen=True, slots=True)
+class VerifiedCommittedChange:
+    prepared_change_id: str
+    dungeonmind_publication_id: str
+    expected_parent_revision_id: str
+    child_revision_id: str
+    child_graph_payload_sha256: str
+    object_results: tuple[CommittedObjectResult, ...]
+    assertion_results: tuple[CommittedAssertionResult, ...]
+    verification: CommitVerification = field(default_factory=CommitVerification)
