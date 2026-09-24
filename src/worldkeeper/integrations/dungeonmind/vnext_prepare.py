@@ -272,10 +272,10 @@ def _plan_payload(plan: DungeonMindPreparedProspectivePlan) -> dict[str, object]
     }
 
 
-def compile_prepared_change_to_dungeonmind(
+def _compile_prepared_change_to_dungeonmind(
     prepared: PreparedWorldChange,
 ) -> DungeonMindPreparedProspectivePlan:
-    """Losslessly compile one prepared meaning to accepted V5.4 syntax."""
+    """Build one compile plan before checking its sealed digest."""
     items: list[ProspectiveContributionItem] = []
     for operation in prepared.prepared_operations:
         if isinstance(operation, CreateObject):
@@ -360,3 +360,23 @@ def compile_prepared_change_to_dungeonmind(
 def compiled_plan_digest(plan: DungeonMindPreparedProspectivePlan) -> str:
     """Canonical digest of every authority-bearing compile-ready value."""
     return canonical_sha256(_plan_payload(plan))
+
+
+def compute_prepared_plan_digest(prepared: PreparedWorldChange) -> str:
+    """Compute the canonical integrity witness while sealing a preparation."""
+    if prepared.dungeonmind_publication_id != prepared.prepared_change_id:
+        raise ValueError("DungeonMind publication identity must equal prepared identity")
+    return compiled_plan_digest(_compile_prepared_change_to_dungeonmind(prepared))
+
+
+def compile_prepared_change_to_dungeonmind(
+    prepared: PreparedWorldChange,
+) -> DungeonMindPreparedProspectivePlan:
+    """Compile only an intact prepared meaning to accepted V5.4 syntax."""
+    if prepared.dungeonmind_publication_id != prepared.prepared_change_id:
+        raise ValueError("DungeonMind publication identity must equal prepared identity")
+    plan = _compile_prepared_change_to_dungeonmind(prepared)
+    actual_digest = compiled_plan_digest(plan)
+    if actual_digest != prepared.compiled_plan_digest:
+        raise ValueError("prepared compiled plan digest mismatch")
+    return plan

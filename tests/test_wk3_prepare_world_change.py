@@ -216,6 +216,39 @@ def test_canonical_prepare_compiles_exact_v5_4_witness_without_mutation() -> Non
     assert "asrt:" not in serialized
 
 
+def test_worldkeeper_generates_fresh_opaque_prepared_ids_by_default() -> None:
+    contract, profile = descriptors()
+    service = WorldChangePreparer(
+        authority=FakeAuthority(),
+        domain_contract=contract,
+        semantic_profile=profile,
+        clock=lambda: NOW,
+    )
+
+    first = service.prepare_change(canonical_intent())
+    second = service.prepare_change(canonical_intent())
+
+    assert first.prepared_change_id.startswith("prepared:")
+    assert second.prepared_change_id.startswith("prepared:")
+    assert first.prepared_change_id != second.prepared_change_id
+    assert first.dungeonmind_publication_id == first.prepared_change_id
+    assert second.dungeonmind_publication_id == second.prepared_change_id
+
+
+def test_compile_rejects_changed_publication_identity_or_prepared_meaning() -> None:
+    prepared = preparer()[0].prepare_change(canonical_intent())
+
+    with pytest.raises(ValueError, match="publication identity"):
+        compile_prepared_change_to_dungeonmind(
+            replace(prepared, dungeonmind_publication_id="prepared:other")
+        )
+
+    with pytest.raises(ValueError, match="digest mismatch"):
+        compile_prepared_change_to_dungeonmind(
+            replace(prepared, parent_graph_payload_sha256="b" * 64)
+        )
+
+
 def test_object_fact_and_use_existing_compile_losslessly() -> None:
     intent = WorldChangeIntent(
         space_id="space:lab",

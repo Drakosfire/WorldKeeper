@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import replace
 from datetime import datetime
+from uuid import uuid4
 
 from dungeonmind.contracts.vnext.domain import (
     DomainContractDescriptor,
@@ -13,8 +14,7 @@ from dungeonmind.contracts.vnext.domain import (
 from dungeonmind.domain.canonical import canonical_sha256
 
 from worldkeeper.integrations.dungeonmind.vnext_prepare import (
-    compile_prepared_change_to_dungeonmind,
-    compiled_plan_digest,
+    compute_prepared_plan_digest,
 )
 
 from .authority import GovernedPreparationAuthority, PreparationAuthorityWitness
@@ -47,6 +47,11 @@ class InvalidWorldChange(ValueError):
     def __init__(self, reason: str) -> None:
         super().__init__(reason)
         self.reason = reason
+
+
+def generate_prepared_change_id() -> str:
+    """Generate one fresh opaque WorldKeeper-owned preparation identity."""
+    return f"prepared:{uuid4().hex}"
 
 
 def _required(value: str, reason: str) -> str:
@@ -143,13 +148,13 @@ class WorldChangePreparer:
         authority: GovernedPreparationAuthority,
         domain_contract: DomainContractDescriptor,
         semantic_profile: SemanticProfileDescriptorV2,
-        prepared_id_factory: Callable[[], str],
         clock: Callable[[], datetime],
+        prepared_id_factory: Callable[[], str] | None = None,
     ) -> None:
         self._authority = authority
         self._domain_contract_json = domain_contract.model_dump_json()
         self._semantic_profile_json = semantic_profile.model_dump_json()
-        self._prepared_id_factory = prepared_id_factory
+        self._prepared_id_factory = prepared_id_factory or generate_prepared_change_id
         self._clock = clock
 
     def prepare_change(self, intent: WorldChangeIntent) -> PreparedWorldChange:
@@ -249,10 +254,10 @@ class WorldChangePreparer:
         ):
             raise InvalidWorldChange("no_contribution_items")
         try:
-            plan = compile_prepared_change_to_dungeonmind(prepared)
+            digest = compute_prepared_plan_digest(prepared)
         except (TypeError, ValueError) as exc:
             raise InvalidWorldChange("malformed_semantic_contract") from exc
-        return replace(prepared, compiled_plan_digest=compiled_plan_digest(plan))
+        return replace(prepared, compiled_plan_digest=digest)
 
     @staticmethod
     def _claim_result_id(value: str, seen: set[str]) -> None:

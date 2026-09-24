@@ -12,6 +12,15 @@ def test_worldkeeper_imports_as_an_independent_package() -> None:
     assert not hasattr(worldkeeper, "commit_prepared_change")
 
 
+def test_dungeonmind_integration_exports_wk2_and_wk3_authorities() -> None:
+    from worldkeeper.integrations import dungeonmind
+
+    assert "DungeonMindInProcessAuthority" in dungeonmind.__all__
+    assert "DungeonMindVNextPreparationAuthority" in dungeonmind.__all__
+    assert dungeonmind.DungeonMindInProcessAuthority.__module__.endswith(".in_process")
+    assert dungeonmind.DungeonMindVNextPreparationAuthority.__module__.endswith(".vnext_prepare")
+
+
 def test_wk3_prepare_source_has_no_publication_or_allocator_entrypoints() -> None:
     root = Path(__file__).parents[1] / "src" / "worldkeeper"
     source = "\n".join(
