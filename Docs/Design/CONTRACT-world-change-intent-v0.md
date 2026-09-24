@@ -89,9 +89,14 @@ prepared_change_id
 DungeonMind publication identity
 exact child_revision_id
 create_object client_op_id -> durable_object_id
-create_relationship client_op_id -> durable_relationship_id
+create_relationship client_op_id -> durable_assertion_id
 exact child-revision read-back verification
 ```
+
+Native vNext relationships are assertions; WorldKeeper does not invent a
+separate relationship identity. A known commit whose exact child is temporarily
+unavailable remains committed and retry-safe, distinct from an unknown
+publication outcome.
 
 ## Gating decision
 

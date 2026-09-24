@@ -55,8 +55,10 @@ ID receives a new publication identity without requiring a second Keeper ledger.
 
 The minimum verified receipt returns the prepared ID, DungeonMind publication
 identity, exact child revision, each `create_object client_op_id ->
-durable_object_id`, each `create_relationship client_op_id ->
-durable_relationship_id`, and proof of exact-child read-back.
+durable_object_id`, each fact/relationship `client_op_id ->
+durable_assertion_id` with semantic role, and proof of exact-child read-back.
+Known durable success is preserved when exact-child verification is temporarily
+unavailable or fails integrity; it is not relabeled outcome-unknown.
 
 ## Non-goals and gate
 
