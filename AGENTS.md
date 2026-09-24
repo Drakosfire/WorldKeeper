@@ -1,10 +1,10 @@
 # World Keeper repository operating law
 
-This repository is in **WK-3 PREPARE WORLD CHANGE — ACTIVE**.
+This repository is in **WK-4 COMMIT PREPARED CHANGE — ACTIVE**.
 The current checked-in authority says:
 
 ```text
-IMPLEMENTATION: LIMITED AUTHORIZATION — WK-3 PREPARE ONLY
+IMPLEMENTATION: LIMITED AUTHORIZATION — WK-4 COMMIT + EXACT-CHILD VERIFY ONLY
 ```
 
 ## Authority and pickup
@@ -26,16 +26,14 @@ IMPLEMENTATION: LIMITED AUTHORIZATION — WK-3 PREPARE ONLY
 
 ## Work restrictions
 
-- WK-3 may implement immutable intent/prepared contracts, a read-only native
-  DungeonMind preparation authority, lossless V5.4 prospective compilation,
-  and its test harness under
-  `Docs/Plans/HANDOFF-wk3-prepare-world-change-v1.md`.
+- WK-4 may commit an intact WK-3 `PreparedWorldChange` through DungeonMind
+  V5.4, independently verify the exact immutable child, and reshape the
+  durable result under `Docs/Plans/HANDOFF-wk4-commit-prepared-change-v1.md`.
 - Do not add HTTP endpoints, World Keeper persistence, migrations, an agent
   harness, vector storage, automatic deduplication, or a second graph engine.
-- Do not implement `commit_change`, publication/recovery orchestration,
-  prepared workflow persistence, confirmation bindings, HTTP, or durable
-  identity allocation. Prepare must not call a DungeonMind mutation seam or
-  reproduce the V5.4 allocator. Those remain WK-4 or later work.
+- Do not add prepared workflow persistence, a recovery ledger, confirmation
+  bindings, HTTP, or durable identity allocation. WorldKeeper must not
+  reproduce the V5.4 allocator. Product adapters remain later work.
 - Do not copy DungeonMindBuddy modules wholesale. Classify current seams as product behavior, migration evidence, World Keeper responsibility, or DungeonMind responsibility before moving anything.
 - A future implementation change must name the authority document and the explicit authorization that permits it.
 - Before handing work back, run documentation-oriented checks, inspect the complete diff, and report the exact branch, commit, status, and unresolved questions.

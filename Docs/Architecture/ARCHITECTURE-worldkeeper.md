@@ -1,8 +1,8 @@
 # Architecture — WorldKeeper
 
 **Status:** CURRENT ARCHITECTURE AUTHORITY
-**Phase:** WK-1 and WK-2 accepted; WK-3 prepare active
-**Implementation:** LIMITED AUTHORIZATION — WK-3 PREPARE ONLY
+**Phase:** WK-1/WK-2/WK-3 accepted; WK-4 commit active
+**Implementation:** LIMITED AUTHORIZATION — WK-4 COMMIT + EXACT-CHILD VERIFY
 **Decision:** [ownership simplification](../Design/DECISION-worldkeeper-ownership-simplification.md)
 
 ## Mission
@@ -47,5 +47,6 @@ WK-1 and WK-2 are accepted. DungeonMind V5.4 is accepted and merged at
 `6edb9e40…`; WK-3 is active for non-mutating preparation and lossless compile
 to its prospective contract.
 
-Publication, commit, recovery orchestration, prepared persistence, and exact
-child verification remain unauthorized until WK-4.
+WK-4 may publish an intact prepared value and independently verify the exact
+child. Recovery ledgers, prepared persistence, HTTP, and product integration
+remain unauthorized.

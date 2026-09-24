@@ -1,6 +1,6 @@
 # Contract — PreparedWorldChange v0
 
-**Status:** CURRENT APPLICATION CONTRACT, WK-3 prepare active
+**Status:** CURRENT APPLICATION CONTRACT, WK-4 commit active
 **Owner:** WorldKeeper boundary
 **Decision:** [ownership simplification](DECISION-worldkeeper-ownership-simplification.md)
 
@@ -69,4 +69,5 @@ needs status inspection independently of a commit retry.
 
 DungeonMind V5.4 at merged authority `6edb9e40…` proves prospective allocation,
 substitution, atomicity, idempotency, and lost-response resolution. WK-3 may
-produce an immutable compile-ready prospective plan; it may not publish it.
+produce an immutable compile-ready prospective plan. WK-4 may publish exactly
+that caller-held prepared value and independently verify its exact child.
