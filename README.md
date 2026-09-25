@@ -97,12 +97,6 @@ WorldKeeper exists so a proposal can remain reversible and reviewable until the
 moment it becomes exactly one verified durable change—without making the
 product become the database or the database become the product.
 
-WorldKeeper must not predict future DungeonMind IDs, maintain a second graph or
-recovery ledger, or publish an object and repair dependent relationships later.
-Prepare binds same-transaction references to exact prospective create results;
-DungeonMind must allocate and substitute durable identities atomically during
-publication.
-
 The current decision and inspected DungeonMind evidence are recorded in
 [`DECISION-worldkeeper-ownership-simplification.md`](Docs/Design/DECISION-worldkeeper-ownership-simplification.md).
 DungeonMind V5.4 is accepted and merged at
