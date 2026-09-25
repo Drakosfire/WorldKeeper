@@ -22,7 +22,7 @@ wheels = [
 [[package]]
 name = "dungeonmind"
 version = "0.1.0"
-source = { git = "https://github.com/Drakosfire/DungeonMind.git?rev=6edb9e40d1dc930f537c66deb1afbd1b99002844#6edb9e40d1dc930f537c66deb1afbd1b99002844" }
+source = { git = "https://github.com/Drakosfire/DungeonMind.git?rev=0f709d76fdc53bac9c9258d1751463ae2c76ca71#0f709d76fdc53bac9c9258d1751463ae2c76ca71" }
 dependencies = [
     { name = "pydantic" },
 ]
@@ -280,7 +280,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "dungeonmind", git = "https://github.com/Drakosfire/DungeonMind.git?rev=6edb9e40d1dc930f537c66deb1afbd1b99002844#6edb9e40d1dc930f537c66deb1afbd1b99002844" }]
+requires-dist = [{ name = "dungeonmind", git = "https://github.com/Drakosfire/DungeonMind.git?rev=0f709d76fdc53bac9c9258d1751463ae2c76ca71#0f709d76fdc53bac9c9258d1751463ae2c76ca71" }]
 
 [package.metadata.requires-dev]
 dev = [

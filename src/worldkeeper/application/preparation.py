@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from collections.abc import Callable
 from dataclasses import replace
 from datetime import datetime
@@ -10,6 +11,7 @@ from uuid import uuid4
 from dungeonmind.contracts.vnext.domain import (
     DomainContractDescriptor,
     SemanticProfileDescriptorV2,
+    parse_semantic_profile_descriptor,
 )
 from dungeonmind.domain.canonical import canonical_sha256
 
@@ -171,8 +173,8 @@ class WorldChangePreparer:
             raise InvalidWorldChange("authority_space_mismatch")
 
         domain_contract = DomainContractDescriptor.model_validate_json(self._domain_contract_json)
-        semantic_profile = SemanticProfileDescriptorV2.model_validate_json(
-            self._semantic_profile_json
+        semantic_profile = parse_semantic_profile_descriptor(
+            json.loads(self._semantic_profile_json)
         )
         self._validate_descriptors(witness, domain_contract, semantic_profile)
 

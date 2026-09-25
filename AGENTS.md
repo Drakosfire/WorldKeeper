@@ -7,6 +7,11 @@ The current checked-in authority says:
 IMPLEMENTATION: LIMITED AUTHORIZATION — WK-5 COMPOSITION ONLY
 ```
 
+The custom-predicate compatibility amendment in the Steward anchor separately
+authorizes only rehydrating DungeonMind V3 semantic profiles in the accepted
+prepare/compile path and repinning the DungeonMind dependency. It does not
+extend WK-5 into product mapping or a new lifecycle.
+
 ## Authority and pickup
 
 - Begin with `Docs/Steward/STEWARD-ANCHOR-worldkeeper.md` and follow its pickup order.

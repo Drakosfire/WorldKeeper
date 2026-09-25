@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from typing import Protocol, TypeVar
@@ -41,6 +42,7 @@ from dungeonmind.contracts.vnext.domain import (
     LiteralValue,
     SemanticProfileDescriptorV2,
     TermRefValue,
+    parse_semantic_profile_descriptor,
 )
 from dungeonmind.contracts.vnext.knowledge import KnowledgeHead
 from dungeonmind.contracts.vnext.prospective import (
@@ -346,8 +348,8 @@ def _compile_prepared_change_to_dungeonmind(
         domain_contract=DomainContractDescriptor.model_validate_json(
             prepared._domain_contract_json
         ),
-        semantic_profile=SemanticProfileDescriptorV2.model_validate_json(
-            prepared._semantic_profile_json
+        semantic_profile=parse_semantic_profile_descriptor(
+            json.loads(prepared._semantic_profile_json)
         ),
         publication_id=prepared.dungeonmind_publication_id,
         parent_graph_payload_sha256=prepared.parent_graph_payload_sha256,
