@@ -16,14 +16,14 @@ pr_body_template: |
 
 # HANDOFF — WK-5 consumer composition boundary
 
-**Status:** READY FOR IMPLEMENTATION  
-**Repository:** `Drakosfire/WorldKeeper`  
-**Implementation branch:** `kernel/wk5-consumer-composition-boundary`  
-**Base:** `cdbd13ca981f9ff062c2cbb750f320a28626f9a3`  
-**WK-4 accepted head:** `95f29ce519312690419b89727605eeac26e6e98b`  
-**WK-4 merge:** `cdbd13ca981f9ff062c2cbb750f320a28626f9a3`  
-**WK-4 disposition:** `WK_4_COMMIT_AND_VERIFY_ACCEPTED`  
-**DungeonMind V5.4 merge:** `6edb9e40d1dc930f537c66deb1afbd1b99002844`  
+**Status:** READY FOR IMPLEMENTATION
+**Repository:** `Drakosfire/WorldKeeper`
+**Implementation branch:** `kernel/wk5-consumer-composition-boundary`
+**Base:** `cdbd13ca981f9ff062c2cbb750f320a28626f9a3`
+**WK-4 accepted head:** `95f29ce519312690419b89727605eeac26e6e98b`
+**WK-4 merge:** `cdbd13ca981f9ff062c2cbb750f320a28626f9a3`
+**WK-4 disposition:** `WK_4_COMMIT_AND_VERIFY_ACCEPTED`
+**DungeonMind V5.4 merge:** `6edb9e40d1dc930f537c66deb1afbd1b99002844`
 **Suggested PR title:** `WK-5: expose consumer composition boundary`
 
 ## 1. Why this is next
