@@ -18,7 +18,9 @@ from dungeonmind.contracts.vnext.domain import (
 )
 from dungeonmind.contracts.vnext.domain import (
     DomainContractDescriptor,
+    OpenPredicateNamespace,
     SemanticProfileDescriptorV2,
+    SemanticProfileDescriptorV3,
     SemanticProfilePredicate,
 )
 from dungeonmind.contracts.vnext.prospective import (
@@ -214,6 +216,52 @@ def test_canonical_prepare_compiles_exact_v5_4_witness_without_mutation() -> Non
     assert "ent:castle" in serialized
     assert "ent:" not in serialized.replace("ent:castle", "")
     assert "asrt:" not in serialized
+
+
+def test_prepare_and_compile_preserve_v3_custom_predicate_authority() -> None:
+    contract, old_profile = descriptors()
+    profile = SemanticProfileDescriptorV3(
+        profile_id=old_profile.profile_id,
+        profile_revision="2",
+        term_namespaces=["lab", "lab.custom"],
+        predicates=old_profile.predicates,
+        open_predicate_namespaces=[
+            OpenPredicateNamespace(namespace="lab.custom", allowed_value_kinds=["entity_ref"])
+        ],
+    )
+    witness = replace(
+        authority_witness(),
+        semantic_profile_ref=PreparationAuthorityRef(
+            authority_id=profile.profile_id,
+            revision=profile.profile_revision,
+            descriptor_sha256=canonical_sha256(profile.model_dump(mode="json")),
+        ),
+    )
+    service = WorldChangePreparer(
+        authority=FakeAuthority(witness),
+        domain_contract=contract,
+        semantic_profile=profile,
+        clock=lambda: NOW,
+        prepared_id_factory=lambda: "prepared:custom",
+    )
+    intent = replace(
+        canonical_intent(),
+        operations=(
+            CreateObject(client_op_id="npc-7"),
+            CreateRelationship(
+                client_op_id="rel-4",
+                source=ResultOf("npc-7"),
+                predicate="lab.custom:works_at",
+                target=DurableObjectRef("ent:castle"),
+                metadata=metadata(),
+            ),
+        ),
+    )
+    prepared = service.prepare_change(intent)
+    plan = compile_prepared_change_to_dungeonmind(prepared)
+    assert isinstance(plan.semantic_profile, SemanticProfileDescriptorV3)
+    assert plan.semantic_profile_ref.revision == "2"
+    assert plan.prospective_contribution.items[1].predicate == "lab.custom:works_at"
 
 
 def test_worldkeeper_generates_fresh_opaque_prepared_ids_by_default() -> None:

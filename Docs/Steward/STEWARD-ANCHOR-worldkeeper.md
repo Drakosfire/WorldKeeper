@@ -5,6 +5,16 @@
 **Repository:** `WorldKeeper`
 **Current decision:** [ownership simplification](../Design/DECISION-worldkeeper-ownership-simplification.md)
 
+## Bounded custom-predicate compatibility amendment
+
+The user-authorized custom-predicate follow-up permits a surgical compatibility
+change against DungeonMind PR #77: pin its exact commit, preserve the sealed
+`dm_semantic_profile_v3` descriptor through WorldKeeper prepare/compile, and
+prove an authored `entity_ref` relationship term survives unchanged. This is
+not authorization to change WK-3/WK-4 lifecycle semantics, choose predicate
+meaning for a consumer, initialize a World, or migrate a V2-pinned World to V3.
+The dependency PR remains a prerequisite until accepted and merged.
+
 ## Pickup order
 
 Read this anchor first, then the current architecture, boundary, lifecycle,
