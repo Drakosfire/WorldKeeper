@@ -8,12 +8,17 @@
 ## Bounded custom-predicate compatibility amendment
 
 The user-authorized custom-predicate follow-up permits a surgical compatibility
-change against DungeonMind PR #77: pin its exact commit, preserve the sealed
+change against DungeonMind PR #77: pin its substantively reviewed exact runtime
+head `0f709d76fdc53bac9c9258d1751463ae2c76ca71`, preserve the sealed
 `dm_semantic_profile_v3` descriptor through WorldKeeper prepare/compile, and
 prove an authored `entity_ref` relationship term survives unchanged. This is
 not authorization to change WK-3/WK-4 lifecycle semantics, choose predicate
 meaning for a consumer, initialize a World, or migrate a V2-pinned World to V3.
-The dependency PR remains a prerequisite until accepted and merged.
+DungeonMind #77 merged as `a9051f02dfd95e051a83c1d74b26bb04a2b3e5bf`
+after `SEMANTIC_PROFILE_V3_SUBSTANTIVE_PASS`. Its requested authority finalization
+is in DungeonMind PR #78 at `7489d517a1c653eca66200fa612613febe31cf64`;
+that docs/test-only PR still requires delta review and merge before this
+compatibility dependency can be called finally accepted on DungeonMind `main`.
 
 ## Pickup order
 
