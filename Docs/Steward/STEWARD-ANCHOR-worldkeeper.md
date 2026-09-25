@@ -1,7 +1,7 @@
 # Steward Anchor — WorldKeeper
 
-**Status:** WK-1 ACCEPTED / WK-2 ACCEPTED / WK-3 ACCEPTED / WK-4 ACTIVE
-**Implementation:** LIMITED AUTHORIZATION — WK-4 COMMIT + EXACT-CHILD VERIFY
+**Status:** WK-1/WK-2/WK-3/WK-4 ACCEPTED / WK-5 ACTIVE
+**Implementation:** LIMITED AUTHORIZATION — WK-5 CONSUMER COMPOSITION ONLY
 **Repository:** `WorldKeeper`
 **Current decision:** [ownership simplification](../Design/DECISION-worldkeeper-ownership-simplification.md)
 
@@ -56,7 +56,9 @@ DungeonMind PR #75 V5.4 is accepted at
 ```text
 WK-3 COMPLETE — accepted head `1c5e3d1262239ba8faf6fca75fbc0aa756d7a2a7`,
 merged as `3c1132e9c3a63571984704bf66bcf5bf482b7bd8`
-WK-4 ACTIVE — commit intact prepared values and verify exact immutable children
+WK-4 COMPLETE — accepted head `95f29ce519312690419b89727605eeac26e6e98b`,
+merged as `cdbd13ca981f9ff062c2cbb750f320a28626f9a3`
+WK-5 ACTIVE — expose accepted prepare + commit through composition only
 ```
 
 V5.4 proves transaction-local prospective handles, DungeonMind-owned
@@ -71,7 +73,8 @@ allocator.
 Stop rather than broaden authority if work would add WorldKeeper persistence,
 HTTP, migrations, agent harnesses, vector storage, automatic dedupe, generic
 reconciliation, a general read façade, `recover_change`, prepared persistence,
-or any V5.4 allocator logic.
+or any V5.4 allocator logic. WK-5 also stops if composition requires new
+semantics, product mapping, source admission, or first-world initialization.
 
 Earlier WK-1 and WK-2 documents and commits remain truthful historical evidence;
 they are not silently rewritten. Their deterministic-ID and recovery-ledger
