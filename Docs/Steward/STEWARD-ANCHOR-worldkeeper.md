@@ -16,7 +16,7 @@ not authorization to change WK-3/WK-4 lifecycle semantics, choose predicate
 meaning for a consumer, initialize a World, or migrate a V2-pinned World to V3.
 DungeonMind #77 merged as `a9051f02dfd95e051a83c1d74b26bb04a2b3e5bf`
 after `SEMANTIC_PROFILE_V3_SUBSTANTIVE_PASS`. Its requested authority finalization
-is in DungeonMind PR #78 at `7489d517a1c653eca66200fa612613febe31cf64`;
+is in DungeonMind PR #78 at `19cf798d9b8ed9c63eb41d585b5e6ad46d99f5a0`;
 that docs/test-only PR still requires delta review and merge before this
 compatibility dependency can be called finally accepted on DungeonMind `main`.
 
