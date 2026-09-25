@@ -53,3 +53,34 @@ def test_wk4_commit_source_does_not_import_or_call_dungeonmind_allocator() -> No
         )
     )
     assert "allocate_prospective_result_id" not in source
+
+
+def test_wk5_application_protocol_has_no_integration_or_transport_dependencies() -> None:
+    root = Path(__file__).parents[1] / "src" / "worldkeeper"
+    source = (root / "application" / "service.py").read_text(encoding="utf-8")
+    forbidden = ("dungeonmind", "DungeonBuddy", "fastapi", "sqlalchemy", "repository")
+    assert not any(name in source for name in forbidden)
+
+
+def test_wk5_runtime_only_composes_accepted_services() -> None:
+    root = Path(__file__).parents[1] / "src" / "worldkeeper"
+    source = (root / "integrations" / "dungeonmind" / "runtime.py").read_text(encoding="utf-8")
+    assert "WorldChangePreparer" in source
+    assert "WorldChangeCommitter" in source
+    forbidden = (
+        "publish_prospective_contribution",
+        "publish_prospective_publication",
+        "allocate_prospective_result_id",
+        "get_prospective_publication",
+    )
+    assert not any(name in source for name in forbidden)
+
+
+def test_top_level_worldkeeper_does_not_export_dungeonmind_composition_types() -> None:
+    import worldkeeper
+
+    assert hasattr(worldkeeper, "WorldChangeService")
+    assert not hasattr(worldkeeper, "DungeonMindWorldKeeperRuntime")
+    assert not hasattr(worldkeeper, "KnowledgeRevisionRepository")
+    assert not hasattr(worldkeeper, "DomainContractDescriptor")
+    assert not hasattr(worldkeeper, "SemanticProfileDescriptorV2")
