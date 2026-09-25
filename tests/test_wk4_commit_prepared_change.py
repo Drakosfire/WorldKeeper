@@ -12,7 +12,9 @@ from dungeonmind.contracts.semantic_profile import SemanticProfileRef
 from dungeonmind.contracts.vnext.domain import (
     DomainContractDescriptor,
     Entity,
+    OpenPredicateNamespace,
     SemanticProfileDescriptorV2,
+    SemanticProfileDescriptorV3,
     SemanticProfilePredicate,
 )
 from dungeonmind.contracts.vnext.knowledge import DomainContractRef, PublishKnowledgeRevisionCommand
@@ -69,9 +71,10 @@ def descriptors():
     return contract, profile
 
 
-def repository():
+def repository(*, semantic_profile: SemanticProfileDescriptorV2 | None = None):
     repo = InMemoryKnowledgeRevisionRepository()
     contract, profile = descriptors()
+    profile = semantic_profile or profile
     payload = encode_native_graph_payload(
         entities={"ent:castle": Entity(entity_id="ent:castle")},
         assertions={},
@@ -143,8 +146,16 @@ def intent(*, label: str | None = None) -> WorldChangeIntent:
     )
 
 
-def prepare(repo, change: WorldChangeIntent, prepared_id: str, at: datetime = NOW):
+def prepare(
+    repo,
+    change: WorldChangeIntent,
+    prepared_id: str,
+    at: datetime = NOW,
+    *,
+    semantic_profile: SemanticProfileDescriptorV2 | None = None,
+):
     contract, profile = descriptors()
+    profile = semantic_profile or profile
     return WorldChangePreparer(
         authority=DungeonMindVNextPreparationAuthority(repo),
         domain_contract=contract,
@@ -184,6 +195,42 @@ def test_canonical_commit_verifies_exact_child_and_replays_same_mapping() -> Non
     )
     assert assertion["subject_entity_id"] == first.object_results[0].durable_object_id
     assert assertion["value"] == {"kind": "entity_ref", "entity_id": "ent:castle"}
+
+
+def test_v3_custom_relationship_commits_exact_predicate_and_child() -> None:
+    _, old_profile = descriptors()
+    profile = SemanticProfileDescriptorV3(
+        profile_id=old_profile.profile_id,
+        profile_revision="2",
+        term_namespaces=["lab", "lab.custom"],
+        predicates=old_profile.predicates,
+        open_predicate_namespaces=[
+            OpenPredicateNamespace(namespace="lab.custom", allowed_value_kinds=["entity_ref"])
+        ],
+    )
+    repo = repository(semantic_profile=profile)
+    change = intent()
+    relationship = change.operations[-1]
+    change = replace(
+        change,
+        operations=(
+            *change.operations[:-1],
+            replace(relationship, predicate="lab.custom:works_at"),
+        ),
+    )
+    prepared = prepare(repo, change, "prepared:wk4-v3", semantic_profile=profile)
+    result = committer(repo).commit_prepared_change(prepared, "user:keeper")
+
+    child = repo.get_revision("space:lab", result.child_revision_id)
+    assert child is not None
+    assertion = next(
+        item
+        for item in child.graph_payload["assertions"]
+        if item["assertion_id"] == result.assertion_results[0].durable_assertion_id
+    )
+    assert result.verification.exact_child_read_back is True
+    assert assertion["predicate"] == "lab.custom:works_at"
+    assert assertion["subject_entity_id"] == result.object_results[0].durable_object_id
 
 
 def test_fact_role_and_use_existing_has_no_result() -> None:
