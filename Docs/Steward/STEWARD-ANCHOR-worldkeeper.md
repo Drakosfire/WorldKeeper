@@ -15,10 +15,12 @@ prove an authored `entity_ref` relationship term survives unchanged. This is
 not authorization to change WK-3/WK-4 lifecycle semantics, choose predicate
 meaning for a consumer, initialize a World, or migrate a V2-pinned World to V3.
 DungeonMind #77 merged as `a9051f02dfd95e051a83c1d74b26bb04a2b3e5bf`
-after `SEMANTIC_PROFILE_V3_SUBSTANTIVE_PASS`. Its requested authority finalization
-is in DungeonMind PR #78 at `19cf798d9b8ed9c63eb41d585b5e6ad46d99f5a0`;
-that docs/test-only PR still requires delta review and merge before this
-compatibility dependency can be called finally accepted on DungeonMind `main`.
+after `SEMANTIC_PROFILE_V3_SUBSTANTIVE_PASS`. DungeonMind PR #78 finalized its
+authority at reviewed head `19cf798d9b8ed9c63eb41d585b5e6ad46d99f5a0`,
+Cycle 2 PASS `5322577539`, and merge
+`54a419f99057d96e0c4e7620d8bd8ccc6816fb62`. The accepted disposition is
+`SEMANTIC_PROFILE_V3_OPEN_PREDICATE_NAMESPACES_ACCEPTED`. This accepts scoped
+V3 predicates; it does not provide a V2→V3 profile transition for existing Worlds.
 
 ## Pickup order
 
