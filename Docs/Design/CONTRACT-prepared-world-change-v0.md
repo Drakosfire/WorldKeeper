@@ -1,6 +1,6 @@
 # Contract — PreparedWorldChange v0
 
-**Status:** CURRENT APPLICATION CONTRACT, WK-3 prepare active
+**Status:** CURRENT APPLICATION CONTRACT, WK-4 commit active
 **Owner:** WorldKeeper boundary
 **Decision:** [ownership simplification](DECISION-worldkeeper-ownership-simplification.md)
 
@@ -55,8 +55,10 @@ ID receives a new publication identity without requiring a second Keeper ledger.
 
 The minimum verified receipt returns the prepared ID, DungeonMind publication
 identity, exact child revision, each `create_object client_op_id ->
-durable_object_id`, each `create_relationship client_op_id ->
-durable_relationship_id`, and proof of exact-child read-back.
+durable_object_id`, each fact/relationship `client_op_id ->
+durable_assertion_id` with semantic role, and proof of exact-child read-back.
+Known durable success is preserved when exact-child verification is temporarily
+unavailable or fails integrity; it is not relabeled outcome-unknown.
 
 ## Non-goals and gate
 
@@ -69,4 +71,5 @@ needs status inspection independently of a commit retry.
 
 DungeonMind V5.4 at merged authority `6edb9e40…` proves prospective allocation,
 substitution, atomicity, idempotency, and lost-response resolution. WK-3 may
-produce an immutable compile-ready prospective plan; it may not publish it.
+produce an immutable compile-ready prospective plan. WK-4 may publish exactly
+that caller-held prepared value and independently verify its exact child.

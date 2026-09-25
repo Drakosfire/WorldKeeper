@@ -1,7 +1,7 @@
 # Roadmap — WorldKeeper
 
-**Status:** WK-1 and WK-2 accepted; DungeonMind V5.4 accepted; WK-3 active
-**Implementation:** limited authorization — WK-3 prepare only
+**Status:** WK-1/WK-2/WK-3 accepted; DungeonMind V5.4 accepted; WK-4 active
+**Implementation:** limited authorization — WK-4 commit + exact-child verify
 
 ## Accepted history
 
@@ -29,7 +29,7 @@ The completed prerequisite handoff is recorded in
 
 ## WK-3 — Prepare World change
 
-**State:** ACTIVE / PREPARE-ONLY IMPLEMENTATION AUTHORIZED.
+**State:** COMPLETE / `WK_3_PREPARE_WORLD_CHANGE_ACCEPTED`.
 
 WK-3 implements non-mutating semantic interpretation, exact parent and
 authority binding, source/evidence admissibility, and complete local-reference
@@ -37,9 +37,10 @@ resolution against the DungeonMind publication contract.
 
 ## WK-4 — Commit prepared change and verify exact child
 
-**State:** NAMED SUCCESSOR / NOT AUTHORIZED.
+**State:** ACTIVE / COMMIT + EXACT-CHILD VERIFICATION AUTHORIZED.
 
-Commit coordination, verified receipts, and product integration follow only
-after WK-3 is accepted. HTTP, persistence,
+WK-4 coordinates commit of an intact prepared value through DungeonMind V5.4,
+independently verifies the exact immutable child, and returns a WorldKeeper-owned
+verified receipt. HTTP, persistence,
 migrations, agent harnesses, vector storage, automatic dedupe, and generic
 reconciliation remain outside this bootstrap unless separately authorized.

@@ -1,7 +1,7 @@
 # Steward Anchor — WorldKeeper
 
-**Status:** WK-1 ACCEPTED / WK-2 ACCEPTED / WK-3 ACTIVE
-**Implementation:** LIMITED AUTHORIZATION — WK-3 PREPARE ONLY
+**Status:** WK-1 ACCEPTED / WK-2 ACCEPTED / WK-3 ACCEPTED / WK-4 ACTIVE
+**Implementation:** LIMITED AUTHORIZATION — WK-4 COMMIT + EXACT-CHILD VERIFY
 **Repository:** `WorldKeeper`
 **Current decision:** [ownership simplification](../Design/DECISION-worldkeeper-ownership-simplification.md)
 
@@ -54,8 +54,9 @@ DungeonMind PR #75 V5.4 is accepted at
 `6edb9e40d1dc930f537c66deb1afbd1b99002844`.
 
 ```text
-WK-3 ACTIVE — prepare, authority binding, and V5.4 prospective compilation only
-WK-4 UNAUTHORIZED — commit, recovery, and exact-child verification
+WK-3 COMPLETE — accepted head `1c5e3d1262239ba8faf6fca75fbc0aa756d7a2a7`,
+merged as `3c1132e9c3a63571984704bf66bcf5bf482b7bd8`
+WK-4 ACTIVE — commit intact prepared values and verify exact immutable children
 ```
 
 V5.4 proves transaction-local prospective handles, DungeonMind-owned
@@ -69,8 +70,8 @@ allocator.
 
 Stop rather than broaden authority if work would add WorldKeeper persistence,
 HTTP, migrations, agent harnesses, vector storage, automatic dedupe, generic
-reconciliation, a general read façade, publication, `commit_change`,
-`recover_change`, prepared persistence, or any V5.4 allocator logic.
+reconciliation, a general read façade, `recover_change`, prepared persistence,
+or any V5.4 allocator logic.
 
 Earlier WK-1 and WK-2 documents and commits remain truthful historical evidence;
 they are not silently rewritten. Their deterministic-ID and recovery-ledger

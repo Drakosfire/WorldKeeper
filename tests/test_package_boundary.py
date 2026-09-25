@@ -12,13 +12,15 @@ def test_worldkeeper_imports_as_an_independent_package() -> None:
     assert not hasattr(worldkeeper, "commit_prepared_change")
 
 
-def test_dungeonmind_integration_exports_wk2_and_wk3_authorities() -> None:
+def test_dungeonmind_integration_exports_wk2_wk3_and_wk4_authorities() -> None:
     from worldkeeper.integrations import dungeonmind
 
     assert "DungeonMindInProcessAuthority" in dungeonmind.__all__
     assert "DungeonMindVNextPreparationAuthority" in dungeonmind.__all__
     assert dungeonmind.DungeonMindInProcessAuthority.__module__.endswith(".in_process")
     assert dungeonmind.DungeonMindVNextPreparationAuthority.__module__.endswith(".vnext_prepare")
+    assert "DungeonMindVNextCommitAuthority" in dungeonmind.__all__
+    assert dungeonmind.DungeonMindVNextCommitAuthority.__module__.endswith(".vnext_commit")
 
 
 def test_wk3_prepare_source_has_no_publication_or_allocator_entrypoints() -> None:
@@ -39,3 +41,15 @@ def test_wk3_prepare_source_has_no_publication_or_allocator_entrypoints() -> Non
         "allocate_prospective_result_id",
     )
     assert not any(name in source for name in forbidden)
+
+
+def test_wk4_commit_source_does_not_import_or_call_dungeonmind_allocator() -> None:
+    root = Path(__file__).parents[1] / "src" / "worldkeeper"
+    source = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in (
+            root / "application" / "commit.py",
+            root / "integrations" / "dungeonmind" / "vnext_commit.py",
+        )
+    )
+    assert "allocate_prospective_result_id" not in source

@@ -1,7 +1,7 @@
 # Design — Governed World Change Lifecycle
 
-**Status:** CURRENT LIFECYCLE AUTHORITY, WK-3 prepare active
-**Phase:** WK-1/WK-2 and DungeonMind V5.4 accepted
+**Status:** CURRENT LIFECYCLE AUTHORITY, WK-4 commit active
+**Phase:** WK-1/WK-2/WK-3 and DungeonMind V5.4 accepted
 **Decision:** [ownership simplification](DECISION-worldkeeper-ownership-simplification.md)
 
 ## Lifecycle
@@ -62,7 +62,8 @@ DungeonMind V5.4 now proves:
 8. the result returns prospective/client-operation-to-durable mappings.
 
 V5.4 was accepted at `c7700f98…` and merged at `6edb9e40…`. WK-3 prepare is
-active; publication and exact-child verification remain WK-4 work.
+accepted. WK-4 publishes the caller-held immutable prepared value and performs
+exact-child verification without a WorldKeeper persistence or recovery ledger.
 
 ## Deferred capabilities
 

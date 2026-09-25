@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
+
+if TYPE_CHECKING:
+    from .contracts import PreparedWorldChange
 
 
 class AuthorityIntegrityFailure(RuntimeError):
@@ -120,3 +123,26 @@ class GovernedPreparationAuthority(Protocol):
     """Read-only current native-vNext authority used by prepare."""
 
     def read_current_space(self, space_id: str) -> PreparationAuthorityWitness | None: ...
+
+
+@dataclass(frozen=True, slots=True)
+class CommitResultBinding:
+    client_op_id: str
+    result_kind: str
+    durable_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class CommitAuthorityWitness:
+    space_id: str
+    publication_id: str
+    expected_parent_revision_id: str
+    child_revision_id: str
+    child_graph_payload_sha256: str
+    results: tuple[CommitResultBinding, ...]
+
+
+class GovernedCommitAuthority(Protocol):
+    """Narrow publication and exact-child verification seam for WK-4."""
+
+    def commit_and_verify(self, prepared: PreparedWorldChange) -> CommitAuthorityWitness: ...

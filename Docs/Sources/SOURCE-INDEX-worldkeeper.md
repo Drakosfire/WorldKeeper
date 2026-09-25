@@ -1,7 +1,7 @@
 # Source Index — WorldKeeper
 
 **Status:** CURRENT EVIDENCE INDEX
-**Snapshot:** 2026-09-23
+**Snapshot:** 2026-09-24
 
 Sources prove facts; they do not override the steward, architecture, boundary,
 lifecycle, or versioned contract documents.
@@ -11,6 +11,7 @@ lifecycle, or versioned contract documents.
 | Source | Revision / condition | What it proves | What it does not prove |
 | --- | --- | --- | --- |
 | WorldKeeper | accepted WK-2 PR #2 head `15739eb2688992fe8f977d006b1e9153047753a9` | accepted WK-2 boundary proof and its history | authorization for WK-3 implementation |
+| WorldKeeper | accepted WK-3 PR #4 head `1c5e3d1262239ba8faf6fca75fbc0aa756d7a2a7`; merged `3c1132e9c3a63571984704bf66bcf5bf482b7bd8` | immutable prepare contract, V5.4 compilation, and exact-head verification with 28 tests | permission for persistence, HTTP, or product integration |
 | DungeonMind | V5.4 accepted head `c7700f98e62732cbd1c021270f5366a77c24ea9b`; merged `main` `6edb9e40d1dc930f537c66deb1afbd1b99002844`; final PASS `5296514025` | prospective allocation/substitution, atomic publication, V5.3 receipt/replay/recovery, durable result mapping | WorldKeeper allocation logic or authorization to publish in WK-3 |
 | DungeonMindBuddy | side-quest authority `19593ae6d5a0ba583eaac063d772abaf9a42d74d` | product interaction boundary and migration evidence | WorldKeeper authority or DungeonMind contract |
 | DungeonMindBuddy historical review | `b7e71379399905b7853d3ee67459511b2669b003` | older source-to-World transaction evidence | current Buddy authority |

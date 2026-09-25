@@ -1,6 +1,6 @@
 # Contract — WorldChangeIntent v0
 
-**Status:** CURRENT APPLICATION CONTRACT, WK-3 prepare active
+**Status:** CURRENT APPLICATION CONTRACT, WK-4 commit active
 **Owner:** WorldKeeper boundary
 **Decision:** [ownership simplification](DECISION-worldkeeper-ownership-simplification.md)
 
@@ -59,9 +59,11 @@ The selected v0 semantic surface is:
 
 ```text
 prepare_change(intent) -> PreparedWorldChange
-commit_change(prepared_change_id, confirmed_by) -> VerifiedCommittedChange
+commit_prepared_change(prepared, confirmed_by) -> VerifiedCommittedChange
 ```
 
+The ID-only `commit_change(prepared_change_id, confirmed_by)` surface is a later
+workflow concern because WorldKeeper has no prepared-state database.
 `get_change_result(prepared_change_id)` is optional until a demonstrated caller
 needs independent status inspection. `recover_change`,
 `read_exact_change_result`, mandatory cryptographic confirmation tokens, and a
@@ -87,15 +89,21 @@ prepared_change_id
 DungeonMind publication identity
 exact child_revision_id
 create_object client_op_id -> durable_object_id
-create_relationship client_op_id -> durable_relationship_id
+create_relationship client_op_id -> durable_assertion_id
 exact child-revision read-back verification
 ```
+
+Native vNext relationships are assertions; WorldKeeper does not invent a
+separate relationship identity. A known commit whose exact child is temporarily
+unavailable remains committed and retry-safe, distinct from an unknown
+publication outcome.
 
 ## Gating decision
 
 DungeonMind V5.4 at merged authority `6edb9e40…` accepts prospective references
 and owns allocation/substitution. WK-3 compiles `result_of(client_op_id)` to
-that syntax without predicting IDs or publishing. Commit remains WK-4 work.
+that syntax without predicting IDs. WK-4 commits that immutable prepared value
+and verifies the exact child.
 
 Earlier WK-1 contract text is retained in repository history as historical
 evidence, including its same-transaction safety analysis. It is not current

@@ -1,8 +1,8 @@
 # Boundary — DungeonBuddy, WorldKeeper, and DungeonMind
 
 **Status:** CURRENT BOUNDARY AUTHORITY
-**Phase:** WK-1/WK-2 accepted; WK-3 prepare active
-**Implementation:** LIMITED AUTHORIZATION — WK-3 PREPARE ONLY
+**Phase:** WK-1/WK-2/WK-3 accepted; WK-4 commit active
+**Implementation:** LIMITED AUTHORIZATION — WK-4 COMMIT + EXACT-CHILD VERIFY
 
 ## Boundary statement
 
@@ -29,8 +29,9 @@ DungeonMind owns durable governed World truth and publication.
 DungeonMind V5.4 at merged authority `6edb9e40…` accepts prospective create
 references, allocates type-separated durable IDs at its owning boundary,
 substitutes them through dependents before materialization, publishes atomically,
-and returns durable mappings. WK-3 may compile to this accepted syntax but may
-not call publication or predict/reproduce the allocation.
+and returns durable mappings. WK-3 compiles to this syntax; WK-4 may call its
+publication path and independently verify the exact child, but may not
+predict/reproduce allocation.
 
 No object-first/dependent-repair sequence, automatic merge, second graph, or
 WorldKeeper durable recovery ledger is permitted.
