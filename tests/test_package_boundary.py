@@ -41,3 +41,15 @@ def test_wk3_prepare_source_has_no_publication_or_allocator_entrypoints() -> Non
         "allocate_prospective_result_id",
     )
     assert not any(name in source for name in forbidden)
+
+
+def test_wk4_commit_source_does_not_import_or_call_dungeonmind_allocator() -> None:
+    root = Path(__file__).parents[1] / "src" / "worldkeeper"
+    source = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in (
+            root / "application" / "commit.py",
+            root / "integrations" / "dungeonmind" / "vnext_commit.py",
+        )
+    )
+    assert "allocate_prospective_result_id" not in source

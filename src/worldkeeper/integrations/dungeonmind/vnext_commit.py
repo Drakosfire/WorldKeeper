@@ -139,7 +139,7 @@ class DungeonMindVNextCommitAuthority:
                 child_revision_id=child_id,
             ) from exc
         if stored_child is None:
-            raise CommittedChangeVerificationUnavailable(
+            raise CommittedChangeVerificationIntegrityFailure(
                 prepared_change_id=prepared.prepared_change_id,
                 publication_id=prepared.dungeonmind_publication_id,
                 child_revision_id=child_id,
@@ -232,9 +232,14 @@ class DungeonMindVNextCommitAuthority:
         receipt = aggregate.publication_receipt
         result = aggregate.prospective_result
         if (
-            result.publication_id != prepared.prepared_change_id
+            receipt.space_id != prepared.space_id
+            or result.space_id != prepared.space_id
+            or receipt.space_id != result.space_id
+            or result.publication_id != prepared.prepared_change_id
             or receipt.publication_id != prepared.prepared_change_id
+            or receipt.published_revision_id != result.published_revision_id
             or child.revision_id != result.published_revision_id
+            or child.revision_id != receipt.published_revision_id
             or child.parent_revision_id != prepared.expected_parent_revision_id
             or child.graph_payload_sha256 != receipt.graph_payload_sha256
             or receipt.expected_parent_revision_id != prepared.expected_parent_revision_id

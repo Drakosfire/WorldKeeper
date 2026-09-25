@@ -437,6 +437,22 @@ Up to two extra test/helper paths are allowed if strictly required.
 Any new persistence, HTTP, migration, product adapter, or DungeonMind source path
 is a stop.
 
+### Bounded authority-document rebrief
+
+WK-4 also updates these three existing authority/evidence paths, which were
+omitted from the initial bookkeeping list but must not remain contradictory
+after activating the slice:
+
+```text
+Docs/Architecture/ARCHITECTURE-worldkeeper.md
+Docs/Architecture/BOUNDARY-dungeonbuddy-worldkeeper-dungeonmind.md
+Docs/Sources/SOURCE-INDEX-worldkeeper.md
+```
+
+Their scope is limited to recording the accepted WK-3 merge, the WK-4
+publication/verification lease, and its evidence provenance. This rebrief does
+not authorize another runtime capability or any additional implementation path.
+
 ## 13. Explicitly out of scope
 
 Do not implement:
