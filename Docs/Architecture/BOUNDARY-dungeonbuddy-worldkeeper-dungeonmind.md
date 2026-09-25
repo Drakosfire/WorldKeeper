@@ -1,8 +1,8 @@
 # Boundary — DungeonBuddy, WorldKeeper, and DungeonMind
 
 **Status:** CURRENT BOUNDARY AUTHORITY
-**Phase:** WK-1/WK-2/WK-3 accepted; WK-4 commit active
-**Implementation:** LIMITED AUTHORIZATION — WK-4 COMMIT + EXACT-CHILD VERIFY
+**Phase:** WK-1/WK-2/WK-3/WK-4 accepted; WK-5 composition active
+**Implementation:** LIMITED AUTHORIZATION — WK-5 CONSUMER COMPOSITION ONLY
 
 ## Boundary statement
 
@@ -32,6 +32,10 @@ substitutes them through dependents before materialization, publishes atomically
 and returns durable mappings. WK-3 compiles to this syntax; WK-4 may call its
 publication path and independently verify the exact child, but may not
 predict/reproduce allocation.
+
+WK-5 exposes this accepted lifecycle as a generic WorldKeeper application
+service and an explicit DungeonMind composition root. It does not perform
+DungeonBuddy mapping or introduce another semantic path.
 
 No object-first/dependent-repair sequence, automatic merge, second graph, or
 WorldKeeper durable recovery ledger is permitted.

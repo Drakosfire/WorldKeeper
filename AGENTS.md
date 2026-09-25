@@ -1,10 +1,10 @@
 # World Keeper repository operating law
 
-This repository is in **WK-4 COMMIT PREPARED CHANGE — ACTIVE**.
+This repository is in **WK-5 CONSUMER COMPOSITION BOUNDARY — ACTIVE**.
 The current checked-in authority says:
 
 ```text
-IMPLEMENTATION: LIMITED AUTHORIZATION — WK-4 COMMIT + EXACT-CHILD VERIFY ONLY
+IMPLEMENTATION: LIMITED AUTHORIZATION — WK-5 COMPOSITION ONLY
 ```
 
 ## Authority and pickup
@@ -26,14 +26,16 @@ IMPLEMENTATION: LIMITED AUTHORIZATION — WK-4 COMMIT + EXACT-CHILD VERIFY ONLY
 
 ## Work restrictions
 
-- WK-4 may commit an intact WK-3 `PreparedWorldChange` through DungeonMind
-  V5.4, independently verify the exact immutable child, and reshape the
-  durable result under `Docs/Plans/HANDOFF-wk4-commit-prepared-change-v1.md`.
+- WK-5 may expose the accepted prepare/commit lifecycle through a
+  transport-neutral application protocol and a DungeonMind-backed composition
+  root under `Docs/Plans/HANDOFF-wk5-consumer-composition-boundary-v1.md`.
 - Do not add HTTP endpoints, World Keeper persistence, migrations, an agent
   harness, vector storage, automatic deduplication, or a second graph engine.
 - Do not add prepared workflow persistence, a recovery ledger, confirmation
   bindings, HTTP, or durable identity allocation. WorldKeeper must not
   reproduce the V5.4 allocator. Product adapters remain later work.
+- Do not redesign or duplicate prepare, commit, publication, recovery, or
+  exact-child verification semantics. The runtime only wires accepted services.
 - Do not copy DungeonMindBuddy modules wholesale. Classify current seams as product behavior, migration evidence, World Keeper responsibility, or DungeonMind responsibility before moving anything.
 - A future implementation change must name the authority document and the explicit authorization that permits it.
 - Before handing work back, run documentation-oriented checks, inspect the complete diff, and report the exact branch, commit, status, and unresolved questions.

@@ -1,7 +1,7 @@
 # Roadmap — WorldKeeper
 
-**Status:** WK-1/WK-2/WK-3 accepted; DungeonMind V5.4 accepted; WK-4 active
-**Implementation:** limited authorization — WK-4 commit + exact-child verify
+**Status:** WK-1/WK-2/WK-3/WK-4 accepted; WK-5 active
+**Implementation:** limited authorization — WK-5 consumer composition only
 
 ## Accepted history
 
@@ -37,10 +37,19 @@ resolution against the DungeonMind publication contract.
 
 ## WK-4 — Commit prepared change and verify exact child
 
-**State:** ACTIVE / COMMIT + EXACT-CHILD VERIFICATION AUTHORIZED.
+**State:** COMPLETE / `WK_4_COMMIT_AND_VERIFY_ACCEPTED`.
 
 WK-4 coordinates commit of an intact prepared value through DungeonMind V5.4,
 independently verifies the exact immutable child, and returns a WorldKeeper-owned
 verified receipt. HTTP, persistence,
 migrations, agent harnesses, vector storage, automatic dedupe, and generic
 reconciliation remain outside this bootstrap unless separately authorized.
+
+## WK-5 — Consumer composition boundary
+
+**State:** ACTIVE / COMPOSITION-ONLY IMPLEMENTATION AUTHORIZED.
+
+WK-5 exposes the accepted prepare and commit lifecycle through one generic
+application protocol and one DungeonMind-backed in-process composition root.
+Product integration, transport, persistence, source admission, and new write
+semantics remain unauthorized.

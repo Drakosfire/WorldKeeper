@@ -48,6 +48,7 @@ from .contracts import (
     WorldChangeIntent,
 )
 from .preparation import InvalidWorldChange, WorldChangePreparer
+from .service import WorldChangeService
 
 __all__ = [
     "AssertionMetadata",
@@ -92,5 +93,6 @@ __all__ = [
     "WorldChangeCommitter",
     "WorldChangeIntent",
     "WorldChangePreparer",
+    "WorldChangeService",
     "WorldHeadWitness",
 ]
