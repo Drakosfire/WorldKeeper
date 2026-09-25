@@ -73,6 +73,21 @@ class MissingChildRepository(RepositoryWrapper):
         return super().get_revision(space_id, revision_id)
 
 
+class MissingOnlyOnWorldKeeperReadRepository(RepositoryWrapper):
+    """Allow DungeonMind's two verification reads, then hide WK's exact child."""
+
+    def __init__(self, inner) -> None:
+        super().__init__(inner)
+        self.post_commit_child_reads = 0
+
+    def get_revision(self, space_id, revision_id):
+        if self.committed:
+            self.post_commit_child_reads += 1
+            if self.post_commit_child_reads == 3:
+                return None
+        return super().get_revision(space_id, revision_id)
+
+
 class ChangedBindingRepository(RepositoryWrapper):
     def publish_prospective_publication(
         self, command, publication_id, prospective_request_sha256, result_bindings
@@ -140,6 +155,21 @@ def test_known_commit_corruption_is_integrity_failure(wrapper) -> None:
             DungeonMindVNextCommitAuthority(wrapper(inner))
         ).commit_prepared_change(prepared, "user:keeper")
     assert caught.value.committed is True
+
+
+def test_worldkeeper_independent_missing_child_read_is_integrity_failure() -> None:
+    inner = support.repository()
+    prepared = _prepared(inner, "prepared:wk4-wk-read-missing")
+    repository = MissingOnlyOnWorldKeeperReadRepository(inner)
+
+    with pytest.raises(CommittedChangeVerificationIntegrityFailure) as caught:
+        WorldChangeCommitter(DungeonMindVNextCommitAuthority(repository)).commit_prepared_change(
+            prepared, "user:keeper"
+        )
+
+    assert repository.post_commit_child_reads == 3
+    assert caught.value.committed is True
+    assert caught.value.child_revision_id
 
 
 def test_genuine_outcome_unknown_maps_retry_safe_identity() -> None:
