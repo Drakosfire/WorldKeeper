@@ -1,6 +1,7 @@
 """DungeonMind-backed World Keeper authority adapters."""
 
 from .in_process import DungeonMindInProcessAuthority
+from .runtime import DungeonMindWorldKeeperRuntime
 from .vnext_commit import DungeonMindVNextCommitAuthority
 from .vnext_prepare import (
     DungeonMindPreparedProspectivePlan,
@@ -16,6 +17,7 @@ __all__ = [
     "DungeonMindPreparedProspectivePlan",
     "DungeonMindVNextCommitAuthority",
     "DungeonMindVNextPreparationAuthority",
+    "DungeonMindWorldKeeperRuntime",
     "NativeKnowledgeReader",
     "compile_prepared_change_to_dungeonmind",
     "compiled_plan_digest",
