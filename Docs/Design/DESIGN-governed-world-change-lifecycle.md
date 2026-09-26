@@ -1,7 +1,7 @@
 # Design — Governed World Change Lifecycle
 
-**Status:** CURRENT LIFECYCLE AUTHORITY, WK-5 composition active
-**Phase:** WK-1/WK-2/WK-3/WK-4 and DungeonMind V5.4 accepted
+**Status:** CURRENT LIFECYCLE AUTHORITY; WK-5 composition complete
+**Phase:** WK-1 through WK-5 complete; DungeonMind V5.4 accepted; V3 compatibility merged
 **Decision:** [ownership simplification](DECISION-worldkeeper-ownership-simplification.md)
 
 ## Lifecycle

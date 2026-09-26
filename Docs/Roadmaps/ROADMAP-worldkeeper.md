@@ -1,7 +1,7 @@
 # Roadmap — WorldKeeper
 
-**Status:** WK-1/WK-2/WK-3/WK-4 accepted; WK-5 active
-**Implementation:** limited authorization — WK-5 consumer composition only
+**Status:** WK-1 through WK-5 complete; V3 compatibility merged
+**Implementation:** no active implementation lease
 
 ## Accepted history
 
@@ -47,9 +47,19 @@ reconciliation remain outside this bootstrap unless separately authorized.
 
 ## WK-5 — Consumer composition boundary
 
-**State:** ACTIVE / COMPOSITION-ONLY IMPLEMENTATION AUTHORIZED.
+**State:** COMPLETE / PR #7 merged as
+`8a5efb96b69dc9ca136288ecc80f67c1ed027bd1`.
 
 WK-5 exposes the accepted prepare and commit lifecycle through one generic
 application protocol and one DungeonMind-backed in-process composition root.
 Product integration, transport, persistence, source admission, and new write
 semantics remain unauthorized.
+
+## Bounded V3 custom-predicate compatibility
+
+PR #8 preserved the accepted DungeonMind V3 profile through prepare/compile
+and proved exact authored `entity_ref` relationship predicates through commit
+and child read-back. Reviewed head
+`49a8620f066ce7ef8972a699020c012f50af9158` merged as
+`a0a70db275cf6c5f3876fe7b4d2a557de12388f5`. This did not authorize a
+V2-to-V3 migration or a new implementation lane.

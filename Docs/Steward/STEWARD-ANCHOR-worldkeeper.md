@@ -1,19 +1,36 @@
 # Steward Anchor — WorldKeeper
 
-**Status:** WK-1/WK-2/WK-3/WK-4 ACCEPTED / WK-5 ACTIVE
-**Implementation:** LIMITED AUTHORIZATION — WK-5 CONSUMER COMPOSITION ONLY
+**Status:** WK-1 THROUGH WK-5 COMPLETE / V3 COMPATIBILITY MERGED
+**Implementation:** NO ACTIVE IMPLEMENTATION LEASE
 **Repository:** `WorldKeeper`
 **Current decision:** [ownership simplification](../Design/DECISION-worldkeeper-ownership-simplification.md)
 
-## Bounded custom-predicate compatibility amendment
+## Current merged state
 
-The user-authorized custom-predicate follow-up permits a surgical compatibility
-change against DungeonMind PR #77: pin its substantively reviewed exact runtime
-head `0f709d76fdc53bac9c9258d1751463ae2c76ca71`, preserve the sealed
+Re-anchored to `main@b692266a55276536fa6b90a0464e19961ce89324`. The
+open-PR inventory was empty before this settlement branch.
+
+- WK-5 consumer composition PR #7: head
+  `c1aeb157e14f2c07036e6346e93b2e47a228f387`, merged as
+  `8a5efb96b69dc9ca136288ecc80f67c1ed027bd1`.
+- Bounded V3 custom-predicate compatibility PR #8: reviewed head
+  `49a8620f066ce7ef8972a699020c012f50af9158`, merged as
+  `a0a70db275cf6c5f3876fe7b4d2a557de12388f5`.
+- Governance PR #9: head `d5e2d56b025629ea0e95d922b4d29974254d038e`,
+  merged as `b692266a55276536fa6b90a0464e19961ce89324`. `AGENTS.md` now
+  carries stable operating law; this anchor carries changing workstream state.
+
+These merges close the prior WK-5 and V3 compatibility lanes. They do not
+activate a successor. Any new implementation needs its own bounded authority.
+
+## Completed bounded custom-predicate compatibility
+
+The completed custom-predicate follow-up pinned DungeonMind PR #77's reviewed
+runtime head `0f709d76fdc53bac9c9258d1751463ae2c76ca71`, preserved the sealed
 `dm_semantic_profile_v3` descriptor through WorldKeeper prepare/compile, and
-prove an authored `entity_ref` relationship term survives unchanged. This is
-not authorization to change WK-3/WK-4 lifecycle semantics, choose predicate
-meaning for a consumer, initialize a World, or migrate a V2-pinned World to V3.
+proved an authored `entity_ref` relationship term survives unchanged. It did
+not change WK-3/WK-4 lifecycle semantics, choose predicate meaning for a
+consumer, initialize a World, or migrate a V2-pinned World to V3.
 DungeonMind #77 merged as `a9051f02dfd95e051a83c1d74b26bb04a2b3e5bf`
 after `SEMANTIC_PROFILE_V3_SUBSTANTIVE_PASS`. DungeonMind PR #78 finalized its
 authority at reviewed head `19cf798d9b8ed9c63eb41d585b5e6ad46d99f5a0`,
@@ -75,7 +92,10 @@ WK-3 COMPLETE — accepted head `1c5e3d1262239ba8faf6fca75fbc0aa756d7a2a7`,
 merged as `3c1132e9c3a63571984704bf66bcf5bf482b7bd8`
 WK-4 COMPLETE — accepted head `95f29ce519312690419b89727605eeac26e6e98b`,
 merged as `cdbd13ca981f9ff062c2cbb750f320a28626f9a3`
-WK-5 ACTIVE — expose accepted prepare + commit through composition only
+WK-5 COMPLETE — consumer composition PR #7 merged as
+  `8a5efb96b69dc9ca136288ecc80f67c1ed027bd1`
+V3 COMPATIBILITY MERGED — PR #8 merged as
+  `a0a70db275cf6c5f3876fe7b4d2a557de12388f5`
 ```
 
 V5.4 proves transaction-local prospective handles, DungeonMind-owned
@@ -90,8 +110,9 @@ allocator.
 Stop rather than broaden authority if work would add WorldKeeper persistence,
 HTTP, migrations, agent harnesses, vector storage, automatic dedupe, generic
 reconciliation, a general read façade, `recover_change`, prepared persistence,
-or any V5.4 allocator logic. WK-5 also stops if composition requires new
-semantics, product mapping, source admission, or first-world initialization.
+or any V5.4 allocator logic. The completed WK-5 lease did not authorize new
+semantics, product mapping, source admission, or first-world initialization;
+none is authorized by this settlement.
 
 Earlier WK-1 and WK-2 documents and commits remain truthful historical evidence;
 they are not silently rewritten. Their deterministic-ID and recovery-ledger

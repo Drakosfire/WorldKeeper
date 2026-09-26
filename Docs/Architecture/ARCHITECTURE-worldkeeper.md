@@ -1,8 +1,8 @@
 # Architecture — WorldKeeper
 
 **Status:** CURRENT ARCHITECTURE AUTHORITY
-**Phase:** WK-1/WK-2/WK-3/WK-4 accepted; WK-5 composition active
-**Implementation:** LIMITED AUTHORIZATION — WK-5 CONSUMER COMPOSITION ONLY
+**Phase:** WK-1 through WK-5 complete; V3 compatibility merged
+**Implementation:** no active implementation lease; see the steward anchor
 **Decision:** [ownership simplification](../Design/DECISION-worldkeeper-ownership-simplification.md)
 
 ## Mission
@@ -46,6 +46,6 @@ lifecycle and DungeonMind durable publication outcome are separate authorities.
 WK-1 and WK-2 are accepted. DungeonMind V5.4 is accepted and merged at
 `6edb9e40…`; WK-3 preparation and WK-4 commit/verification are accepted.
 
-WK-5 may compose those accepted services behind a stable in-process consumer
+WK-5 composes those accepted services behind a stable in-process consumer
 contract. Recovery ledgers, prepared persistence, HTTP, product mapping, and
 new write semantics remain unauthorized.

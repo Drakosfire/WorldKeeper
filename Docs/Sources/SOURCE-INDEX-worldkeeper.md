@@ -1,7 +1,7 @@
 # Source Index — WorldKeeper
 
 **Status:** CURRENT EVIDENCE INDEX
-**Snapshot:** 2026-09-25
+**Snapshot:** 2026-09-26
 
 Sources prove facts; they do not override the steward, architecture, boundary,
 lifecycle, or versioned contract documents.
@@ -12,6 +12,8 @@ lifecycle, or versioned contract documents.
 | --- | --- | --- | --- |
 | WorldKeeper | accepted WK-2 PR #2 head `15739eb2688992fe8f977d006b1e9153047753a9` | accepted WK-2 boundary proof and its history | authorization for WK-3 implementation |
 | WorldKeeper | accepted WK-3 PR #4 head `1c5e3d1262239ba8faf6fca75fbc0aa756d7a2a7`; merged `3c1132e9c3a63571984704bf66bcf5bf482b7bd8` | immutable prepare contract, V5.4 compilation, and exact-head verification with 28 tests | permission for persistence, HTTP, or product integration |
+| WorldKeeper | WK-5 PR #7 head `c1aeb157e14f2c07036e6346e93b2e47a228f387`; merged `8a5efb96b69dc9ca136288ecc80f67c1ed027bd1` | transport-neutral `WorldChangeService` and DungeonMind-backed composition root are merged | product mapping, transport, or persistence authority |
+| WorldKeeper | V3 compatibility PR #8 reviewed head `49a8620f066ce7ef8972a699020c012f50af9158`; merged `a0a70db275cf6c5f3876fe7b4d2a557de12388f5` | preserved DungeonMind V3 profile and exact custom-predicate child proof | V2-to-V3 migration or new consumer semantics |
 | DungeonMind | V5.4 accepted head `c7700f98e62732cbd1c021270f5366a77c24ea9b`; merged `main` `6edb9e40d1dc930f537c66deb1afbd1b99002844`; final PASS `5296514025` | prospective allocation/substitution, atomic publication, V5.3 receipt/replay/recovery, durable result mapping | WorldKeeper allocation logic or authorization to publish in WK-3 |
 | DungeonMind | PR #77 runtime head `0f709d76fdc53bac9c9258d1751463ae2c76ca71`, merge `a9051f02dfd95e051a83c1d74b26bb04a2b3e5bf`; finalization PR #78 reviewed head `19cf798d9b8ed9c63eb41d585b5e6ad46d99f5a0`, Cycle 2 PASS `5322577539`, merge `54a419f99057d96e0c4e7620d8bd8ccc6816fb62` | `SEMANTIC_PROFILE_V3_OPEN_PREDICATE_NAMESPACES_ACCEPTED`: scoped V3 authored-predicate admission and exact read rehydration | V2-to-V3 profile transition or Buddy mapping |
 | DungeonMindBuddy | side-quest authority `19593ae6d5a0ba583eaac063d772abaf9a42d74d` | product interaction boundary and migration evidence | WorldKeeper authority or DungeonMind contract |
