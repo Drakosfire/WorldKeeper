@@ -1,8 +1,8 @@
 # Boundary — DungeonBuddy, WorldKeeper, and DungeonMind
 
 **Status:** CURRENT BOUNDARY AUTHORITY
-**Phase:** WK-1/WK-2/WK-3/WK-4 accepted; WK-5 composition active
-**Implementation:** LIMITED AUTHORIZATION — WK-5 CONSUMER COMPOSITION ONLY
+**Phase:** WK-1 through WK-5 complete; V3 compatibility merged
+**Implementation:** no active implementation lease; see the steward anchor
 
 ## Boundary statement
 
