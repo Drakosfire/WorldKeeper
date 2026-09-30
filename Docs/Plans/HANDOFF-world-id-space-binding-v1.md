@@ -96,4 +96,7 @@ After both predecessors merge and the WorldKeeper authority/lease is accepted,
 re-anchor to latest main and open one WK implementation PR for the finalized
 validation-port paths and tests. Do not include Buddy's registry or MIND's
 provisioner. Suggested title: `WorldKeeper: validate product World bindings`.
-Keep this proposal/handoff BLOCKED; do not merge or treat it as a write lease.
+This docs-only proposal PR may merge after review to record the owner split and
+hold. Its merge grants no implementation authority. Keep the successor
+implementation BLOCKED until both predecessors merge, the WorldKeeper authority
+is updated, and a new bounded implementation lease is explicitly issued.
