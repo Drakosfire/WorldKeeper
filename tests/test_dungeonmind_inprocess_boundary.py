@@ -13,6 +13,7 @@ from dungeonmind.application.graph_snapshot import (
 from dungeonmind.contracts import SourceArtifact, SourceDomain, SourceRevision
 from dungeonmind.contracts.graph import PublishRevisionCommand
 from dungeonmind.contracts.review_publication import FinalizedReviewPublicationCommand
+from dungeonmind.contracts.semantic_profile import SemanticProfileRef
 from dungeonmind.domain import canonical_sha256
 from dungeonmind.domain.revision_ids import compute_revision_id
 from dungeonmind.infrastructure.memory import (
@@ -42,6 +43,7 @@ class _PlanRef:
     expected_parent_revision_id: str
     base_graph_payload_sha256: str
     base_graph_schema: str
+    semantic_profile: SemanticProfileRef | None
 
 
 @dataclass(frozen=True)
@@ -213,6 +215,7 @@ def _seed() -> _SeededAuthority:
                 expected_parent_revision_id=parent.revision_id,
                 base_graph_payload_sha256=parent.graph_payload_sha256,
                 base_graph_schema=GRAPH_SCHEMA_V1,
+                semantic_profile=None,  # This fixture publishes unprofiled GRAPH_SCHEMA_V1.
             ),
         )
     )
