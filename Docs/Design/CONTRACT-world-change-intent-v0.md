@@ -27,6 +27,8 @@ create_object
 
 use_existing
   durable_object_id
+  facts[] = optional literal/term CreateFact values with client_op_id,
+            predicate and exact assertion metadata/evidence
 
 create_relationship
   client_op_id
@@ -37,7 +39,14 @@ create_relationship
 ```
 
 `use_existing` is an explicit identity choice, never similarity inference. A
-relationship endpoint may use only an exact selected durable object or the
+use_existing with facts adds those assertions to the exact selected object;
+it never creates a replacement object. With no facts it remains a selection and
+has no contribution or result of its own. An intent with only such selections
+is still rejected as no_contribution_items. Fact-bearing use_existing contributes
+without create_object; each fact has its own globally unique client_op_id and
+verified assertion result, while the existing object has no create result.
+
+A relationship endpoint may use only an exact selected durable object or the
 result of a `create_object` in the same intent. `client_op_id` is transaction-
 local semantic identity, not a durable graph ID or an ID-generation algorithm.
 
@@ -89,7 +98,7 @@ prepared_change_id
 DungeonMind publication identity
 exact child_revision_id
 create_object client_op_id -> durable_object_id
-create_relationship client_op_id -> durable_assertion_id
+fact or create_relationship client_op_id -> durable_assertion_id with semantic role
 exact child-revision read-back verification
 ```
 

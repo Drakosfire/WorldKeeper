@@ -111,15 +111,16 @@ class WorldChangeCommitter:
             or witness.expected_parent_revision_id != prepared.expected_parent_revision_id
         ):
             raise CommitAuthorityIntegrityFailure("commit witness identity mismatch")
-        from .contracts import CreateObject, CreateRelationship
+        from .contracts import CreateObject, CreateRelationship, UseExisting
 
         expected: dict[str, str] = {}
         for operation in prepared.prepared_operations:
             if isinstance(operation, CreateObject):
                 expected[operation.client_op_id] = "entity"
-                expected.update((fact.client_op_id, "assertion") for fact in operation.facts)
             elif isinstance(operation, CreateRelationship):
                 expected[operation.client_op_id] = "assertion"
+            if isinstance(operation, CreateObject | UseExisting):
+                expected.update((fact.client_op_id, "assertion") for fact in operation.facts)
         actual = {item.client_op_id: item for item in witness.results}
         if len(actual) != len(witness.results) or set(actual) != set(expected):
             raise CommitAuthorityIntegrityFailure("commit result binding set mismatch")
@@ -132,12 +133,12 @@ class WorldChangeCommitter:
 
 
 def _assertion_role(prepared: PreparedWorldChange, client_op_id: str) -> str:
-    from .contracts import CreateObject, CreateRelationship
+    from .contracts import CreateObject, CreateRelationship, UseExisting
 
     for operation in prepared.prepared_operations:
         if isinstance(operation, CreateRelationship) and operation.client_op_id == client_op_id:
             return "relationship"
-        if isinstance(operation, CreateObject) and any(
+        if isinstance(operation, CreateObject | UseExisting) and any(
             fact.client_op_id == client_op_id for fact in operation.facts
         ):
             return "fact"
