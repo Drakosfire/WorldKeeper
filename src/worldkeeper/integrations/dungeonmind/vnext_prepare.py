@@ -80,6 +80,7 @@ from worldkeeper.application.contracts import (
     ResultOf,
     TemporalScope,
     TermRefFactValue,
+    UseExisting,
     Visibility,
     thaw_json,
 )
@@ -289,6 +290,12 @@ def _compile_prepared_change_to_dungeonmind(
                     client_op_id=operation.client_op_id,
                 )
             )
+        if isinstance(operation, CreateObject | UseExisting):
+            subject = (
+                ProspectiveEntityRef(client_op_id=operation.client_op_id)
+                if isinstance(operation, CreateObject)
+                else DurableEntityRef(entity_id=operation.durable_object_id)
+            )
             for fact in operation.facts:
                 if isinstance(fact.value, LiteralFactValue):
                     fact_value = LiteralValue(value=thaw_json(fact.value.value))
@@ -302,7 +309,7 @@ def _compile_prepared_change_to_dungeonmind(
                             prepared.prepared_change_id, "fact-item", fact.client_op_id
                         ),
                         client_op_id=fact.client_op_id,
-                        subject=ProspectiveEntityRef(client_op_id=operation.client_op_id),
+                        subject=subject,
                         predicate=fact.predicate,
                         value=fact_value,
                         metadata=_metadata(fact.metadata),

@@ -113,7 +113,10 @@ def _operation_copy(value: WorldOperation) -> WorldOperation:
             facts=tuple(_fact_copy(item) for item in value.facts),
         )
     if isinstance(value, UseExisting):
-        return UseExisting(durable_object_id=value.durable_object_id)
+        return UseExisting(
+            durable_object_id=value.durable_object_id,
+            facts=tuple(_fact_copy(item) for item in value.facts),
+        )
     return CreateRelationship(
         client_op_id=value.client_op_id,
         source=_endpoint_copy(value.source),
@@ -185,31 +188,35 @@ class WorldChangePreparer:
             if isinstance(operation, CreateObject):
                 self._claim_result_id(operation.client_op_id, all_result_ids)
                 object_ids.add(operation.client_op_id)
-                for fact in operation.facts:
-                    self._claim_result_id(fact.client_op_id, all_result_ids)
-                    assertion_ids.add(fact.client_op_id)
-                    _required(fact.predicate, "blank_predicate")
-                    self._validate_metadata(fact.metadata)
+            elif isinstance(operation, UseExisting):
+                _required(operation.durable_object_id, "blank_durable_object_id")
             elif isinstance(operation, CreateRelationship):
                 self._claim_result_id(operation.client_op_id, all_result_ids)
                 assertion_ids.add(operation.client_op_id)
                 _required(operation.predicate, "blank_predicate")
                 self._validate_metadata(operation.metadata)
-            else:
-                _required(operation.durable_object_id, "blank_durable_object_id")
+            if isinstance(operation, CreateObject | UseExisting):
+                for fact in operation.facts:
+                    self._claim_result_id(fact.client_op_id, all_result_ids)
+                    assertion_ids.add(fact.client_op_id)
+                    _required(fact.predicate, "blank_predicate")
+                    self._validate_metadata(fact.metadata)
 
         durable_ids = set(witness.durable_entity_ids)
         used_evidence_ids: set[str] = set()
         for operation in operations:
-            if isinstance(operation, CreateObject):
+            if isinstance(operation, CreateObject | UseExisting):
+                if (
+                    isinstance(operation, UseExisting)
+                    and operation.durable_object_id not in durable_ids
+                ):
+                    raise InvalidWorldChange("durable_endpoint_absent")
                 for fact in operation.facts:
                     used_evidence_ids.update(fact.metadata.evidence_ref_ids)
             elif isinstance(operation, CreateRelationship):
                 self._validate_endpoint(operation.source, object_ids, assertion_ids, durable_ids)
                 self._validate_endpoint(operation.target, object_ids, assertion_ids, durable_ids)
                 used_evidence_ids.update(operation.metadata.evidence_ref_ids)
-            elif operation.durable_object_id not in durable_ids:
-                raise InvalidWorldChange("durable_endpoint_absent")
 
         evidence_by_id = {item.evidence_ref_id: item for item in witness.evidence_witnesses}
         missing_evidence = used_evidence_ids - set(evidence_by_id)
@@ -252,7 +259,9 @@ class WorldChangePreparer:
             _semantic_profile_json=self._semantic_profile_json,
         )
         if not any(
-            isinstance(operation, CreateObject | CreateRelationship) for operation in operations
+            isinstance(operation, CreateObject | CreateRelationship)
+            or (isinstance(operation, UseExisting) and bool(operation.facts))
+            for operation in operations
         ):
             raise InvalidWorldChange("no_contribution_items")
         try:

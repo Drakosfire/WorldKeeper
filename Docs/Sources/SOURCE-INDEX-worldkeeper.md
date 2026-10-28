@@ -63,3 +63,6 @@ allocator or publish during WK-3.
 
 Evidence grounding remains distinct from occurrence/mention binding. Similarity
 is advisory; it never silently changes durable identity.
+
+## Existing-object fact capability evidence — 2026-10-28
+OverMind PR62 reviewed c3df4334f53a1284f318e3a5000c6a656f4605b9, merged020a78d1dd2bca11f120ef2de7ccf935a4a4dda8, selects one WK/vNext destination and separates this first WK intent/compiler gap from later integration gates. WK4e9579f4/declared Core0f709 supports native assertions on existing durable subjects; WK's closed public intent currently cannot express them. Benchmark's native diagnostic is component evidence, not real ingestion or source/identity acceptance. PRIME's owning handoff activates only UseExisting facts; retained nine Elderwyld source admissions and broader integration remain untouched.

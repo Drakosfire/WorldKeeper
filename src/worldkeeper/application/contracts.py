@@ -156,6 +156,7 @@ class CreateObject:
 @dataclass(frozen=True, slots=True)
 class UseExisting:
     durable_object_id: str
+    facts: tuple[CreateFact, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

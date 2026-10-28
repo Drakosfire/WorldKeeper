@@ -73,3 +73,12 @@ DungeonMind V5.4 at merged authority `6edb9e40…` proves prospective allocation
 substitution, atomicity, idempotency, and lost-response resolution. WK-3 may
 produce an immutable compile-ready prospective plan. WK-4 may publish exactly
 that caller-held prepared value and independently verify its exact child.
+
+## Facts on selected existing objects
+The bounded existing-object facts handoff extends UseExisting with nested
+CreateFact literal/term assertions. Preparation copies and seals their exact
+subject, values, metadata and evidence. They produce assertion result bindings
+only, never prospective entity handles or a replacement-object result. The
+existing Core publication, exact-child verification and retry path applies
+unchanged. This does not establish source-qualified identity uniqueness or
+authorize source admission or product cutover.

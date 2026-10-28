@@ -1,9 +1,13 @@
 # Steward Anchor — WorldKeeper
 
 **Status:** WK-1 THROUGH WK-5 COMPLETE / V3 COMPATIBILITY MERGED
-**Implementation:** NO ACTIVE IMPLEMENTATION LEASE
+**Implementation:** ACTIVE LIMITED WK EXISTING-OBJECT FACTS — [exact lease](../Plans/HANDOFF-WK-existing-object-facts.md)
 **Repository:** `WorldKeeper`
 **Current decision:** [ownership simplification](../Design/DECISION-worldkeeper-ownership-simplification.md)
+
+## Current bounded successor
+
+PRIME activates the UseExisting facts capability under independently reviewed OverMind PR62 (merged020a78d1dd2bca11f120ef2de7ccf935a4a4dda8), on fetched WK4e9579f4 with declared Core0f709 unchanged. The linked handoff owns the exact write/test lease. It supersedes the prior no-successor state only for that capability; source admission, identity registry, product ingestion/query cutover and deployments remain unauthorized here.
 
 ## Current merged state
 
