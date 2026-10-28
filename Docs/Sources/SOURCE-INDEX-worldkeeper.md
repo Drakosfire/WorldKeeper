@@ -66,3 +66,6 @@ is advisory; it never silently changes durable identity.
 
 ## Existing-object fact capability evidence — 2026-10-28
 OverMind PR62 reviewed c3df4334f53a1284f318e3a5000c6a656f4605b9, merged020a78d1dd2bca11f120ef2de7ccf935a4a4dda8, selects one WK/vNext destination and separates this first WK intent/compiler gap from later integration gates. WK4e9579f4/declared Core0f709 supports native assertions on existing durable subjects; WK's closed public intent currently cannot express them. Benchmark's native diagnostic is component evidence, not real ingestion or source/identity acceptance. PRIME's owning handoff activates only UseExisting facts; retained nine Elderwyld source admissions and broader integration remain untouched.
+
+## Accepted native source dependency — 2026-10-28
+Fetched WKbbccae1/Core4ccd39a. WK12 facts are independently accepted on prior declaredCore0f709. AcceptedCore4ccd adds the owning native source-admission/view contract. The77-test comparison gives72pass/5old fakeprofile setupfailures, not5liveproductdefects. The new explicit lease changes only the dependency/lock and tests/docs, composes actual public APIs, and preserves separate source/semantic transactions. Component source-body/span proof does not establish real-corpus identity, full-clone or product acceptance.
