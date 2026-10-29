@@ -415,6 +415,25 @@ class FailureClassificationRepository(RepositoryWrapper):
                     )
                 }
             )
+        if self.fault in ("command_sha", "child_id", "payload_sha", "bindings"):
+            field = {
+                "command_sha": "command_sha256",
+                "child_id": "published_revision_id",
+                "payload_sha": "graph_payload_sha256",
+            }.get(self.fault)
+            receipt = aggregate.publication_receipt
+            result = aggregate.prospective_result
+            if field:
+                receipt = receipt.model_copy(
+                    update={field: "rev:missing" if self.fault == "child_id" else "0" * 64}
+                )
+            if self.fault == "child_id":
+                result = result.model_copy(update={"published_revision_id": "rev:missing"})
+            if self.fault == "bindings":
+                result = result.model_copy(update={"results": []})
+            return aggregate.model_copy(
+                update={"publication_receipt": receipt, "prospective_result": result}
+            )
         if self.fault in ("parent", "receipt_mismatch"):
             return aggregate.model_copy(
                 update={
@@ -429,6 +448,15 @@ class FailureClassificationRepository(RepositoryWrapper):
         receipt = super().get_publication_receipt(space_id, publication_id)
         if self.fault == "receipt_unavailable":
             raise PersistenceUnavailableError("receipt unavailable")
+        if receipt and self.fault in ("command_sha", "child_id", "payload_sha"):
+            field = {
+                "command_sha": "command_sha256",
+                "child_id": "published_revision_id",
+                "payload_sha": "graph_payload_sha256",
+            }[self.fault]
+            return receipt.model_copy(
+                update={field: "rev:missing" if self.fault == "child_id" else "0" * 64}
+            )
         if receipt and self.fault == "parent":
             return receipt.model_copy(update={"expected_parent_revision_id": "rev:other"})
         return receipt
@@ -444,6 +472,10 @@ class FailureClassificationRepository(RepositoryWrapper):
         "parent",
         "receipt_mismatch",
         "receipt_unavailable",
+        "command_sha",
+        "child_id",
+        "payload_sha",
+        "bindings",
     ],
 )
 def test_unverified_aggregate_does_not_establish_that_submitted_intent_committed(fault):

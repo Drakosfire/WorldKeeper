@@ -60,3 +60,13 @@ full assertion failure retained in wk-exact-intent-test-assertion-failure.log,
 then corrected without changing the product guard. All92 owner tests pass against
 both declared Core dependency and delivered Coreb73. Ruff and Pyright pass using
 existing shared environments, with no installs or runtime/data writes.
+
+## Independent review correction
+Initial c9de7f5 review HOLD reproduced a forged matching aggregate/receipt pointing
+to nonexistent rev:missing. Matching request fingerprint alone was insufficient.
+Architecture critique approves additionally deriving the exact command, child ID,
+payload SHA and result bindings through public Core composition before classifying
+known commit. This preserves the explicit contract for genuine durable publication
+whose child becomes missing/unavailable; a full-child getter cannot erase those
+known outcomes. No WK hashing, identity allocation or recovery algorithm is copied.
+Independent re-review of the corrected exact head remains required.

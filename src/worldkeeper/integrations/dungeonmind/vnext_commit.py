@@ -5,13 +5,17 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from typing import Any, TypeVar
 
+from dungeonmind.application.vnext.authority import revision_from_command
 from dungeonmind.application.vnext.builder import build_parsed_knowledge_revision
 from dungeonmind.application.vnext.errors import (
     KnowledgePublicationIdempotencyConflictError,
     KnowledgePublicationOutcomeUnknownError,
     KnowledgeStaleParentRevisionError,
 )
-from dungeonmind.application.vnext.materialization import decode_native_graph_payload
+from dungeonmind.application.vnext.materialization import (
+    decode_native_graph_payload,
+    materialize_governed_revision,
+)
 from dungeonmind.application.vnext.model import ParsedKnowledgeRevision
 from dungeonmind.application.vnext.ports import KnowledgeRevisionRepository
 from dungeonmind.application.vnext.prospective import (
@@ -31,6 +35,7 @@ from dungeonmind.contracts.vnext.prospective import (
     ProspectiveEntityRefValue,
     ProspectiveResultBinding,
 )
+from dungeonmind.domain.canonical import canonical_sha256
 from dungeonmind.domain.errors import (
     ImmutableRevisionConflictError,
     PersistenceIntegrityError,
@@ -227,9 +232,26 @@ class DungeonMindVNextCommitAuthority:
                     publication=plan.publication,
                     publication_id=plan.publication_id,
                 )
-                if resolved.prospective_request_sha256 != result.prospective_request_sha256:
-                    # Cannot establish this intent committed. Preserve the
-                    # original integrity failure without a committed claim.
+                materialization = materialize_governed_revision(
+                    parent=parent,
+                    contribution=resolved.canonical_contribution,
+                    dispositions=plan.dispositions,
+                    publication=plan.publication,
+                    domain_contract=plan.domain_contract,
+                    semantic_profile=plan.semantic_profile,
+                )
+                command = materialization.command
+                expected_child = revision_from_command(command)
+                if (
+                    resolved.prospective_request_sha256 != result.prospective_request_sha256
+                    or tuple(result.results) != resolved.committed_result_bindings
+                    or receipt.command_sha256 != canonical_sha256(command.model_dump(mode="json"))
+                    or receipt.published_revision_id != expected_child.revision_id
+                    or receipt.graph_payload_sha256 != expected_child.graph_payload_sha256
+                ):
+                    # Core proves this exact publication independently of a
+                    # child read which may legitimately be unavailable/missing.
+                    # Matching keys or request fingerprints alone do not suffice.
                     return
         except Exception:
             return
