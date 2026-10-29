@@ -6,7 +6,9 @@ zero open WK PRs at activation. Branch codex/exact-intent-commit-classification,
 isolated checkout /home/drakosfire/Projects/.codex/prime-first-world-spans/worktrees/WorldKeeper.
 The original checkout is imported by live/benchmark consumers and must not switch.
 PRIME owns cleanup after dependency adoption; reuse shared dependencies, no new env.
-One WK PR; independently reviewed exact cumulative diff and CI before PRIME merge.
+One WK PR; independent exact cumulative review, owner tests/lint/type checks and
+all configured checks before PRIME merge. The fetched repository has no workflow
+files, and merged PR13 reports no hosted checks; do not claim a CI pass.
 Buddy/ADVERSARY dependency adoption and protected delivery require exact successor
 pins. No primary/benchmark database, source, provider or runtime mutation here.
 
@@ -49,4 +51,12 @@ Cover same-parent fingerprint mismatch, missing/unreadable aggregate, lost ack,
 corrupt receipt/fingerprint/mapping/child, original exact recovery and replay after
 descendants. Preserve original RED and full prior owner suite; test the owning
 boundary rather than exception mocks alone. Independently review cumulative diff,
-commit/push/open PR, pass CI, then PRIME merge. No live acceptance is implied by tests.
+commit/push/open PR, satisfy all configured checks, then PRIME merge. No live acceptance is implied by tests.
+
+## Author verification for review
+Original current-main RED retained in private wk-exact-intent-red.log. The first
+added fault tests used KnowledgeHead.revision_id instead of head_revision_id;
+full assertion failure retained in wk-exact-intent-test-assertion-failure.log,
+then corrected without changing the product guard. All92 owner tests pass against
+both declared Core dependency and delivered Coreb73. Ruff and Pyright pass using
+existing shared environments, with no installs or runtime/data writes.
