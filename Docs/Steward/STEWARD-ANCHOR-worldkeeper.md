@@ -1,7 +1,7 @@
 # Steward Anchor — WorldKeeper
 
 **Status:** WK-1 THROUGH WK-5 COMPLETE / V3 COMPATIBILITY MERGED
-**Implementation:** ACTIVE LIMITED NATIVE SOURCE COMPOSITION — [exact lease](../Plans/HANDOFF-WK-native-source-composition.md)
+**Implementation:** ACTIVE EXACT-INTENT COMMIT CLASSIFICATION — [exact lease](../Plans/HANDOFF-WK-exact-intent-commit-classification.md)
 **Repository:** `WorldKeeper`
 **Current decision:** [ownership simplification](../Design/DECISION-worldkeeper-ownership-simplification.md)
 
@@ -9,7 +9,14 @@
 
 WK12 existing-object facts mergedbbccae1c8493701404d3874f9a75f28bdb5f4877, independently approvedhead1fede837,77tests plus independent5/5positive and4/4refusalchecks. It does not establish source identity or product integration.
 
-PRIME activates the linked bounded dependency/composition successor from fetchedbbccae1. It pins accepted Core4ccd consistently and proves Core-owned source admission followed by WK publication; no runtime/source/identity/query algorithm changes or product deployment. Real-source/fullclone and consumer cutover remain gated.
+Native source composition PR13 merged as a30ee81ae0e777037c68afea8847b04a2c736ae1;
+its implementation lease is released. Core source admission followed by WK
+publication is delivered; this does not establish automatic identity extraction or
+full-chain ingestion acceptance.
+
+PRIME activates the linked bounded exact-intent failure-classification repair from
+that fetched merge. No source/identity/query semantics, persistence or API are
+allocated. Live and benchmark consumer adoption remains a separately pinned step.
 
 ## Current merged state
 

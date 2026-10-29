@@ -5,16 +5,24 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from typing import Any, TypeVar
 
+from dungeonmind.application.vnext.authority import revision_from_command
 from dungeonmind.application.vnext.builder import build_parsed_knowledge_revision
 from dungeonmind.application.vnext.errors import (
     KnowledgePublicationIdempotencyConflictError,
     KnowledgePublicationOutcomeUnknownError,
     KnowledgeStaleParentRevisionError,
 )
-from dungeonmind.application.vnext.materialization import decode_native_graph_payload
+from dungeonmind.application.vnext.materialization import (
+    decode_native_graph_payload,
+    materialize_governed_revision,
+)
 from dungeonmind.application.vnext.model import ParsedKnowledgeRevision
 from dungeonmind.application.vnext.ports import KnowledgeRevisionRepository
-from dungeonmind.application.vnext.prospective import publish_prospective_contribution
+from dungeonmind.application.vnext.prospective import (
+    publish_prospective_contribution,
+    resolve_prospective_contribution,
+)
+from dungeonmind.application.vnext.publication import get_publication_receipt
 from dungeonmind.application.vnext.records import StoredKnowledgeRevision
 from dungeonmind.contracts.vnext.domain import Assertion, EntityRefValue
 from dungeonmind.contracts.vnext.prospective import (
@@ -27,6 +35,7 @@ from dungeonmind.contracts.vnext.prospective import (
     ProspectiveEntityRefValue,
     ProspectiveResultBinding,
 )
+from dungeonmind.domain.canonical import canonical_sha256
 from dungeonmind.domain.errors import (
     ImmutableRevisionConflictError,
     PersistenceIntegrityError,
@@ -113,10 +122,14 @@ class DungeonMindVNextCommitAuthority:
         except ImmutableRevisionConflictError as exc:
             raise PreparedChangeConflict(str(exc)) from exc
         except PersistenceUnavailableError as exc:
-            self._raise_if_known_commit(prepared, unavailable=True, cause=exc)
+            self._raise_if_known_commit(
+                prepared, plan=plan, parent=parent, unavailable=True, cause=exc
+            )
             raise CommitAuthorityIntegrityFailure("DungeonMind publication unavailable") from exc
         except PersistenceIntegrityError as exc:
-            self._raise_if_known_commit(prepared, unavailable=False, cause=exc)
+            self._raise_if_known_commit(
+                prepared, plan=plan, parent=parent, unavailable=False, cause=exc
+            )
             raise CommitAuthorityIntegrityFailure(
                 "DungeonMind publication integrity failure"
             ) from exc
@@ -171,6 +184,8 @@ class DungeonMindVNextCommitAuthority:
         self,
         prepared: PreparedWorldChange,
         *,
+        plan: DungeonMindPreparedProspectivePlan,
+        parent: ParsedKnowledgeRevision,
         unavailable: bool,
         cause: Exception,
     ) -> None:
@@ -182,6 +197,68 @@ class DungeonMindVNextCommitAuthority:
             return
         if aggregate is None:
             return
+        receipt, result = aggregate.publication_receipt, aggregate.prospective_result
+        if (
+            receipt.space_id != prepared.space_id
+            or result.space_id != prepared.space_id
+            or receipt.publication_id != prepared.dungeonmind_publication_id
+            or result.publication_id != prepared.dungeonmind_publication_id
+            or receipt.published_revision_id != result.published_revision_id
+        ):
+            return
+        try:
+            # The aggregate and publication receipt must agree even when the
+            # child's independent verification is unavailable.
+            durable_receipt = self._repository.get_publication_receipt(
+                prepared.space_id, prepared.dungeonmind_publication_id
+            )
+            if durable_receipt != receipt:
+                return
+            if receipt.expected_parent_revision_id != prepared.expected_parent_revision_id:
+                # Verify the unrelated durable publication before calling this
+                # a key conflict. It is not this submitted change's failed child.
+                verified = get_publication_receipt(
+                    prepared.space_id,
+                    prepared.dungeonmind_publication_id,
+                    repository=self._repository,
+                )
+                if verified != receipt:
+                    return
+            else:
+                resolved = resolve_prospective_contribution(
+                    parent=parent,
+                    prospective_contribution=plan.prospective_contribution,
+                    dispositions=plan.dispositions,
+                    publication=plan.publication,
+                    publication_id=plan.publication_id,
+                )
+                materialization = materialize_governed_revision(
+                    parent=parent,
+                    contribution=resolved.canonical_contribution,
+                    dispositions=plan.dispositions,
+                    publication=plan.publication,
+                    domain_contract=plan.domain_contract,
+                    semantic_profile=plan.semantic_profile,
+                )
+                command = materialization.command
+                expected_child = revision_from_command(command)
+                if (
+                    resolved.prospective_request_sha256 != result.prospective_request_sha256
+                    or tuple(result.results) != resolved.committed_result_bindings
+                    or receipt.command_sha256 != canonical_sha256(command.model_dump(mode="json"))
+                    or receipt.published_revision_id != expected_child.revision_id
+                    or receipt.graph_payload_sha256 != expected_child.graph_payload_sha256
+                ):
+                    # Core proves this exact publication independently of a
+                    # child read which may legitimately be unavailable/missing.
+                    # Matching keys or request fingerprints alone do not suffice.
+                    return
+        except Exception:
+            return
+        if receipt.expected_parent_revision_id != prepared.expected_parent_revision_id:
+            raise PreparedChangeConflict(
+                "publication identity is already bound to a different prepared parent"
+            ) from cause
         error_type = (
             CommittedChangeVerificationUnavailable
             if unavailable
