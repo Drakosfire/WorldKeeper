@@ -2,7 +2,7 @@
 
 **Status:** CURRENT BOUNDARY AUTHORITY
 **Phase:** WK-1 through WK-5 complete; V3 compatibility merged
-**Implementation:** no active implementation lease; see the steward anchor
+**Implementation:** no active implementation lease; see the workstream anchor
 
 ## Boundary statement
 

@@ -18,8 +18,10 @@ These rules are intentionally shared across active DungeonMind ecosystem reposit
 
 ## Authority and pickup
 
+Responsibilities belong to the person or agent explicitly assigned the bounded task, with required independent review preserved. The legacy anchor path is retained for links; it does not create a standing role or grant additional merge, runtime, data, model-allocation, or deployment authority.
+
 - Begin with `Docs/Steward/STEWARD-ANCHOR-worldkeeper.md`, then follow its current pickup order.
-- The steward anchor owns changing workstream state. Architecture/decisions/contracts own stable semantics. Historical handoffs and source material are evidence only.
+- The workstream anchor owns changing workstream state. Architecture/decisions/contracts own stable semantics. Historical handoffs and source material are evidence only.
 - Do not treat DungeonMindBuddy implementation details or chat reconstruction as WorldKeeper authority.
 - Keep unresolved design questions explicitly unresolved. Missing authority is a stop condition, not permission to invent an endpoint, persistence layer, schema, or lifecycle.
 

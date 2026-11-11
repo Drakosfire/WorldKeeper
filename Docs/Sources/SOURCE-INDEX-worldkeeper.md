@@ -3,7 +3,7 @@
 **Status:** CURRENT EVIDENCE INDEX
 **Snapshot:** 2026-09-26
 
-Sources prove facts; they do not override the steward, architecture, boundary,
+Sources prove facts; they do not override the workstream assignment, architecture, boundary,
 lifecycle, or versioned contract documents.
 
 ## Reviewed revisions
@@ -54,7 +54,7 @@ allocator or publish during WK-3.
 ## Retained evidence classifications
 
 - **CURRENT:** the ownership simplification and prerequisite in the current
-  architecture, boundary, contracts, lifecycle, steward, and roadmap.
+  architecture, boundary, contracts, lifecycle, workstream assignment, and roadmap.
 - **HISTORICAL EVIDENCE:** earlier WK-1 deterministic prospective-identity,
   generation, recovery, and explicit capability analysis. It proved safety
   concerns but is superseded as the selected ownership model.
