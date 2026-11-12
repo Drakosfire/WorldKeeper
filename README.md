@@ -1,5 +1,8 @@
 # World Keeper
 
+For agent pickup, start with [AGENTS.md](AGENTS.md) and follow the current
+[WorldKeeper anchor](Docs/Steward/STEWARD-ANCHOR-worldkeeper.md).
+
 **Status:** WK-1/WK-2/WK-3 accepted / WK-4 commit active
 **Implementation:** limited authorization — WK-4 commit + exact-child verify
 
