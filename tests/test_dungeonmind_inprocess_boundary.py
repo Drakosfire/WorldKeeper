@@ -27,7 +27,7 @@ from worldkeeper import (
     ExactRevisionWitness,
     SourceRevisionWitness,
 )
-from worldkeeper.integrations.dungeonmind import DungeonMindInProcessAuthority
+from worldkeeper.integrations.dungeonmind.compat import DungeonMindInProcessAuthority
 
 WORLD_ID = "world:wk2-fixture"
 ARTIFACT_ID = "source:wk2-fixture"
