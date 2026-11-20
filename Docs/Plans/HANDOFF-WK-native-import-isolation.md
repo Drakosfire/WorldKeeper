@@ -1,6 +1,6 @@
 # V10 prerequisite — native WorldKeeper import isolation
 
-Status: ACTIVE. Owner: MIND, under the operator's explicit full-lane execution,
+Status: IMPLEMENTED — exact-head qualification/review pending. Owner: MIND, under the operator's explicit full-lane execution,
 review and merge authority. Base: `3e79dbd` (fresh remote main, docs-only after
 accepted WK `ef9c50f2d6aa89a35e9408f83fc4d0ba47825ca2`). This assignment is
 pinned before runtime edits. It narrows imports, not transaction semantics.
@@ -43,8 +43,8 @@ collection extras; no aggregate-green or deployed-cutover claim follows.
 No edits to adapters, preparation/commit/runtime algorithms, contracts, domain
 schema bundle, requests/receipts, dependency manifests/lock, CI, transport,
 persistence, database, provider, serving processes or stored data. Do not touch
-PR #15's documentation regions or replace the stale anchor wholesale. Its exact
-five-path historical lease does not own these runtime/test regions; this MIND
+PR #15's documentation regions or replace the stale anchor wholesale. Its documentation
+lease does not own these runtime/test regions; this MIND
 assignment owns the named regions under the operator's authority.
 
 ## Owning proof and qualification
@@ -90,3 +90,20 @@ standalone outputs and isolated environment/cache live under
 MIND retains these through the full goal for qualification/recovery. No manual
 deletion authorized; cleanup follow-up requires active-process/mount, dirty data,
 unique-commit protection and explicit approved scope. No reclaimed bytes claimed.
+
+## Implementation checkpoint
+
+Lease pin: `fefc4a6` before runtime edits; independent Hubble readiness PASS.
+Reused original clean, merged checkout after no active process cwd was found.
+Working candidate installed-wheel diagnostics: all 98 tests pass, zero skips;
+Ruff passes; Pyright zero errors/warnings. The wheel resolves outside the source
+checkout in a separate retained environment, Python3.14.3, using unchanged locked
+Core4ccd. Accepted Buddy Core90a5/WKef9 environment remains untouched. Downstream
+qualification must preserve Core90a5 while adopting the accepted WK ref.
+
+Final exact-head results belong to the PR and task evidence, not this earlier
+working diagnostic. Source-inspection tests inspect source intentionally; runtime
+imports and cold subprocesses execute the installed wheel. No execution is
+claimed for a future merge tree. The initial Ruff invocation attempted its
+default cache on a read-only path; rerunning with `--no-cache` passed, with no
+source or configuration workaround.
