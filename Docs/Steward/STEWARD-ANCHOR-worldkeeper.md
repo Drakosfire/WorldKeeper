@@ -1,4 +1,4 @@
-# Steward Anchor — WorldKeeper
+# Workstream Anchor: WorldKeeper
 
 **Status:** WK-1 THROUGH WK-5 COMPLETE / V3 COMPATIBILITY MERGED
 **Implementation:** ACTIVE EXACT-INTENT COMMIT CLASSIFICATION — [exact lease](../Plans/HANDOFF-WK-exact-intent-commit-classification.md)
